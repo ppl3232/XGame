@@ -23,7 +23,7 @@ public:
 
 // method
 public:
-	static XGInput* create();
+	CREATE_FUNC(XGInput);
 
 	void setControlUnit(XGPlayerUnit* pControlUnit);
 

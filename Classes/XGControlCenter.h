@@ -3,6 +3,8 @@
 
 #include "cocos2d.h"
 
+#include "XGGameInfo.h"
+
 class XGControlCenter: public cocos2d::CCObject
 {
 // constructor/destructor
@@ -12,11 +14,15 @@ public:
 
 // override
 public:
-	virtual bool init();
+	virtual bool init(XGGameInfo* pGameInfo);
 
 // method
 public:
-	CREATE_FUNC(XGControlCenter);
+	static XGControlCenter* create(XGGameInfo* pGameInfo);
+
+// member
+protected:
+	XGGameInfo*						GameInfo;
 };
 
 #endif  // __XG_CONTROL_CENTER_H__

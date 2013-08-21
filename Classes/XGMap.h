@@ -3,6 +3,9 @@
 
 #include "cocos2d.h"
 
+#include "XGGameInfo.h"
+#include "XGTile.h"
+
 class XGMap: public cocos2d::CCObject
 {
 // constructor/destructor
@@ -16,8 +19,14 @@ public:
 
 // method
 public:
-	CREATE_FUNC(XGMap);
+	static XGMap* create();
+
+	XGTile* getTileAt(int x, int y);
+
+// member
+protected:
+	unsigned int					TileNumX, TileNumY;
+	cocos2d::CCArray*				TileInfo;
 };
 
 #endif  // __XG_MAP_H__
-

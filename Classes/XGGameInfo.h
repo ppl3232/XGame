@@ -4,6 +4,7 @@
 #include "cocos2d.h"
 
 class XGInput;
+class XGControlCenter;
 class XGGameInfo: public cocos2d::CCLayer
 {
 // constructor/destructor
@@ -26,7 +27,7 @@ protected:
 	static const int				InputZOrder = 100000;
 
 	// control center
-
+	XGControlCenter*				ControlCenter;
 };
 
 #endif  // __XG_GAME_INFO_H__
