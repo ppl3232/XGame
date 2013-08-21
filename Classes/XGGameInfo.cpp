@@ -1,10 +1,11 @@
 #include "XGGameInfo.h"
 
-#include "XGGameInfo.h"
+#include "XGInput.h"
 
 USING_NS_CC;
 
 XGGameInfo::XGGameInfo()
+	: GameInput(NULL)
 {
 }
 
@@ -16,15 +17,14 @@ bool XGGameInfo::init()
 {
 	do
 	{
-		CC_BREAK_IF(!CCScene::init());
+		CC_BREAK_IF(!CCLayer::init());
 
-		XGGameInfo* pGame = XGGameInfo::create();
-		CC_BREAK_IF(!pGame);
-		addChild(pGame);
+		GameInput = XGInput::create();
+		addChild(GameInput, InputZOrder);
 
 		return true;
-
-	} while (false);
+	}
+	while (false);
 
 	return false;
 }

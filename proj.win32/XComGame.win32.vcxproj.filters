@@ -1,14 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="source">
-      <UniqueIdentifier>{3e18178f-80d6-4517-880a-6db2e01294ab}</UniqueIdentifier>
-      <Extensions>cpp;c;cxx;def;odl;idl;hpj;bat;asm</Extensions>
-    </Filter>
-    <Filter Include="include">
-      <UniqueIdentifier>{5468e6c3-a28b-47d6-bcc2-3c93b764298b}</UniqueIdentifier>
-      <Extensions>h;hpp;hxx;hm;inl;inc</Extensions>
-    </Filter>
     <Filter Include="resource">
       <UniqueIdentifier>{96390b11-76e8-4a12-9161-58d0b945194e}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;jpg;jpeg;jpe;png;manifest</Extensions>
@@ -54,6 +46,12 @@
     </Filter>
     <Filter Include="Classes\Game\XGUIMenu">
       <UniqueIdentifier>{94c72352-f40a-4f04-9e7c-3604a66bff27}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Classes\Game\XGPlayerUnit">
+      <UniqueIdentifier>{23fc9f37-6f29-4dfe-a4e7-bf62c0eb87b1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Classes\Game\XGAIUnit">
+      <UniqueIdentifier>{cb80c576-74d6-45b1-abb8-ea0a75c05721}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -112,6 +110,12 @@
     <ClInclude Include="..\Classes\XGUIMenu.h">
       <Filter>Classes\Game\XGUIMenu</Filter>
     </ClInclude>
+    <ClInclude Include="..\Classes\XGPlayerUnit.h">
+      <Filter>Classes\Game\XGPlayerUnit</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\XGAIUnit.h">
+      <Filter>Classes\Game\XGAIUnit</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Classes\XGApp.cpp">
@@ -146,6 +150,12 @@
     </ClCompile>
     <ClCompile Include="..\Classes\XGUIMenu.cpp">
       <Filter>Classes\Game\XGUIMenu</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\XGPlayerUnit.cpp">
+      <Filter>Classes\Game\XGPlayerUnit</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\XGAIUnit.cpp">
+      <Filter>Classes\Game\XGAIUnit</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

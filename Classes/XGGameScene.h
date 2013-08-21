@@ -3,12 +3,7 @@
 
 #include "cocos2d.h"
 
-/**
-@brief    The cocos2d Application.
-
-The reason for implement as private inheritance is to hide some interface call by CCDirector.
-*/
-class  XGGameScene : private cocos2d::CCScene
+class XGGameScene: public cocos2d::CCScene
 {
 // constructor/destructor
 public:

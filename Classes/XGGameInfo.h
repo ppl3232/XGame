@@ -3,12 +3,8 @@
 
 #include "cocos2d.h"
 
-/**
-@brief    The cocos2d Application.
-
-The reason for implement as private inheritance is to hide some interface call by CCDirector.
-*/
-class  XGGameInfo : private cocos2d::CCLayer
+class XGInput;
+class XGGameInfo: public cocos2d::CCLayer
 {
 // constructor/destructor
 public:
@@ -22,6 +18,15 @@ public:
 // method
 public:
 	CREATE_FUNC(XGGameInfo);
+
+// member
+protected:
+	// input
+	XGInput*						GameInput;
+	static const int				InputZOrder = 100000;
+
+	// control center
+
 };
 
 #endif  // __XG_GAME_INFO_H__
