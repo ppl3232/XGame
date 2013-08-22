@@ -1,5 +1,5 @@
 #include "main.h"
-#include "XGApp.h"
+#include "AppDelegate.h"
 #include "CCEGLView.h"
 
 USING_NS_CC;
@@ -23,7 +23,7 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 #endif
 
     // create the application instance
-    XGApp app;
+    AppDelegate app;
     CCEGLView* eglView = CCEGLView::sharedOpenGLView();
     eglView->setFrameSize(480, 320);
 

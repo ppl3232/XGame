@@ -15,17 +15,17 @@ public:
 
 // override
 public:
-	virtual bool init();
+	virtual bool init(int mapSizeX, int mapSizeY);
 
 // method
 public:
-	static XGMap* create();
+	static XGMap* create(int mapSizeX, int mapSizeY);
 
 	XGTile* getTileAt(int x, int y);
 
 // member
 protected:
-	unsigned int					TileNumX, TileNumY;
+	unsigned int					MapSizeX, MapSizeY;
 	cocos2d::CCArray*				TileInfo;
 };
 

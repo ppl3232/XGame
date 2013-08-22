@@ -14,9 +14,6 @@
     <Filter Include="Classes\Game">
       <UniqueIdentifier>{8495fdc6-bc57-4658-b647-67a2914aee53}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Classes\Application\XGApp">
-      <UniqueIdentifier>{663dbdcd-1d21-4274-92aa-8706479d85e1}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Classes\Application\Win32">
       <UniqueIdentifier>{0906f650-be6e-4f37-bb68-711e544f34de}</UniqueIdentifier>
     </Filter>
@@ -53,18 +50,15 @@
     <Filter Include="Classes\Game\XGAIUnit">
       <UniqueIdentifier>{cb80c576-74d6-45b1-abb8-ea0a75c05721}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Classes\Application\AppDelegate">
+      <UniqueIdentifier>{663dbdcd-1d21-4274-92aa-8706479d85e1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="res\XComGame.ico">
       <Filter>resource</Filter>
     </None>
-    <None Include="..\Resources\CloseSelected.png">
-      <Filter>resource</Filter>
-    </None>
-    <None Include="..\Resources\CloseNormal.png">
-      <Filter>resource</Filter>
-    </None>
-    <None Include="..\Resources\HelloWorld.png">
+    <None Include="..\Resources\Tile.png">
       <Filter>resource</Filter>
     </None>
   </ItemGroup>
@@ -74,9 +68,6 @@
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\Classes\XGApp.h">
-      <Filter>Classes\Application\XGApp</Filter>
-    </ClInclude>
     <ClInclude Include="resource.h">
       <Filter>Classes\Application\Win32</Filter>
     </ClInclude>
@@ -116,11 +107,11 @@
     <ClInclude Include="..\Classes\XGAIUnit.h">
       <Filter>Classes\Game\XGAIUnit</Filter>
     </ClInclude>
+    <ClInclude Include="..\Classes\AppDelegate.h">
+      <Filter>Classes\Application\AppDelegate</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\Classes\XGApp.cpp">
-      <Filter>Classes\Application\XGApp</Filter>
-    </ClCompile>
     <ClCompile Include="main.cpp">
       <Filter>Classes\Application\Win32</Filter>
     </ClCompile>
@@ -156,6 +147,9 @@
     </ClCompile>
     <ClCompile Include="..\Classes\XGAIUnit.cpp">
       <Filter>Classes\Game\XGAIUnit</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\AppDelegate.cpp">
+      <Filter>Classes\Application\AppDelegate</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

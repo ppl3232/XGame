@@ -8,11 +8,11 @@
 
 The reason for implement as private inheritance is to hide some interface call by CCDirector.
 */
-class  XGApp : private cocos2d::CCApplication
+class  AppDelegate : private cocos2d::CCApplication
 {
 public:
-    XGApp();
-    virtual ~XGApp();
+    AppDelegate();
+    virtual ~AppDelegate();
 
     /**
     @brief    Implement CCDirector and CCScene init code here.

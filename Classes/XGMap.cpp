@@ -3,8 +3,8 @@
 USING_NS_CC;
 
 XGMap::XGMap()
-	: TileNumX(10)
-	, TileNumY(10)
+	: MapSizeX(10)
+	, MapSizeY(10)
 	, TileInfo(NULL)
 {
 }
@@ -13,18 +13,21 @@ XGMap::~XGMap()
 {
 }
 
-bool XGMap::init()
+bool XGMap::init(int mapSizeX, int mapSizeY)
 {
 	do
 	{
-		unsigned int tileTotalNum = TileNumX*TileNumY;
+		MapSizeX = mapSizeX;
+		MapSizeY = mapSizeY;
+
+		unsigned int tileTotalNum = MapSizeX*MapSizeY;
 		TileInfo = CCArray::createWithCapacity(tileTotalNum);
 		CC_BREAK_IF(!TileInfo);
 		// Store in row
 		bool initTileFailed = false;
 		for (unsigned int i = 0; i < tileTotalNum; i++)
 		{
-			XGTile* tile = XGTile::createWithXY(i%TileNumX, i/TileNumX);
+			XGTile* tile = XGTile::createWithXY(i%MapSizeX, i/MapSizeY);
 			if (tile == NULL)
 			{
 				initTileFailed = true;
@@ -42,10 +45,10 @@ bool XGMap::init()
 	return false;
 }
 
-XGMap* XGMap::create()
+XGMap* XGMap::create(int mapSizeX, int mapSizeY)
 {
 	XGMap* pReturnValue = new XGMap();
-	if (pReturnValue && pReturnValue->init())
+	if (pReturnValue && pReturnValue->init(mapSizeX, mapSizeY))
 	{
 		pReturnValue->autorelease();
 	}
@@ -62,5 +65,5 @@ XGMap* XGMap::create()
 
 XGTile* XGMap::getTileAt(int x, int y)
 {
-	return dynamic_cast<XGTile*>(TileInfo->objectAtIndex(y*TileNumX+x));
+	return dynamic_cast<XGTile*>(TileInfo->objectAtIndex(y*MapSizeX+x));
 }

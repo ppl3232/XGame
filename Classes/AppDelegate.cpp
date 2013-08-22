@@ -1,6 +1,6 @@
 #include "cocos2d.h"
 #include "CCEGLView.h"
-#include "XGApp.h"
+#include "AppDelegate.h"
 #include "SimpleAudioEngine.h"
 
 #include "XGGameScene.h"
@@ -9,16 +9,16 @@ using namespace CocosDenshion;
 
 USING_NS_CC;
 
-XGApp::XGApp()
+AppDelegate::AppDelegate()
 {
 }
 
-XGApp::~XGApp()
+AppDelegate::~AppDelegate()
 {
     SimpleAudioEngine::end();
 }
 
-bool XGApp::applicationDidFinishLaunching()
+bool AppDelegate::applicationDidFinishLaunching()
 {
     // initialize director
     CCDirector *pDirector = CCDirector::sharedDirector();
@@ -39,7 +39,7 @@ bool XGApp::applicationDidFinishLaunching()
 }
 
 // This function will be called when the app is inactive. When comes a phone call,it's be invoked too
-void XGApp::applicationDidEnterBackground()
+void AppDelegate::applicationDidEnterBackground()
 {
     CCDirector::sharedDirector()->stopAnimation();
 
@@ -47,7 +47,7 @@ void XGApp::applicationDidEnterBackground()
 }
 
 // this function will be called when the app is active again
-void XGApp::applicationWillEnterForeground()
+void AppDelegate::applicationWillEnterForeground()
 {
     CCDirector::sharedDirector()->startAnimation();
 
