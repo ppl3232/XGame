@@ -26,9 +26,9 @@ protected:
 	cocos2d::CCSize					TileSize;
 	const char*						TileBackgroundFileName;
 
-	// backgrounds of tiles
+	// backgrounds of tiles, store CCSprite
 	cocos2d::CCArray*				TileBackgrounds;
-	// objects in tiles
+	// objects in tiles, store CCSprite
 	cocos2d::CCArray*				TileObjects;
 };
 

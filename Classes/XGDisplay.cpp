@@ -20,7 +20,7 @@ bool XGDisplay::init()
 	{
 		CC_BREAK_IF(!CCLayer::init());
 
-
+		//TileBackgrounds = CCArray::createWithCapacity(TileSize
 
 		return true;
 	}
