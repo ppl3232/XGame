@@ -53,6 +53,12 @@
     <Filter Include="Classes\Application\AppDelegate">
       <UniqueIdentifier>{663dbdcd-1d21-4274-92aa-8706479d85e1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Classes\Game\XGGameFlow">
+      <UniqueIdentifier>{f92300e4-630a-4402-b913-adab594009f2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Classes\Game\XGGameInit">
+      <UniqueIdentifier>{4d80bf6a-072c-47d2-8e78-a340c6a1b538}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="res\XComGame.ico">
@@ -110,6 +116,12 @@
     <ClInclude Include="..\Classes\AppDelegate.h">
       <Filter>Classes\Application\AppDelegate</Filter>
     </ClInclude>
+    <ClInclude Include="..\Classes\XGGameFlow.h">
+      <Filter>Classes\Game\XGGameFlow</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\XGGameInit.h">
+      <Filter>Classes\Game\XGGameInit</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -150,6 +162,12 @@
     </ClCompile>
     <ClCompile Include="..\Classes\AppDelegate.cpp">
       <Filter>Classes\Application\AppDelegate</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\XGGameFlow.cpp">
+      <Filter>Classes\Game\XGGameFlow</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\XGGameInit.cpp">
+      <Filter>Classes\Game\XGGameInit</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

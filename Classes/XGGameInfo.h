@@ -3,6 +3,14 @@
 
 #include "cocos2d.h"
 
+/*
+ * code standard:
+ * Generally use CamelCase,
+ * local variables and function use lower case CamelCase,
+ * class member use upper case CamelCase
+ * bool class member use upper case CamelCase with a 'b' prefix (e.g. bShot)
+ */
+
 class XGInput;
 class XGControlCenter;
 class XGDisplay;
