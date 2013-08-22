@@ -23,6 +23,10 @@ public:
 
 	XGTile* getTileAt(int x, int y);
 
+	unsigned int getSizeX();
+	unsigned int getSizeY();
+	unsigned int getTileNum();
+
 // member
 protected:
 	unsigned int					MapSizeX, MapSizeY;

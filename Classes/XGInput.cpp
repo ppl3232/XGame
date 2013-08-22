@@ -1,5 +1,7 @@
 #include "XGInput.h"
 
+#include "XGGameInfo.h"
+
 USING_NS_CC;
 
 XGInput::XGInput()

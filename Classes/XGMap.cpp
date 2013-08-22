@@ -67,3 +67,18 @@ XGTile* XGMap::getTileAt(int x, int y)
 {
 	return dynamic_cast<XGTile*>(TileInfo->objectAtIndex(y*MapSizeX+x));
 }
+
+unsigned int XGMap::getSizeX()
+{
+	return MapSizeX;
+}
+
+unsigned int XGMap::getSizeY()
+{
+	return MapSizeY;
+}
+
+unsigned int XGMap::getTileNum()
+{
+	return MapSizeX*MapSizeY;
+}

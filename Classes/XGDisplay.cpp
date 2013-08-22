@@ -1,10 +1,11 @@
 #include "XGDisplay.h"
 
+#include "XGMap.h"
+
 USING_NS_CC;
 
 XGDisplay::XGDisplay()
 	: TileSize(32, 32)
-	, TileBackgroundFileName(NULL)
 	, TileBackgrounds(NULL)
 	, TileObjects(NULL)
 {
@@ -12,15 +13,43 @@ XGDisplay::XGDisplay()
 
 XGDisplay::~XGDisplay()
 {
+	TileBackgrounds->release();
+	TileObjects->release();
 }
 
-bool XGDisplay::init()
+bool XGDisplay::init(XGMap* map)
 {
 	do
 	{
 		CC_BREAK_IF(!CCLayer::init());
 
-		//TileBackgrounds = CCArray::createWithCapacity(TileSize
+		Map = map;
+
+		unsigned int tileNum = Map->getTileNum();
+		TileBackgrounds = CCArray::createWithCapacity(tileNum);
+		CC_BREAK_IF(!TileBackgrounds);
+		bool initBackgroundFailed = false;
+		for (unsigned int i = 0; i < tileNum; i++)
+		{
+			CCSprite* tileSprite = CCSprite::create();
+			if (!tileSprite)
+			{
+				initBackgroundFailed = true;
+				break;
+			}
+			int tileX = i % Map->getSizeX();
+			int tileY = i / Map->getSizeY();
+			tileSprite->setPosition(CCPoint(
+				TileSize.width*(tileX+0.5), TileSize.height*(tileY+0.5)));
+			TileBackgrounds->addObject(tileSprite);
+			addChild(tileSprite);
+		}
+		CC_BREAK_IF(initBackgroundFailed);
+		TileBackgrounds->retain();
+
+		TileObjects = CCArray::create();
+		CC_BREAK_IF(!TileObjects);
+		TileObjects->retain();
 
 		return true;
 	}
@@ -29,10 +58,10 @@ bool XGDisplay::init()
 	return false;
 }
 
-XGDisplay* XGDisplay::create()
+XGDisplay* XGDisplay::create(XGMap* map)
 {
 	XGDisplay* pReturnValue = new XGDisplay();
-	if (pReturnValue && pReturnValue->init())
+	if (pReturnValue && pReturnValue->init(map))
 	{
 		pReturnValue->autorelease();
 	}
@@ -50,4 +79,19 @@ XGDisplay* XGDisplay::create()
 void XGDisplay::setTileSize(CCSize tileSize)
 {
 	TileSize = tileSize;
+	TileSize.width = floor(TileSize.width);
+	TileSize.height = floor(TileSize.height);
+}
+
+void XGDisplay::setTileBackground(const char* filename)
+{
+	CCObject* tileObj = NULL;
+	CCARRAY_FOREACH(TileBackgrounds, tileObj)
+	{
+		CCSprite* tileSprite = dynamic_cast<CCSprite*>(tileObj);
+		if (tileSprite)
+		{
+			tileSprite->initWithFile(filename);
+		}
+	}
 }
