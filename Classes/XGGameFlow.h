@@ -4,18 +4,20 @@
 #include "cocos2d.h"
 
 #include "XGUnit.h"
+#include "XGGameInitInfo.h"
+
+// definition
+enum TurnType
+{
+	eTurn_Player,
+	eTurn_Enemy,
+	eTurn_Neutral
+};
 
 class XGGameFlow: public cocos2d::CCObject
 {
 // definition
 public:
-	enum TurnType
-	{
-		eTurn_Player,
-		eTurn_Enemy,
-		eTurn_Neutral
-	};
-
 // constructor/destructor
 protected:
     XGGameFlow();
@@ -23,18 +25,18 @@ protected:
 
 // method
 public:
-	virtual bool init();
+	virtual bool init(XGGameInitInfo* pInitInfo);
 
-	static XGGameFlow* create();
+	static XGGameFlow* create(XGGameInitInfo* pInitInfo);
 
 	cocos2d::CCArray* getCurrentTurnUnits();
 	XGUnit* getNextActableUnit();
 
+	virtual void startTurn();
 	virtual void updateTurn();
 	virtual void finishTurn();
 
 protected:
-
 
 // member
 protected:

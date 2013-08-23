@@ -1,15 +1,20 @@
 #include "XGGameInfo.h"
 
+#include "XGGameInitInfo.h"
+#include "XGControlCenter.h"
+#include "XGGameFlow.h"
+#include "XGMap.h"
 #include "XGInput.h"
 #include "XGDisplay.h"
-#include "XGControlCenter.h"
-#include "XGMap.h"
 
 USING_NS_CC;
 
 XGGameInfo::XGGameInfo()
-	: GameInput(NULL)
-	, ControlCenter(NULL)
+	: ControlCenter(NULL)
+	, GameFlow(NULL)
+	, Map(NULL)
+	, GameInput(NULL)
+	, GameDisplay(NULL)
 {
 }
 
@@ -24,11 +29,19 @@ bool XGGameInfo::init()
 	{
 		CC_BREAK_IF(!CCLayer::init());
 
+		XGGameInitInfo* pGameInitInfo = getGameInitInfo(NULL);
+		CC_BREAK_IF(!pGameInitInfo);
+		pGameInitInfo->retain();
+
 		ControlCenter = XGControlCenter::create(this);
 		CC_BREAK_IF(!ControlCenter);
 		ControlCenter->retain();
 
-		Map = XGMap::create(10, 10);
+		GameFlow = XGGameFlow::create(pGameInitInfo);
+		CC_BREAK_IF(!GameFlow);
+		GameFlow->retain();
+
+		Map = XGMap::create(pGameInitInfo);
 		CC_BREAK_IF(!Map);
 		Map->retain();
 
@@ -41,11 +54,41 @@ bool XGGameInfo::init()
 		addChild(GameDisplay, DisplayZOrder);
 		GameDisplay->setTileBackground("tile.png");
 
+		pGameInitInfo->release();
 		return true;
 	}
 	while (false);
 
 	return false;
+}
+
+XGGameInitInfo* XGGameInfo::getGameInitInfo(const char* filename)
+{
+	XGGameInitInfo* pGameInitInfo = NULL;
+	if (filename == NULL)
+	// use debug info
+	{
+		pGameInitInfo = XGGameInitInfo::create();
+		int sizeX = 10, sizeY = 10;
+		pGameInitInfo->MapSize = CCSize(sizeX, sizeY);
+		pGameInitInfo->MapTiles = CCArray::createWithCapacity(sizeX*sizeY);
+		if (!pGameInitInfo)
+		{
+			return NULL;
+		}
+		for (int i = 0; i < sizeX*sizeY; i++)
+		{
+			XGTile* pTile = XGTile::createWithXY(i%sizeX, i/sizeY);
+			pGameInitInfo->MapTiles->addObject(pTile);
+		}
+		pGameInitInfo->Units = CCArray::create();
+	}
+	else
+	{
+		// @TODO: load information from file or something else
+	}
+
+	return pGameInitInfo;
 }
 
 XGInput* XGGameInfo::getInput()

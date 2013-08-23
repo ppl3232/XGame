@@ -22,6 +22,10 @@ public:
 public:
 	virtual bool init(cocos2d::CCPoint position);
 
+// override
+public:
+    virtual CCObject* copyWithZone(cocos2d::CCZone* pZone);
+
 // method
 public:
 	static XGTile* create(cocos2d::CCPoint position);
@@ -34,6 +38,7 @@ public:
 
 // member
 protected:
+	// position of tile, not in pixel
 	cocos2d::CCPoint				Position;
 	TileGeoType						Geography;
 };

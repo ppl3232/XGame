@@ -4,6 +4,7 @@
 #include "cocos2d.h"
 
 class XGMap;
+class XGGameFlow;
 class XGDisplay: public cocos2d::CCLayer
 {
 // constructor/destructor

@@ -3,8 +3,7 @@
 USING_NS_CC;
 
 XGMap::XGMap()
-	: MapSizeX(10)
-	, MapSizeY(10)
+	: MapSize(0, 0)
 	, TileInfo(NULL)
 {
 }
@@ -13,30 +12,18 @@ XGMap::~XGMap()
 {
 }
 
-bool XGMap::init(int mapSizeX, int mapSizeY)
+bool XGMap::init(XGGameInitInfo* pInitInfo)
 {
 	do
 	{
-		MapSizeX = mapSizeX;
-		MapSizeY = mapSizeY;
-
-		unsigned int tileTotalNum = MapSizeX*MapSizeY;
-		TileInfo = CCArray::createWithCapacity(tileTotalNum);
+		CC_BREAK_IF(!pInitInfo);
+		MapSize = pInitInfo->MapSize;
+		TileInfo = dynamic_cast<CCArray*>(pInitInfo->MapTiles->copy());
 		CC_BREAK_IF(!TileInfo);
-		// Store in row
-		bool initTileFailed = false;
-		for (unsigned int i = 0; i < tileTotalNum; i++)
-		{
-			XGTile* tile = XGTile::createWithXY(i%MapSizeX, i/MapSizeY);
-			if (tile == NULL)
-			{
-				initTileFailed = true;
-				break;
-			}
-			TileInfo->addObject(tile);
-		}
-		CC_BREAK_IF(initTileFailed);
+		CC_BREAK_IF(int(MapSize.width)*int(MapSize.height) != TileInfo->count());
 		TileInfo->retain();
+		MapSize.width = floor(MapSize.width);
+		MapSize.height = floor(MapSize.height);
 
 		return true;
 	}
@@ -45,40 +32,40 @@ bool XGMap::init(int mapSizeX, int mapSizeY)
 	return false;
 }
 
-XGMap* XGMap::create(int mapSizeX, int mapSizeY)
+XGMap* XGMap::create(XGGameInitInfo* pInitInfo)
 {
 	XGMap* pReturnValue = new XGMap();
-	if (pReturnValue && pReturnValue->init(mapSizeX, mapSizeY))
+	if (pReturnValue)
 	{
-		pReturnValue->autorelease();
-	}
-	else
-	{
-		if (pReturnValue)
+		if(pReturnValue->init(pInitInfo))
+		{
+			pReturnValue->autorelease();
+		}
+		else
 		{
 			delete pReturnValue;
+			pReturnValue = NULL;
 		}
-		pReturnValue = NULL;
 	}
 	return pReturnValue;
 }
 
 XGTile* XGMap::getTileAt(int x, int y)
 {
-	return dynamic_cast<XGTile*>(TileInfo->objectAtIndex(y*MapSizeX+x));
+	return dynamic_cast<XGTile*>(TileInfo->objectAtIndex(y*MapSize.width+x));
 }
 
 unsigned int XGMap::getSizeX()
 {
-	return MapSizeX;
+	return MapSize.height;
 }
 
 unsigned int XGMap::getSizeY()
 {
-	return MapSizeY;
+	return MapSize.width;
 }
 
 unsigned int XGMap::getTileNum()
 {
-	return MapSizeX*MapSizeY;
+	return getSizeX()*getSizeY();
 }

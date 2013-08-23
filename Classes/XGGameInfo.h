@@ -11,10 +11,12 @@
  * bool class member use upper case CamelCase with a 'b' prefix (e.g. bShot)
  */
 
-class XGInput;
+class XGGameInitInfo;
 class XGControlCenter;
-class XGDisplay;
+class XGGameFlow;
 class XGMap;
+class XGInput;
+class XGDisplay;
 class XGGameInfo: public cocos2d::CCLayer
 {
 // constructor/destructor
@@ -30,6 +32,8 @@ public:
 public:
 	CREATE_FUNC(XGGameInfo);
 
+	XGGameInitInfo* getGameInitInfo(const char* filename);
+
 	XGInput* getInput();
 	XGDisplay* getDisplay();
 	XGControlCenter* getControlCenter();
@@ -37,6 +41,15 @@ public:
 
 // member
 protected:
+	// control center
+	XGControlCenter*				ControlCenter;
+
+	// game flow (turn based)
+	XGGameFlow*						GameFlow;
+
+	// map
+	XGMap*							Map;
+
 	// input
 	XGInput*						GameInput;
 	static const int				InputZOrder = 100000;
@@ -44,12 +57,6 @@ protected:
 	// display
 	XGDisplay*						GameDisplay;
 	static const int				DisplayZOrder = 0;
-
-	// control center
-	XGControlCenter*				ControlCenter;
-
-	// map
-	XGMap*							Map;
 };
 
 #endif  // __XG_GAME_INFO_H__

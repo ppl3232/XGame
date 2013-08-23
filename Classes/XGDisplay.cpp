@@ -1,6 +1,7 @@
 #include "XGDisplay.h"
 
 #include "XGMap.h"
+#include "XGGameFlow.h"
 
 USING_NS_CC;
 
@@ -61,17 +62,17 @@ bool XGDisplay::init(XGMap* map)
 XGDisplay* XGDisplay::create(XGMap* map)
 {
 	XGDisplay* pReturnValue = new XGDisplay();
-	if (pReturnValue && pReturnValue->init(map))
+	if (pReturnValue)
 	{
-		pReturnValue->autorelease();
-	}
-	else
-	{
-		if (pReturnValue)
+		if (pReturnValue->init(map))
+		{
+			pReturnValue->autorelease();
+		}
+		else
 		{
 			delete pReturnValue;
+			pReturnValue = NULL;
 		}
-		pReturnValue = NULL;
 	}
 	return pReturnValue;
 }
@@ -85,10 +86,10 @@ void XGDisplay::setTileSize(CCSize tileSize)
 
 void XGDisplay::setTileBackground(const char* filename)
 {
-	CCObject* tileObj = NULL;
-	CCARRAY_FOREACH(TileBackgrounds, tileObj)
+	CCObject* pTileObj = NULL;
+	CCARRAY_FOREACH(TileBackgrounds, pTileObj)
 	{
-		CCSprite* tileSprite = dynamic_cast<CCSprite*>(tileObj);
+		CCSprite* tileSprite = dynamic_cast<CCSprite*>(pTileObj);
 		if (tileSprite)
 		{
 			tileSprite->initWithFile(filename);

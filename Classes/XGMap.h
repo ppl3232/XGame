@@ -3,7 +3,7 @@
 
 #include "cocos2d.h"
 
-#include "XGGameInfo.h"
+#include "XGGameInitInfo.h"
 #include "XGTile.h"
 
 class XGMap: public cocos2d::CCObject
@@ -15,11 +15,11 @@ public:
 
 // override
 public:
-	virtual bool init(int mapSizeX, int mapSizeY);
+	virtual bool init(XGGameInitInfo* pInitInfo);
 
 // method
 public:
-	static XGMap* create(int mapSizeX, int mapSizeY);
+	static XGMap* create(XGGameInitInfo* pInitInfo);
 
 	XGTile* getTileAt(int x, int y);
 
@@ -29,7 +29,7 @@ public:
 
 // member
 protected:
-	unsigned int					MapSizeX, MapSizeY;
+	cocos2d::CCSize					MapSize;
 	cocos2d::CCArray*				TileInfo;
 };
 

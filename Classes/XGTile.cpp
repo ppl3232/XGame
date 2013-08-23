@@ -25,20 +25,31 @@ bool XGTile::init(CCPoint position)
 	return false;
 }
 
+CCObject* XGTile::copyWithZone(CCZone* pZone)
+{
+	XGTile* pReturnValue = new XGTile();
+	if (pReturnValue)
+	{
+		pReturnValue->Position = Position;
+		pReturnValue->Geography = Geography;
+	}
+	return pReturnValue;
+}
+
 XGTile* XGTile::create(CCPoint position)
 {
 	XGTile* pReturnValue = new XGTile();
-	if (pReturnValue && pReturnValue->init(position))
+	if (pReturnValue)
 	{
-		pReturnValue->autorelease();
-	}
-	else
-	{
-		if (pReturnValue)
+		if (pReturnValue->init(position))
+		{
+			pReturnValue->autorelease();
+		}
+		else
 		{
 			delete pReturnValue;
+			pReturnValue = NULL;
 		}
-		pReturnValue = NULL;
 	}
 	return pReturnValue;
 }

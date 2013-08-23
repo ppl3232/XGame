@@ -7,6 +7,7 @@ XGGameFlow::XGGameFlow()
 	, PlayerUnits(NULL)
 	, EnemyUnits(NULL)
 	, NeutralUnits(NULL)
+	, CurrentActableUnits(NULL)
 {
 }
 
@@ -14,31 +15,74 @@ XGGameFlow::~XGGameFlow()
 {
 }
 
-bool XGGameFlow::init()
+bool XGGameFlow::init(XGGameInitInfo* pInitInfo)
 {
 	do 
 	{
+		CC_BREAK_IF(!pInitInfo);
 
+		PlayerUnits = CCArray::create();
+		CC_BREAK_IF(!PlayerUnits);
+		PlayerUnits->retain();
+
+		EnemyUnits = CCArray::create();
+		CC_BREAK_IF(!EnemyUnits);
+		EnemyUnits->retain();
+
+		NeutralUnits = CCArray::create();
+		CC_BREAK_IF(!NeutralUnits);
+		NeutralUnits->retain();
+
+		CCObject* pUnitObj = NULL;
+		CCARRAY_FOREACH(pInitInfo->Units, pUnitObj)
+		{
+			XGUnit* pUnit = dynamic_cast<XGUnit*>(pUnitObj);
+			if (pUnit)
+			{
+				switch (pUnit->getType())
+				{
+				case eUnit_Player:
+					PlayerUnits->addObject(pUnit);
+					break;
+				case eUnit_Enemy:
+					EnemyUnits->addObject(pUnit);
+					break;
+				case eUnit_Neutral:
+				case eUnit_Unknown:
+					NeutralUnits->addObject(pUnit);
+					break;
+				}
+			}
+		}
+
+		CurrentActableUnits = CCArray::create();
+		CC_BREAK_IF(!CurrentActableUnits);
+		CurrentActableUnits->retain();
+
+		startTurn();
+		updateTurn();
+
+		return true;
 	}
 	while (false);
 
 	return false;
 }
 
-XGGameFlow* XGGameFlow::create()
+XGGameFlow* XGGameFlow::create(XGGameInitInfo* pInitInfo)
 {
 	XGGameFlow* pReturnValue = new XGGameFlow();
-	if (pReturnValue && pReturnValue->init())
+	if (pReturnValue)
 	{
-		pReturnValue->autorelease();
-	}
-	else
-	{
-		if (pReturnValue)
+		if (pReturnValue->init(pInitInfo))
+		{
+			pReturnValue->autorelease();
+		}
+		else
 		{
 			delete pReturnValue;
+			pReturnValue = NULL;
 		}
-		pReturnValue = NULL;
 	}
 	return pReturnValue;
 }
@@ -78,13 +122,58 @@ XGUnit* XGGameFlow::getNextActableUnit()
 	return NULL;
 }
 
+void XGGameFlow::startTurn()
+{
+	CurrentActableUnits->removeAllObjects();
+	CCArray* pTargetUnits = getCurrentTurnUnits();
+
+	CCObject* pUnitObj = NULL;
+	CCARRAY_FOREACH(pTargetUnits, pUnitObj)
+	{
+		XGUnit* pUnit = dynamic_cast<XGUnit*>(pUnitObj);
+		if (pUnit)
+		{
+			pUnit->onBeginTurn();
+			CurrentActableUnits->addObject(pUnitObj);
+		}
+	}
+}
+
 void XGGameFlow::updateTurn()
 {
+	CCArray* pFinishedUnits = CCArray::create();
+	CCObject* pUnitObj = NULL;
+	CCARRAY_FOREACH(CurrentActableUnits, pUnitObj)
+	{
+		XGUnit* pUnit = dynamic_cast<XGUnit*>(pUnitObj);
+		if (pUnit && pUnit->getActionPoint() == 0)
+		{
+			pFinishedUnits->addObject(pUnit);
+		}
+	}
+	CurrentActableUnits->removeObjectsInArray(pFinishedUnits);
 
+	if (CurrentActableUnits->count() == 0)
+	{
+		finishTurn();
+		// add some code between two turn?
+		startTurn();
+	}
 }
 
 void XGGameFlow::finishTurn()
 {
+	CCArray* pTargetUnits = getCurrentTurnUnits();
+	CCObject* pUnitObj = NULL;
+	CCARRAY_FOREACH(pTargetUnits, pUnitObj)
+	{
+		XGUnit* pUnit = dynamic_cast<XGUnit*>(pUnitObj);
+		if (pUnit)
+		{
+			pUnit->onEngTurn();
+		}
+	}
+
 	switch (CurrentTurn)
 	{
 	case eTurn_Player:

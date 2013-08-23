@@ -27,17 +27,17 @@ XGControlCenter* XGControlCenter::create(XGGameInfo* pGameInfo)
 {
 	XGControlCenter* pReturnValue = new XGControlCenter();
 
-	if (pReturnValue && pReturnValue->init(pGameInfo))
+	if (pReturnValue)
 	{
-		pReturnValue->autorelease();
-	}
-	else
-	{
-		if (pReturnValue)
+		if (pReturnValue->init(pGameInfo))
+		{
+			pReturnValue->autorelease();
+		}
+		else
 		{
 			delete pReturnValue;
+			pReturnValue = NULL;
 		}
-		pReturnValue = NULL;
 	}
 
 	return pReturnValue;
