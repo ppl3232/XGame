@@ -17,6 +17,10 @@ class XGGameFlow;
 class XGMap;
 class XGInput;
 class XGDisplay;
+class XGBattle;
+class XGPlayer;
+class XGAIPlayer;
+
 class XGGameInfo: public cocos2d::CCLayer
 {
 // constructor/destructor
@@ -39,6 +43,9 @@ public:
 	XGControlCenter* getControlCenter();
 	XGMap* getMap();
 
+	bool InitBattle();
+	void DestoryBattle();
+
 // member
 protected:
 	// control center
@@ -57,6 +64,9 @@ protected:
 	// display
 	XGDisplay*						GameDisplay;
 	static const int				DisplayZOrder = 0;
+
+	// battle
+	XGBattle*						Battle;
 };
 
 #endif  // __XG_GAME_INFO_H__

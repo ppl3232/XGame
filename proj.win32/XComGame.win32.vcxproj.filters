@@ -59,6 +59,12 @@
     <Filter Include="Classes\Game\XGGameInitInfo">
       <UniqueIdentifier>{4d80bf6a-072c-47d2-8e78-a340c6a1b538}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Classes\Game\TurnBaseLogic">
+      <UniqueIdentifier>{6a07fd66-4722-4a1d-a4bb-e93ccdae11ac}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Classes\Game\Utils">
+      <UniqueIdentifier>{79a82c77-f0d1-461f-ba86-c895c11c4009}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="res\XComGame.ico">
@@ -88,9 +94,6 @@
     </ClInclude>
     <ClInclude Include="..\Classes\XGControlCenter.h">
       <Filter>Classes\Game\XGControlCenter</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\XGUnit.h">
-      <Filter>Classes\Game\XGUnit</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\XGInput.h">
       <Filter>Classes\Game\XGInput</Filter>
@@ -122,6 +125,21 @@
     <ClInclude Include="..\Classes\XGGameInitInfo.h">
       <Filter>Classes\Game\XGGameInitInfo</Filter>
     </ClInclude>
+    <ClInclude Include="..\Classes\XGBattle.h">
+      <Filter>Classes\Game\TurnBaseLogic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\XGPlayer.h">
+      <Filter>Classes\Game\TurnBaseLogic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\XGUnit.h">
+      <Filter>Classes\Game\TurnBaseLogic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\XGGameData.h">
+      <Filter>Classes\Game\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\XGAIPlayer.h">
+      <Filter>Classes\Game\TurnBaseLogic</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -135,9 +153,6 @@
     </ClCompile>
     <ClCompile Include="..\Classes\XGControlCenter.cpp">
       <Filter>Classes\Game\XGControlCenter</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Classes\XGUnit.cpp">
-      <Filter>Classes\Game\XGUnit</Filter>
     </ClCompile>
     <ClCompile Include="..\Classes\XGInput.cpp">
       <Filter>Classes\Game\XGInput</Filter>
@@ -168,6 +183,18 @@
     </ClCompile>
     <ClCompile Include="..\Classes\XGGameInitInfo.cpp">
       <Filter>Classes\Game\XGGameInitInfo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\XGBattle.cpp">
+      <Filter>Classes\Game\TurnBaseLogic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\XGPlayer.cpp">
+      <Filter>Classes\Game\TurnBaseLogic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\XGUnit.cpp">
+      <Filter>Classes\Game\TurnBaseLogic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\XGAIPlayer.cpp">
+      <Filter>Classes\Game\TurnBaseLogic</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

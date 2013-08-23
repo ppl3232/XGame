@@ -133,7 +133,7 @@ void XGGameFlow::startTurn()
 		XGUnit* pUnit = dynamic_cast<XGUnit*>(pUnitObj);
 		if (pUnit)
 		{
-			pUnit->onBeginTurn();
+			pUnit->BeginTurn();
 			CurrentActableUnits->addObject(pUnitObj);
 		}
 	}
@@ -170,7 +170,7 @@ void XGGameFlow::finishTurn()
 		XGUnit* pUnit = dynamic_cast<XGUnit*>(pUnitObj);
 		if (pUnit)
 		{
-			pUnit->onEngTurn();
+			pUnit->EndTurn();
 		}
 	}
 

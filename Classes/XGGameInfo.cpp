@@ -6,6 +6,9 @@
 #include "XGMap.h"
 #include "XGInput.h"
 #include "XGDisplay.h"
+#include "XGBattle.h"
+#include "XGPlayer.h"
+#include "XGAIPlayer.h"
 
 USING_NS_CC;
 
@@ -54,6 +57,9 @@ bool XGGameInfo::init()
 		addChild(GameDisplay, DisplayZOrder);
 		GameDisplay->setTileBackground("tile.png");
 
+
+		CC_BREAK_IF(!InitBattle());
+
 		pGameInitInfo->release();
 		return true;
 	}
@@ -61,6 +67,41 @@ bool XGGameInfo::init()
 
 	return false;
 }
+
+void XGGameInfo::DestoryBattle()
+{
+	if(Battle != NULL)
+	{
+		Battle->arrPlayers->removeAllObjects();
+		Battle->release();
+	}
+}
+
+bool XGGameInfo::InitBattle()
+{
+	bool ret = false;
+	do 
+	{
+		Battle = XGBattle::create();
+		CC_BREAK_IF(!Battle);
+		Battle->retain();
+
+		XGPlayer* NewPlayer = XGPlayer::create();
+		CC_BREAK_IF(NewPlayer);
+		Battle->AddPlayer(NewPlayer);
+
+		XGAIPlayer* NewAI = XGAIPlayer::create();
+		CC_BREAK_IF(NewAI);
+		Battle->AddPlayer(NewAI);
+
+		Battle->Start();
+
+		ret = true;
+	} while (0);
+
+	return ret;
+}
+
 
 XGGameInitInfo* XGGameInfo::getGameInitInfo(const char* filename)
 {
