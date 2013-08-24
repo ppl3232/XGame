@@ -25,6 +25,7 @@ public:
 	void setTileBackground(const char* filename);
 
 	void AddUnit(XGUnit* unit);
+	void RemoveUnit(XGUnit* unit);
 	void OnUnitPosChange(XGUnit* unit);
 
 	cocos2d::CCPoint getTileCoordForPosition(cocos2d::CCPoint pos);

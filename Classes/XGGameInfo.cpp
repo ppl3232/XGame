@@ -124,7 +124,7 @@ bool XGGameInfo::InitBattle()
 
 		this->scheduleOnce(schedule_selector(XGGameInfo::BattleStart), 2);
 
-		GameInput->battle = Battle;
+		GameInput->battle = Battle; // for test
 
 		ret = true;
 	} while (0);

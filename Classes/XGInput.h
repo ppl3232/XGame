@@ -34,7 +34,7 @@ public:
 protected:
 	XGUnit*					CurrentControlUnit;
 public:
-	XGBattle*				battle;
+	XGBattle*				battle; // for test
 };
 
 #endif  // __XG_INPUT_H__

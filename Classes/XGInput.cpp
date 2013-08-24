@@ -44,7 +44,7 @@ void XGInput::ccTouchMoved(CCTouch* pTouch, CCEvent* pEvent)
 
 void XGInput::ccTouchEnded(CCTouch* pTouch, CCEvent* pEvent)
 {
-	battle->BeginNewTurn();
+	battle->BeginNewTurn(); // for test
 }
 
 void XGInput::ccTouchCancelled(CCTouch* pTouch, CCEvent* pEvent)

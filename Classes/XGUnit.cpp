@@ -37,8 +37,6 @@ bool XGUnit::init(XGPlayer* Player, XGDisplay* Canvas, CCPoint& Pos, const char*
 		this->Canvas = Canvas;
 		this->Position = Pos;
 
-		Canvas->Map->SetOccupied(Position);
-
 		Sprite = CCSprite::create(Texture);
 		CC_BREAK_IF(!Sprite);
 		this->Canvas->AddUnit(this);
@@ -179,6 +177,8 @@ bool XGUnit::Died(XGUnit* Killer)
 	}
 
 	bDead = true;
+	Canvas->RemoveUnit(this);
+	Player->Units->removeObject(this);
 
 	return true;
 }

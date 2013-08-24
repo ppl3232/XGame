@@ -99,8 +99,16 @@ void XGDisplay::setTileBackground(const char* filename)
 
 void XGDisplay::AddUnit(XGUnit* unit)
 {
-	OnUnitPosChange(unit);
 	addChild(unit->getSprite());
+	Map->SetOccupied(unit->Position);
+	OnUnitPosChange(unit);
+}
+
+void XGDisplay::RemoveUnit(XGUnit* unit)
+{
+	removeChild(unit->getSprite());
+	Map->ClearOccupied(unit->Position);
+
 }
 
 void XGDisplay::OnUnitPosChange(XGUnit* unit)
