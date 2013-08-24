@@ -96,3 +96,29 @@ void XGDisplay::setTileBackground(const char* filename)
 		}
 	}
 }
+
+void XGDisplay::AddUnit(XGUnit* unit)
+{
+	OnUnitPosChange(unit);
+	addChild(unit->getSprite());
+}
+
+void XGDisplay::OnUnitPosChange(XGUnit* unit)
+{
+	CCPoint DisplayPos = getPositionForTileCoord(unit->getPosition());
+	unit->getSprite()->setPosition(DisplayPos);
+}
+
+CCPoint XGDisplay::getTileCoordForPosition(CCPoint pos)
+{
+	int x = pos.x / TileSize.width;
+	int y = (Map->getMapSize().height * TileSize.height - pos.y) / TileSize.height;
+	return ccp(x,y);
+}
+
+CCPoint XGDisplay::getPositionForTileCoord(CCPoint pos)
+{
+	int x = pos.x * TileSize.width + TileSize.width / 2;
+	int y = (Map->getMapSize().height - pos.y) * TileSize.height - TileSize.height / 2;
+	return ccp(x,y);
+}

@@ -9,6 +9,7 @@
 #include "XGBattle.h"
 #include "XGPlayer.h"
 #include "XGAIPlayer.h"
+#include "XGGameData.h"
 
 USING_NS_CC;
 
@@ -77,6 +78,31 @@ void XGGameInfo::DestoryBattle()
 	}
 }
 
+// config function
+CCArray* XGGameInfo::getHumanTeam(int Num)
+{
+	CCArray* TeamInfo = CCArray::createWithCapacity(1);
+	for(int i = 0; i < Num; i++)
+	{
+		XGUnitInfo* info = XGUnitInfo::create(EUT_Footman, ccp(i,0));
+		TeamInfo->addObject(info);
+	}
+
+	return TeamInfo;
+}
+CCArray* XGGameInfo::getOrcTeam(int Num)
+{
+	CCArray* TeamInfo = CCArray::createWithCapacity(1);
+	for(int i = 0; i < Num; i++)
+	{
+		XGUnitInfo* info = XGUnitInfo::create(EUT_Grunt, ccp(9-i,9));
+		TeamInfo->addObject(info);
+	}
+
+	return TeamInfo;
+}
+// end
+
 bool XGGameInfo::InitBattle()
 {
 	bool ret = false;
@@ -86,13 +112,15 @@ bool XGGameInfo::InitBattle()
 		CC_BREAK_IF(!Battle);
 		Battle->retain();
 
-		XGPlayer* NewPlayer = XGPlayer::create();
-		CC_BREAK_IF(NewPlayer);
-		Battle->AddPlayer(NewPlayer);
+		XGAIPlayer* NewAI_1 = XGAIPlayer::create();
+		CC_BREAK_IF(!NewAI_1);
+		NewAI_1->SpawnTeam(GameDisplay, getHumanTeam(4));
+		Battle->AddPlayer(NewAI_1);
 
-		XGAIPlayer* NewAI = XGAIPlayer::create();
-		CC_BREAK_IF(NewAI);
-		Battle->AddPlayer(NewAI);
+		XGAIPlayer* NewAI_2 = XGAIPlayer::create();
+		CC_BREAK_IF(!NewAI_2);
+		NewAI_2->SpawnTeam(GameDisplay, getOrcTeam(3));
+		Battle->AddPlayer(NewAI_2);
 
 		Battle->Start();
 

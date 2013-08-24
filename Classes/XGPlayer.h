@@ -3,6 +3,8 @@
 
 #include "cocos2d.h"
 #include "XGBattle.h"
+#include "XGDisplay.h"
+#include "XGGameData.h"
 
 class XGBattle;
 
@@ -26,6 +28,9 @@ public:
 	virtual void BeginTurn();
 	virtual void EndTurn();
 	
+
+	virtual bool SpawnTeam(XGDisplay* Canvas, cocos2d::CCArray* TeamInfo);
+	virtual XGUnit* SpawnUnit(EUnitType type, XGDisplay* Canvas, cocos2d::CCPoint& Pos);
 
 	// member
 public:

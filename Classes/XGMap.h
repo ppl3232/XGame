@@ -27,10 +27,12 @@ public:
 	unsigned int getSizeY();
 	unsigned int getTileNum();
 
+
 // member
 protected:
-	cocos2d::CCSize					MapSize;
 	cocos2d::CCArray*				TileInfo;
+
+	CC_SYNTHESIZE_PASS_BY_REF(cocos2d::CCSize, MapSize, MapSize);
 };
 
 #endif  // __XG_MAP_H__

@@ -36,23 +36,23 @@ bool XGGameFlow::init(XGGameInitInfo* pInitInfo)
 		CCObject* pUnitObj = NULL;
 		CCARRAY_FOREACH(pInitInfo->Units, pUnitObj)
 		{
-			XGUnit* pUnit = dynamic_cast<XGUnit*>(pUnitObj);
-			if (pUnit)
-			{
-				switch (pUnit->getType())
-				{
-				case eUnit_Player:
-					PlayerUnits->addObject(pUnit);
-					break;
-				case eUnit_Enemy:
-					EnemyUnits->addObject(pUnit);
-					break;
-				case eUnit_Neutral:
-				case eUnit_Unknown:
-					NeutralUnits->addObject(pUnit);
-					break;
-				}
-			}
+			//XGUnit* pUnit = dynamic_cast<XGUnit*>(pUnitObj);
+			//if (pUnit)
+			//{
+			//	switch (pUnit->getType())
+			//	{
+			//	case eUnit_Player
+			//		PlayerUnits->addObject(pUnit);
+			//		break;
+			//	case eUnit_Enemy:
+			//		EnemyUnits->addObject(pUnit);
+			//		break;
+			//	case eUnit_Neutral:
+			//	case eUnit_Unknown:
+			//		NeutralUnits->addObject(pUnit);
+			//		break;
+			//	}
+			//}
 		}
 
 		CurrentActableUnits = CCArray::create();

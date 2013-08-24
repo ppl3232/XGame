@@ -5,6 +5,7 @@
 
 class XGMap;
 class XGGameFlow;
+class XGUnit;
 class XGDisplay: public cocos2d::CCLayer
 {
 // constructor/destructor
@@ -22,6 +23,13 @@ public:
 
 	void setTileSize(cocos2d::CCSize tileSize);
 	void setTileBackground(const char* filename);
+
+	void AddUnit(XGUnit* unit);
+	void OnUnitPosChange(XGUnit* unit);
+
+	cocos2d::CCPoint getTileCoordForPosition(cocos2d::CCPoint pos);
+
+	cocos2d::CCPoint getPositionForTileCoord(cocos2d::CCPoint pos);
 
 // member
 protected:
