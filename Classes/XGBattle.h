@@ -32,6 +32,8 @@ public:
 	XGPlayer*				ActivePlayer;
 
 	int						Turn;
+
+
 };
 
 

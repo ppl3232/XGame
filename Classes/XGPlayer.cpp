@@ -18,11 +18,27 @@ XGPlayer::~XGPlayer()
 	}
 }
 
-bool XGPlayer::init()
+XGPlayer* XGPlayer::create(XGBattle* battle)
+{
+	XGPlayer* player = new XGPlayer();
+	if(player && player->init(battle))
+	{
+		player->autorelease();
+		return player;
+	}
+	else
+	{
+		CC_SAFE_DELETE(player);
+		return NULL;
+	}
+}
+
+bool XGPlayer::init(XGBattle* battle)
 {
 	bool ret = false;
 	do 
 	{
+		Battle = battle;
 		ret = true;
 	} while (0);
 

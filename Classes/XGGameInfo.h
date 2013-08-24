@@ -45,7 +45,7 @@ public:
 
 	bool InitBattle();
 	void DestoryBattle();
-
+	void BattleStart(float dt);
 
 	// config function 
 	cocos2d::CCArray* getHumanTeam(int num);

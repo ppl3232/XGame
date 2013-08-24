@@ -74,3 +74,33 @@ unsigned int XGMap::getTileNum()
 }
 
 
+CCArray* XGMap::GetTilesWithinRange(cocos2d::CCPoint origin, int range)
+{
+	XGTile* OriginTile = getTileAt(origin.x, origin.y);
+	CCArray* Tiles = CCArray::create();
+	CCObject* TileObj = NULL;
+	CCARRAY_FOREACH(TileInfo, TileObj)
+	{
+		XGTile* kTile = dynamic_cast<XGTile*>(TileObj);
+		if(kTile->tileDistanceTo(OriginTile) <= range)
+		{
+			Tiles->addObject(kTile);
+		}
+	}
+
+	return Tiles;
+}
+
+
+void XGMap::SetOccupied(CCPoint& Pos)
+{
+	XGTile* tile = getTileAt(Pos.x, Pos.y);
+	tile->bBlock = true;
+}
+
+void XGMap::ClearOccupied(CCPoint& Pos)
+{
+	XGTile* tile = getTileAt(Pos.x, Pos.y);
+	tile->bBlock = false;
+}
+

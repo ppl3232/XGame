@@ -32,7 +32,7 @@ public:
 	cocos2d::CCPoint getPositionForTileCoord(cocos2d::CCPoint pos);
 
 // member
-protected:
+public:
 	XGMap*							Map;
 
 	cocos2d::CCSize					TileSize;

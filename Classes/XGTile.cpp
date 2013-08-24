@@ -1,10 +1,11 @@
 #include "XGTile.h"
-
+#include "XGGameData.h"
 USING_NS_CC;
 
 XGTile::XGTile()
 	: Position(-1, -1)
 	, Geography(eTileGeo_Normal)
+	, bBlock(false)	
 {
 }
 
@@ -61,5 +62,5 @@ XGTile* XGTile::createWithXY(int x, int y)
 
 int XGTile::tileDistanceTo(XGTile* pTarget)
 {
-	return static_cast<int>(Position.x - pTarget->Position.x + Position.y - pTarget->Position.y);
+	return GetDistance(Position, pTarget->Position);
 }

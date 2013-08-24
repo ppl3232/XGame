@@ -130,6 +130,7 @@
     <ResourceCompile Include="XComGame.rc" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\Classes\NavigationHandle.h" />
     <ClInclude Include="..\Classes\XGAIPlayer.h" />
     <ClInclude Include="..\Classes\XGAIUnit.h" />
     <ClInclude Include="..\Classes\AppDelegate.h" />
@@ -146,7 +147,6 @@
     <ClInclude Include="..\Classes\XGInput.h" />
     <ClInclude Include="..\Classes\XGMap.h" />
     <ClInclude Include="..\Classes\XGPlayer.h" />
-    <ClInclude Include="..\Classes\XGPlayerUnit.h" />
     <ClInclude Include="..\Classes\XGTile.h" />
     <ClInclude Include="..\Classes\XGUIMenu.h" />
     <ClInclude Include="..\Classes\XGUnit.h" />
@@ -154,6 +154,7 @@
     <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\Classes\NavigationHandle.cpp" />
     <ClCompile Include="..\Classes\XGAIPlayer.cpp" />
     <ClCompile Include="..\Classes\XGAIUnit.cpp" />
     <ClCompile Include="..\Classes\AppDelegate.cpp" />
@@ -170,7 +171,6 @@
     <ClCompile Include="..\Classes\XGInput.cpp" />
     <ClCompile Include="..\Classes\XGMap.cpp" />
     <ClCompile Include="..\Classes\XGPlayer.cpp" />
-    <ClCompile Include="..\Classes\XGPlayerUnit.cpp" />
     <ClCompile Include="..\Classes\XGTile.cpp" />
     <ClCompile Include="..\Classes\XGUIMenu.cpp" />
     <ClCompile Include="..\Classes\XGUnit.cpp" />

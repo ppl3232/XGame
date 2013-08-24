@@ -37,10 +37,12 @@ public:
 	int tileDistanceTo(XGTile* pTarget);
 
 // member
-protected:
+public:
 	// position of tile, not in pixel
 	cocos2d::CCPoint				Position;
 	TileGeoType						Geography;
+
+	bool							bBlock;
 };
 
 #endif  // __XG_TILE_H__

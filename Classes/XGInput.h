@@ -2,8 +2,9 @@
 #define __XG_INPUT_H__
 
 #include "cocos2d.h"
+#include "XGUnit.h"
+#include "XGBattle.h"
 
-#include "XGPlayerUnit.h"
 
 class XGInput: public cocos2d::CCLayer
 {
@@ -25,11 +26,15 @@ public:
 public:
 	CREATE_FUNC(XGInput);
 
-	void setControlUnit(XGPlayerUnit* pControlUnit);
+	void setControlUnit(XGUnit* pControlUnit);
+
+
 
 // member
 protected:
-	XGPlayerUnit*					CurrentControlUnit;
+	XGUnit*					CurrentControlUnit;
+public:
+	XGBattle*				battle;
 };
 
 #endif  // __XG_INPUT_H__

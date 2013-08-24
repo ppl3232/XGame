@@ -112,22 +112,29 @@ bool XGGameInfo::InitBattle()
 		CC_BREAK_IF(!Battle);
 		Battle->retain();
 
-		XGAIPlayer* NewAI_1 = XGAIPlayer::create();
+		XGAIPlayer* NewAI_1 = XGAIPlayer::create(Battle);
 		CC_BREAK_IF(!NewAI_1);
 		NewAI_1->SpawnTeam(GameDisplay, getHumanTeam(4));
 		Battle->AddPlayer(NewAI_1);
 
-		XGAIPlayer* NewAI_2 = XGAIPlayer::create();
+		XGAIPlayer* NewAI_2 = XGAIPlayer::create(Battle);
 		CC_BREAK_IF(!NewAI_2);
 		NewAI_2->SpawnTeam(GameDisplay, getOrcTeam(3));
 		Battle->AddPlayer(NewAI_2);
 
-		Battle->Start();
+		this->scheduleOnce(schedule_selector(XGGameInfo::BattleStart), 2);
+
+		GameInput->battle = Battle;
 
 		ret = true;
 	} while (0);
 
 	return ret;
+}
+
+void XGGameInfo::BattleStart(float dt)
+{
+	Battle->Start();
 }
 
 

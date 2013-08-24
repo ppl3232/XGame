@@ -17,8 +17,8 @@ public:
 
 	// create & init
 public:
-	CREATE_FUNC(XGPlayer);
-	virtual bool init();
+	static XGPlayer* create(XGBattle* battle);
+	virtual bool init(XGBattle* battle);
 
 	// method
 public:

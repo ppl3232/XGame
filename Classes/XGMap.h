@@ -28,7 +28,12 @@ public:
 	unsigned int getTileNum();
 
 
-// member
+	cocos2d::CCArray* GetTilesWithinRange(cocos2d::CCPoint origin, int range);
+
+	void SetOccupied(cocos2d::CCPoint& Pos);
+	void ClearOccupied(cocos2d::CCPoint& Pos);
+
+	// member
 protected:
 	cocos2d::CCArray*				TileInfo;
 
