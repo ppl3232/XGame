@@ -1,4 +1,6 @@
 #include "XGUnit.h"
+#include "XGTile.h"
+#include "XGMap.h"
 
 USING_NS_CC;
 
@@ -35,6 +37,8 @@ bool XGUnit::init(XGPlayer* Player, XGDisplay* Canvas, CCPoint& Pos, const char*
 		this->Canvas = Canvas;
 		this->Position = Pos;
 
+		Canvas->Map->SetOccupied(Position);
+
 		Sprite = CCSprite::create(Texture);
 		CC_BREAK_IF(!Sprite);
 		this->Canvas->AddUnit(this);
@@ -45,11 +49,19 @@ bool XGUnit::init(XGPlayer* Player, XGDisplay* Canvas, CCPoint& Pos, const char*
 	return ret;
 }
 
-void XGUnit::setPosition(const cocos2d::CCPoint &Pos)
+void XGUnit::SetPosition(CCPoint &Pos)
 {
+	CCPoint OldPos = ccp(Position.x, Position.y);
 	Position = Pos;
-	Canvas->OnUnitPosChange(this);
+	OnPositionChange(OldPos);
 	
+}
+
+void XGUnit::OnPositionChange(CCPoint& OldPos)
+{
+	Canvas->Map->ClearOccupied(OldPos);
+	Canvas->Map->SetOccupied(Position);
+	Canvas->OnUnitPosChange(this);
 }
 
 CCPoint& XGUnit::getPosition()
@@ -99,8 +111,9 @@ bool XGUnit::CheckForEndTurn()
 	return CurActionPoint <= 0;
 }
 
-void XGUnit::OnNormalActionDone()
+void XGUnit::OnNormalActionDone(int ap)
 {
+	CurActionPoint -= ap;
 	if(CheckForEndTurn())
 	{
 		Player->CheckForEndTurn();
@@ -109,16 +122,20 @@ void XGUnit::OnNormalActionDone()
 
 void XGUnit::OnEndTurnActionDone()
 {
+	CurActionPoint = 0;
 	Player->CheckForEndTurn();
 }
 
-void XGUnit::ActionMove(XGUnit* target)
+void XGUnit::ActionMove(CCPoint& Pos)
 {
-
+	SetPosition(Pos);
+	OnNormalActionDone(1);
 };
 
 void XGUnit::ActionAttack(XGUnit* target)
 {
+	target->TakeDamage(Power, this);
+	OnEndTurnActionDone();
 
 };
 
@@ -164,4 +181,51 @@ bool XGUnit::Died(XGUnit* Killer)
 	bDead = true;
 
 	return true;
+}
+
+
+CCArray* XGUnit::GetMoveableTiles()
+{
+	CCArray* MoveableTiles = NULL;
+
+	MoveableTiles = Canvas->Map->GetTilesWithinRange(Position, Speed);
+
+	CCArray* TilesNeedRemove = CCArray::create();
+
+	for(unsigned int i = 0; i < MoveableTiles->count(); i++)
+	{
+		XGTile* it = dynamic_cast<XGTile*>(MoveableTiles->objectAtIndex(i));
+		if(it->bBlock)
+		{
+			TilesNeedRemove->addObject(it);
+		}
+	}
+
+	MoveableTiles->removeObjectsInArray(TilesNeedRemove);
+
+	return MoveableTiles;
+}
+
+CCArray* XGUnit::GetAttackableTiles(CCPoint& Origin)
+{
+	return Canvas->Map->GetTilesWithinRange(Origin, Range);
+}
+
+CCArray* XGUnit::GetPotentialAttackableTiles()
+{
+	CCArray* PotentialTiles = CCArray::create();
+	CCArray* MoveableTiles = GetMoveableTiles();
+	for(int i = 0; i < MoveableTiles->count(); i++)
+	{
+		XGTile* kTile = dynamic_cast<XGTile*>(MoveableTiles->objectAtIndex(i));
+		PotentialTiles->addObjectsFromArray(GetAttackableTiles(kTile->Position));
+	}
+
+	return PotentialTiles;
+}
+
+
+float XGUnit::GetHealthRatio()
+{
+	return float(Health) / HealthMax;
 }

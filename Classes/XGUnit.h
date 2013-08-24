@@ -6,6 +6,8 @@
 #include "XGDisplay.h"
 #include "XGGameData.h"
 
+class XGPlayer;
+
 class XGUnit: public cocos2d::CCObject
 {
 // constructor/destructor
@@ -22,16 +24,18 @@ public:
 
 // method
 public:
-	virtual void setPosition(const cocos2d::CCPoint &Pos);
+	virtual void SetPosition(cocos2d::CCPoint &Pos);
 	virtual cocos2d::CCPoint &getPosition();
+	virtual void OnPositionChange(cocos2d::CCPoint& OldPos);
+
 	// turn logic
 	virtual void BeginTurn();
 	virtual void EndTurn();
 	virtual void ResetActionPoint();
 	virtual bool CheckForEndTurn();
-	virtual void OnNormalActionDone();
+	virtual void OnNormalActionDone(int ap);
 	virtual void OnEndTurnActionDone();
-	virtual void ActionMove(XGUnit* target);
+	virtual void ActionMove(cocos2d::CCPoint& Pos);
 	virtual void ActionAttack(XGUnit* target);
 	virtual void ActionSkill(XGUnit* target);
 	virtual void ActionForceEndTurn();
@@ -41,11 +45,19 @@ public:
 	virtual void TakeDamage(int DamageAmount, XGUnit* DamageCauser);
 	virtual bool Died(XGUnit* Killer);
 
+	// move
+	
+	virtual cocos2d::CCArray* GetMoveableTiles();
+	virtual cocos2d::CCArray* GetAttackableTiles(cocos2d::CCPoint& Origin);
+	virtual cocos2d::CCArray* GetPotentialAttackableTiles();
 
 	// getter & setter
 	int getActionPoint() {return CurActionPoint;}
 
 	cocos2d::CCSprite* getSprite();
+
+	// property
+	float GetHealthRatio();
 	EUnitType getType(){return Type;}
 
 // member
