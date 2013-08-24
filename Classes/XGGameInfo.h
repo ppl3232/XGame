@@ -51,9 +51,6 @@ protected:
 	// control center
 	XGControlCenter*				ControlCenter;
 
-	// game flow (turn based)
-	XGGameFlow*						GameFlow;
-
 	// map
 	XGMap*							Map;
 

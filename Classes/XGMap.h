@@ -21,11 +21,28 @@ public:
 public:
 	static XGMap* create(XGGameInitInfo* pInitInfo);
 
-	XGTile* getTileAt(int x, int y);
+	XGTile* getTileAt(int x, int y)
+	{
+		return dynamic_cast<XGTile*>(
+			TileInfo->objectAtIndex(y*MapSize.width+x));		
+	}
 
-	unsigned int getSizeX();
-	unsigned int getSizeY();
-	unsigned int getTileNum();
+	cocos2d::CCSize getMapSize()
+	{
+		return MapSize;
+	}
+	unsigned int getMapWidth()
+	{
+		return MapSize.width;
+	}
+	unsigned int getMapHeight()
+	{
+		return MapSize.height;
+	}
+	unsigned int getTileNum()
+	{
+		return MapSize.width*MapSize.height;
+	}
 
 // member
 protected:

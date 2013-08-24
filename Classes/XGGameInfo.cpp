@@ -2,7 +2,6 @@
 
 #include "XGGameInitInfo.h"
 #include "XGControlCenter.h"
-#include "XGGameFlow.h"
 #include "XGMap.h"
 #include "XGInput.h"
 #include "XGDisplay.h"
@@ -14,7 +13,6 @@ USING_NS_CC;
 
 XGGameInfo::XGGameInfo()
 	: ControlCenter(NULL)
-	, GameFlow(NULL)
 	, Map(NULL)
 	, GameInput(NULL)
 	, GameDisplay(NULL)
@@ -39,10 +37,6 @@ bool XGGameInfo::init()
 		ControlCenter = XGControlCenter::create(this);
 		CC_BREAK_IF(!ControlCenter);
 		ControlCenter->retain();
-
-		GameFlow = XGGameFlow::create(pGameInitInfo);
-		CC_BREAK_IF(!GameFlow);
-		GameFlow->retain();
 
 		Map = XGMap::create(pGameInitInfo);
 		CC_BREAK_IF(!Map);

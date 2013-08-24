@@ -137,7 +137,6 @@
     <ClInclude Include="..\Classes\XGControlCenter.h" />
     <ClInclude Include="..\Classes\XGDisplay.h" />
     <ClInclude Include="..\Classes\XGGameData.h" />
-    <ClInclude Include="..\Classes\XGGameFlow.h" />
     <ClInclude Include="..\Classes\XGGameInfo.h" />
     <ClInclude Include="..\Classes\XGGameInitInfo.h" />
     <ClInclude Include="..\Classes\XGGameScene.h" />
@@ -158,7 +157,6 @@
     <ClCompile Include="..\Classes\XGBattle.cpp" />
     <ClCompile Include="..\Classes\XGControlCenter.cpp" />
     <ClCompile Include="..\Classes\XGDisplay.cpp" />
-    <ClCompile Include="..\Classes\XGGameFlow.cpp" />
     <ClCompile Include="..\Classes\XGGameInfo.cpp" />
     <ClCompile Include="..\Classes\XGGameInitInfo.cpp" />
     <ClCompile Include="..\Classes\XGGameScene.cpp" />

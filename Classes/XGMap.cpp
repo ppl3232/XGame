@@ -49,23 +49,3 @@ XGMap* XGMap::create(XGGameInitInfo* pInitInfo)
 	}
 	return pReturnValue;
 }
-
-XGTile* XGMap::getTileAt(int x, int y)
-{
-	return dynamic_cast<XGTile*>(TileInfo->objectAtIndex(y*MapSize.width+x));
-}
-
-unsigned int XGMap::getSizeX()
-{
-	return MapSize.height;
-}
-
-unsigned int XGMap::getSizeY()
-{
-	return MapSize.width;
-}
-
-unsigned int XGMap::getTileNum()
-{
-	return getSizeX()*getSizeY();
-}
