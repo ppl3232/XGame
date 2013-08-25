@@ -3,14 +3,78 @@
 USING_NS_CC;
 
 XGUnit::XGUnit()
-	: Type(eUnit_Unknown)
-	, CurActionPoint(0)
+	: CurActionPoint(0)
+	, Type(EUT_Unknow)
+	, Player(NULL)
+	, Sprite(NULL)
+	, Health(10)
+	, HealthMax(10)
+	, Power(2)
+	, Speed(2)
+	, Range(1)
+	, bDead(false)
 {
 }
 
 XGUnit::~XGUnit()
 {
 }
+
+
+CCObject* XGUnit::copyWithZone(CCZone* pZone)
+{
+	return NULL;
+}
+
+bool XGUnit::init(XGPlayer* Player, CCPoint& Pos, const char* Texture)
+{
+	bool ret = false;
+	do 
+	{
+		this->Player = Player;
+		this->Position = Pos;
+
+		Sprite = CCSprite::create(Texture);
+		CC_BREAK_IF(!Sprite);
+
+		ret = true;
+	} while (0);
+
+	return ret;
+}
+
+void XGUnit::setPosition(const cocos2d::CCPoint &Pos)
+{
+	Position = Pos;
+	
+}
+
+CCPoint& XGUnit::getPosition()
+{
+	return Position;
+}
+
+CCSprite* XGUnit::getSprite()
+{
+	return Sprite;
+}
+
+
+XGUnit* XGUnit::create(XGPlayer* Player, CCPoint& Pos, const char* Texture)
+{
+	XGUnit* unit = new XGUnit();
+	if(unit && unit->init(Player, Pos, Texture))
+	{
+		unit->autorelease();
+		return unit;
+	}
+	else
+	{
+		CC_SAFE_DELETE(unit);
+		return NULL;
+	}
+}
+
 
 /**
  * Turn logic
@@ -73,12 +137,28 @@ void XGUnit::ActionForceEndTurn()
 
 
 
-CCObject* XGUnit::copyWithZone(CCZone* pZone)
+
+
+
+void XGUnit::TakeDamage(int DamageAmount, XGUnit* DamageCauser)
 {
-	return NULL;
+	Health = max(0, Health - DamageAmount);
+
+	if(Health <= 0)
+	{
+		Died(DamageCauser);
+	}
 }
 
-bool XGUnit::init()
+
+bool XGUnit::Died(XGUnit* Killer)
 {
+	if(bDead)
+	{
+		return false;
+	}
+
+	bDead = true;
+
 	return true;
 }

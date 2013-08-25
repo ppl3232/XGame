@@ -2,9 +2,11 @@
 #define __XGPLAYER_H__
 
 #include "cocos2d.h"
-#include "XGBattle.h"
+
+#include "XGGameData.h"
 
 class XGBattle;
+class XGUnit;
 
 class XGPlayer : public cocos2d::CCObject
 {
@@ -26,6 +28,9 @@ public:
 	virtual void BeginTurn();
 	virtual void EndTurn();
 	
+
+	virtual bool SpawnTeam(cocos2d::CCArray* TeamInfo);
+	virtual XGUnit* SpawnUnit(EUnitType type, cocos2d::CCPoint& Pos);
 
 	// member
 public:

@@ -27,26 +27,15 @@ public:
 			TileInfo->objectAtIndex(y*MapSize.width+x));		
 	}
 
-	cocos2d::CCSize getMapSize()
+	XGMapSize getMapSize()
 	{
 		return MapSize;
 	}
-	unsigned int getMapWidth()
-	{
-		return MapSize.width;
-	}
-	unsigned int getMapHeight()
-	{
-		return MapSize.height;
-	}
-	unsigned int getTileNum()
-	{
-		return MapSize.width*MapSize.height;
-	}
+
 
 // member
 protected:
-	cocos2d::CCSize					MapSize;
+	XGMapSize						MapSize;
 	cocos2d::CCArray*				TileInfo;
 };
 

@@ -62,6 +62,9 @@
     <Filter Include="Classes\Game\Utils">
       <UniqueIdentifier>{79a82c77-f0d1-461f-ba86-c895c11c4009}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Classes\Game\Units">
+      <UniqueIdentifier>{fcded213-70c2-4488-a57e-2d1dcb2ab619}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="res\XComGame.ico">
@@ -134,6 +137,12 @@
     <ClInclude Include="..\Classes\XGAIPlayer.h">
       <Filter>Classes\Game\TurnBaseLogic</Filter>
     </ClInclude>
+    <ClInclude Include="..\Classes\XGFootman.h">
+      <Filter>Classes\Game\Units</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\XGGrunt.h">
+      <Filter>Classes\Game\Units</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -186,6 +195,15 @@
     </ClCompile>
     <ClCompile Include="..\Classes\XGAIPlayer.cpp">
       <Filter>Classes\Game\TurnBaseLogic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\XGFootman.cpp">
+      <Filter>Classes\Game\Units</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\XGGrunt.cpp">
+      <Filter>Classes\Game\Units</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\XGGameData.cpp">
+      <Filter>Classes\Game\Utils</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

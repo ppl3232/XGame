@@ -135,7 +135,9 @@
     <ClInclude Include="..\Classes\AppDelegate.h" />
     <ClInclude Include="..\Classes\XGBattle.h" />
     <ClInclude Include="..\Classes\XGControlCenter.h" />
+    <ClInclude Include="..\Classes\XGGrunt.h" />
     <ClInclude Include="..\Classes\XGDisplay.h" />
+    <ClInclude Include="..\Classes\XGFootman.h" />
     <ClInclude Include="..\Classes\XGGameData.h" />
     <ClInclude Include="..\Classes\XGGameInfo.h" />
     <ClInclude Include="..\Classes\XGGameInitInfo.h" />
@@ -156,7 +158,10 @@
     <ClCompile Include="..\Classes\AppDelegate.cpp" />
     <ClCompile Include="..\Classes\XGBattle.cpp" />
     <ClCompile Include="..\Classes\XGControlCenter.cpp" />
+    <ClCompile Include="..\Classes\XGGameData.cpp" />
+    <ClCompile Include="..\Classes\XGGrunt.cpp" />
     <ClCompile Include="..\Classes\XGDisplay.cpp" />
+    <ClCompile Include="..\Classes\XGFootman.cpp" />
     <ClCompile Include="..\Classes\XGGameInfo.cpp" />
     <ClCompile Include="..\Classes\XGGameInitInfo.cpp" />
     <ClCompile Include="..\Classes\XGGameScene.cpp" />

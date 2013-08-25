@@ -46,6 +46,12 @@ public:
 	bool InitBattle();
 	void DestoryBattle();
 
+
+	// config function 
+	cocos2d::CCArray* getHumanTeam(int num);
+	cocos2d::CCArray* getOrcTeam(int num);
+
+
 // member
 protected:
 	// control center

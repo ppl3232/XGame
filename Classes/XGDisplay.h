@@ -3,7 +3,10 @@
 
 #include "cocos2d.h"
 
+#include "XGTile.h"
+
 class XGGameInitInfo;
+
 class XGDisplay: public cocos2d::CCLayer
 {
 // constructor/destructor
@@ -19,19 +22,40 @@ public:
 public:
 	static XGDisplay* create(XGGameInitInfo* pInitInfo);
 
+	void setTileBkAt(XGTilePoint pos, const char* filename);
+	void setTileBkInRange(XGTilePoint pos, int range, const char* filename);
+	void setTileBkToAll(const char* filename);
+
+	// please ensure object not in a same tile by yourself
+	// @return true if add tile object successfully
+	bool AddTileObject(XGTilePoint pos, const char* filename);
+	// please ensure object not in a same tile by yourself
+	// @return true if move tile object successfully
+	bool MoveTileObject(XGTilePoint fromPos, XGTilePoint toPos);
+
+	void changeFogAt(XGTilePoint pos, bool isShow);
+	void changeFogInRange(XGTilePoint pos, int range, bool isShow);
+	void changeFogToAll(bool isShow);
+
 	void setTileSize(cocos2d::CCSize tileSize);
-	void setTileSprites(const char* filename);
-	void changeFogAt(int x, int y, bool isShow);
-	void changeFogInRange(int x, int y, int range, bool isShow);
+
+	// @return a pixel position by passing tile position
+	cocos2d::CCPoint getTileCenterPos(XGTilePoint pos);
+	// @return a tile position using a giving pixel position
+	XGTilePoint getTileLocation(cocos2d::CCPoint posInPixel);
+
+protected:
+	cocos2d::CCSprite* getTileSpriteInArray(
+		XGTilePoint pos, cocos2d::CCArray* pArray);
 
 // member
 private:
-	cocos2d::CCSize					MapSize;
+	XGMapSize						MapSize;
 	cocos2d::CCSize					TileSize;
 
 protected:
 	// backgrounds of tiles, store CCSprite
-	cocos2d::CCArray*				TileSprites;
+	cocos2d::CCArray*				TileBkSprites;
 	static const int				TileZOrder = 100;
 	// objects in tiles, store CCSprite
 	cocos2d::CCArray*				TileObjSprites;

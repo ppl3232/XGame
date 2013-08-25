@@ -12,5 +12,5 @@ XGPlayerUnit::~XGPlayerUnit()
 
 bool XGPlayerUnit::init()
 {
-	return XGUnit::init();
+	return false;
 }

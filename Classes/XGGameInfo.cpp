@@ -8,6 +8,7 @@
 #include "XGBattle.h"
 #include "XGPlayer.h"
 #include "XGAIPlayer.h"
+#include "XGGameData.h"
 
 USING_NS_CC;
 
@@ -46,11 +47,9 @@ bool XGGameInfo::init()
 		CC_BREAK_IF(!GameInput);
 		addChild(GameInput, InputZOrder);
 
-		GameDisplay = XGDisplay::create(Map);
+		GameDisplay = XGDisplay::create(pGameInitInfo);
 		CC_BREAK_IF(!GameDisplay);
 		addChild(GameDisplay, DisplayZOrder);
-		GameDisplay->setTileBackground("tile.png");
-
 
 		CC_BREAK_IF(!InitBattle());
 
@@ -71,6 +70,31 @@ void XGGameInfo::DestoryBattle()
 	}
 }
 
+// config function
+CCArray* XGGameInfo::getHumanTeam(int Num)
+{
+	CCArray* TeamInfo = CCArray::createWithCapacity(1);
+	for(int i = 0; i < Num; i++)
+	{
+		XGUnitInfo* info = XGUnitInfo::create(EUT_Footman, ccp(i,0));
+		TeamInfo->addObject(info);
+	}
+
+	return TeamInfo;
+}
+CCArray* XGGameInfo::getOrcTeam(int Num)
+{
+	CCArray* TeamInfo = CCArray::createWithCapacity(1);
+	for(int i = 0; i < Num; i++)
+	{
+		XGUnitInfo* info = XGUnitInfo::create(EUT_Grunt, ccp(9-i,9));
+		TeamInfo->addObject(info);
+	}
+
+	return TeamInfo;
+}
+// end
+
 bool XGGameInfo::InitBattle()
 {
 	bool ret = false;
@@ -80,13 +104,15 @@ bool XGGameInfo::InitBattle()
 		CC_BREAK_IF(!Battle);
 		Battle->retain();
 
-		XGPlayer* NewPlayer = XGPlayer::create();
-		CC_BREAK_IF(NewPlayer);
-		Battle->AddPlayer(NewPlayer);
+		XGAIPlayer* NewAI_1 = XGAIPlayer::create();
+		CC_BREAK_IF(!NewAI_1);
+		NewAI_1->SpawnTeam(getHumanTeam(4));
+		Battle->AddPlayer(NewAI_1);
 
-		XGAIPlayer* NewAI = XGAIPlayer::create();
-		CC_BREAK_IF(NewAI);
-		Battle->AddPlayer(NewAI);
+		XGAIPlayer* NewAI_2 = XGAIPlayer::create();
+		CC_BREAK_IF(!NewAI_2);
+		NewAI_2->SpawnTeam(getOrcTeam(3));
+		Battle->AddPlayer(NewAI_2);
 
 		Battle->Start();
 
@@ -105,7 +131,7 @@ XGGameInitInfo* XGGameInfo::getGameInitInfo(const char* filename)
 	{
 		pGameInitInfo = XGGameInitInfo::create();
 		int sizeX = 10, sizeY = 10;
-		pGameInitInfo->MapSize = CCSize(sizeX, sizeY);
+		pGameInitInfo->MapSize = XGMapSize(sizeX, sizeY);
 		pGameInitInfo->MapTiles = CCArray::createWithCapacity(sizeX*sizeY);
 		if (!pGameInitInfo)
 		{

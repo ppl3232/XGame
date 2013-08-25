@@ -22,8 +22,6 @@ bool XGMap::init(XGGameInitInfo* pInitInfo)
 		CC_BREAK_IF(!TileInfo);
 		CC_BREAK_IF(int(MapSize.width)*int(MapSize.height) != TileInfo->count());
 		TileInfo->retain();
-		MapSize.width = floor(MapSize.width);
-		MapSize.height = floor(MapSize.height);
 
 		return true;
 	}

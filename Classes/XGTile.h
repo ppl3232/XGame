@@ -3,6 +3,37 @@
 
 #include "cocos2d.h"
 
+class XGTilePoint
+{
+public:
+	int x;
+	int y;
+
+public:
+	XGTilePoint();
+	XGTilePoint(int x, int y);
+	XGTilePoint(const XGTilePoint& other);
+	XGTilePoint& operator = (const XGTilePoint& other);
+	void setPoint(int x, int y);
+	bool equals(const XGTilePoint& target) const;
+};
+
+class XGMapSize
+{
+public:
+	int width;
+	int height;
+
+public:
+	XGMapSize();
+	XGMapSize(int width, int height);
+	XGMapSize(const XGMapSize& other);
+	XGMapSize& operator = (const XGMapSize& other);
+	void setSize(int width, int height);
+	bool equals(const XGMapSize& target) const;
+	int getTileNum() const;
+};
+
 class XGTile: public cocos2d::CCObject
 {
 // definition

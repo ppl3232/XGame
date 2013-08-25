@@ -1,5 +1,9 @@
 #include "XGPlayer.h"
+
+#include "XGBattle.h"
 #include "XGUnit.h"
+#include "XGFootman.h"
+#include "XGGrunt.h"
 
 USING_NS_CC;
 
@@ -21,7 +25,6 @@ bool XGPlayer::init()
 	bool ret = false;
 	do 
 	{
-		
 		ret = true;
 	} while (0);
 
@@ -60,4 +63,41 @@ bool XGPlayer::CheckForEndTurn()
 	EndTurn();
 
 	return true;
+}
+
+
+bool XGPlayer::SpawnTeam(CCArray* TeamInfo)
+{
+	if(TeamInfo->count() <= 0)
+		return false;
+
+	CCObject* UnitInfoObj = NULL;
+	CCARRAY_FOREACH(TeamInfo, UnitInfoObj)
+	{
+		XGUnitInfo* UnitInfo = dynamic_cast<XGUnitInfo*>(UnitInfoObj);
+		XGUnit* Unit = SpawnUnit(UnitInfo->UnitType, UnitInfo->SpawnLocation);
+		Units->addObject(Unit);
+	}
+
+	return true;
+}
+
+
+XGUnit* XGPlayer::SpawnUnit(EUnitType type, CCPoint& Pos)
+{
+	XGUnit* Unit = NULL;
+
+	switch(type)
+	{
+	case EUT_Footman:
+		Unit = XGFootman::create(this, Pos);
+		break;
+	case EUT_Grunt:
+		Unit = XGGrunt::create(this, Pos);
+		break;
+	default:
+		break;
+	}
+
+	return Unit;
 }
