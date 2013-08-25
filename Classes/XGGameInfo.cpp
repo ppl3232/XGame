@@ -31,6 +31,8 @@ bool XGGameInfo::init()
 	{
 		CC_BREAK_IF(!CCLayer::init());
 
+		setTag(GameInfoTag);
+
 		XGGameInitInfo* pGameInitInfo = getGameInitInfo(NULL);
 		CC_BREAK_IF(!pGameInitInfo);
 		pGameInitInfo->retain();
@@ -61,67 +63,14 @@ bool XGGameInfo::init()
 	return false;
 }
 
-void XGGameInfo::DestoryBattle()
+XGGameInfo* XGGameInfo::getGameInfo()
 {
-	if(Battle != NULL)
-	{
-		Battle->arrPlayers->removeAllObjects();
-		Battle->release();
-	}
+	CCDirector* d = CCDirector::sharedDirector();
+	CCScene* s = d->getRunningScene();
+	CCNode* n = s->getChildByTag(GameInfoTag);
+	XGGameInfo* g = dynamic_cast<XGGameInfo*>(n);
+	return g;
 }
-
-// config function
-CCArray* XGGameInfo::getHumanTeam(int Num)
-{
-	CCArray* TeamInfo = CCArray::createWithCapacity(1);
-	for(int i = 0; i < Num; i++)
-	{
-		XGUnitInfo* info = XGUnitInfo::create(EUT_Footman, ccp(i,0));
-		TeamInfo->addObject(info);
-	}
-
-	return TeamInfo;
-}
-CCArray* XGGameInfo::getOrcTeam(int Num)
-{
-	CCArray* TeamInfo = CCArray::createWithCapacity(1);
-	for(int i = 0; i < Num; i++)
-	{
-		XGUnitInfo* info = XGUnitInfo::create(EUT_Grunt, ccp(9-i,9));
-		TeamInfo->addObject(info);
-	}
-
-	return TeamInfo;
-}
-// end
-
-bool XGGameInfo::InitBattle()
-{
-	bool ret = false;
-	do 
-	{
-		Battle = XGBattle::create();
-		CC_BREAK_IF(!Battle);
-		Battle->retain();
-
-		XGAIPlayer* NewAI_1 = XGAIPlayer::create();
-		CC_BREAK_IF(!NewAI_1);
-		NewAI_1->SpawnTeam(getHumanTeam(4));
-		Battle->AddPlayer(NewAI_1);
-
-		XGAIPlayer* NewAI_2 = XGAIPlayer::create();
-		CC_BREAK_IF(!NewAI_2);
-		NewAI_2->SpawnTeam(getOrcTeam(3));
-		Battle->AddPlayer(NewAI_2);
-
-		Battle->Start();
-
-		ret = true;
-	} while (0);
-
-	return ret;
-}
-
 
 XGGameInitInfo* XGGameInfo::getGameInitInfo(const char* filename)
 {
@@ -171,3 +120,72 @@ XGMap* XGGameInfo::getMap()
 {
 	return Map;
 }
+
+
+bool XGGameInfo::InitBattle()
+{
+	bool ret = false;
+	do 
+	{
+		Battle = XGBattle::create();
+		CC_BREAK_IF(!Battle);
+		Battle->retain();
+
+		XGAIPlayer* NewAI_1 = XGAIPlayer::create(ControlCenter, Battle);
+		CC_BREAK_IF(!NewAI_1);
+		NewAI_1->SpawnTeam(getHumanTeam(4));
+		Battle->AddPlayer(NewAI_1);
+
+		XGAIPlayer* NewAI_2 = XGAIPlayer::create(ControlCenter, Battle);
+		CC_BREAK_IF(!NewAI_2);
+		NewAI_2->SpawnTeam(getOrcTeam(3));
+		Battle->AddPlayer(NewAI_2);
+
+		this->scheduleOnce(schedule_selector(XGGameInfo::BattleStart), 2);
+
+		GameInput->battle = Battle; // for test
+
+		ret = true;
+	} while (0);
+
+	return ret;
+}
+
+void XGGameInfo::DestoryBattle()
+{
+	if(Battle != NULL)
+	{
+		Battle->arrPlayers->removeAllObjects();
+		Battle->release();
+	}
+}
+
+void XGGameInfo::BattleStart(float dt)
+{
+	Battle->Start();
+}
+
+// config function
+CCArray* XGGameInfo::getHumanTeam(int Num)
+{
+	CCArray* TeamInfo = CCArray::createWithCapacity(1);
+	for(int i = 0; i < Num; i++)
+	{
+		XGUnitInfo* info = XGUnitInfo::create(EUT_Footman, tile(i,0));
+		TeamInfo->addObject(info);
+	}
+
+	return TeamInfo;
+}
+CCArray* XGGameInfo::getOrcTeam(int Num)
+{
+	CCArray* TeamInfo = CCArray::createWithCapacity(1);
+	for(int i = 0; i < Num; i++)
+	{
+		XGUnitInfo* info = XGUnitInfo::create(EUT_Grunt, tile(9-i,9));
+		TeamInfo->addObject(info);
+	}
+
+	return TeamInfo;
+}
+// end

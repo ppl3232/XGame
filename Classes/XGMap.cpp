@@ -47,3 +47,32 @@ XGMap* XGMap::create(XGGameInitInfo* pInitInfo)
 	}
 	return pReturnValue;
 }
+
+CCArray* XGMap::GetTilesWithinRange(XGTilePoint origin, int range)
+{
+	XGTile* OriginTile = getTileAt(origin.x, origin.y);
+	CCArray* Tiles = CCArray::create();
+	CCObject* TileObj = NULL;
+	CCARRAY_FOREACH(TileInfo, TileObj)
+	{
+		XGTile* kTile = dynamic_cast<XGTile*>(TileObj);
+		if(kTile->tileDistanceTo(OriginTile) <= range)
+		{
+			Tiles->addObject(kTile);
+		}
+	}
+
+	return Tiles;
+}
+
+void XGMap::SetOccupied(XGTilePoint Pos)
+{
+	XGTile* tile = getTileAt(Pos.x, Pos.y);
+	tile->bBlock = true;
+}
+
+void XGMap::ClearOccupied(XGTilePoint Pos)
+{
+	XGTile* tile = getTileAt(Pos.x, Pos.y);
+	tile->bBlock = false;
+}

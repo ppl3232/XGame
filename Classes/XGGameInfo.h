@@ -36,6 +36,8 @@ public:
 public:
 	CREATE_FUNC(XGGameInfo);
 
+	static XGGameInfo* getGameInfo();
+
 	XGGameInitInfo* getGameInitInfo(const char* filename);
 
 	XGInput* getInput();
@@ -45,7 +47,7 @@ public:
 
 	bool InitBattle();
 	void DestoryBattle();
-
+	void BattleStart(float dt);
 
 	// config function 
 	cocos2d::CCArray* getHumanTeam(int num);
@@ -53,6 +55,8 @@ public:
 
 
 // member
+public:
+	static const int				GameInfoTag = 1;
 protected:
 	// control center
 	XGControlCenter*				ControlCenter;

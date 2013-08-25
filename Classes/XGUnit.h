@@ -2,9 +2,12 @@
 #define __XG_UNIT_H__
 
 #include "cocos2d.h"
-#include "XGPlayer.h"
-#include "XGDisplay.h"
+
 #include "XGGameData.h"
+#include "XGTile.h"
+
+class XGPlayer;
+class XGControlCenter;
 
 class XGUnit: public cocos2d::CCObject
 {
@@ -17,21 +20,22 @@ public:
 public:
 	
     virtual CCObject* copyWithZone(cocos2d::CCZone* pZone);
-	virtual bool init(XGPlayer* Player, cocos2d::CCPoint& Pos, const char* Texture);
-	static XGUnit* create(XGPlayer* Player, cocos2d::CCPoint& Pos, const char* Texture);
+	virtual bool init(XGControlCenter* ControlCenter, XGPlayer* Player, XGTilePoint Pos, const char* Texture);
+	static XGUnit* create(XGControlCenter* ControlCenter, XGPlayer* Player, XGTilePoint Pos, const char* Texture);
 
 // method
 public:
-	virtual void setPosition(const cocos2d::CCPoint &Pos);
-	virtual cocos2d::CCPoint &getPosition();
+	XGTilePoint& GetPosition();
+	virtual void OnPositionChanged(XGTilePoint NewPos);
+
 	// turn logic
 	virtual void BeginTurn();
 	virtual void EndTurn();
 	virtual void ResetActionPoint();
 	virtual bool CheckForEndTurn();
-	virtual void OnNormalActionDone();
+	virtual void OnNormalActionDone(int ap);
 	virtual void OnEndTurnActionDone();
-	virtual void ActionMove(XGUnit* target);
+	virtual void ActionMove(XGTilePoint Pos);
 	virtual void ActionAttack(XGUnit* target);
 	virtual void ActionSkill(XGUnit* target);
 	virtual void ActionForceEndTurn();
@@ -41,21 +45,30 @@ public:
 	virtual void TakeDamage(int DamageAmount, XGUnit* DamageCauser);
 	virtual bool Died(XGUnit* Killer);
 
+	// move
+	
+	virtual cocos2d::CCArray* GetMoveableTiles();
+	virtual cocos2d::CCArray* GetAttackableTiles(XGTilePoint Origin);
+	virtual cocos2d::CCArray* GetPotentialAttackableTiles();
 
 	// getter & setter
 	int getActionPoint() {return CurActionPoint;}
 
-	cocos2d::CCSprite* getSprite();
+	// property
+	float GetHealthRatio();
 	EUnitType getType(){return Type;}
 
 // member
 public:
+	XGControlCenter*				ControlCenter;
+
 	EUnitType						Type;
 	int								CurActionPoint;
 	XGPlayer*						Player;
-	cocos2d::CCSprite*				Sprite;
 
-	cocos2d::CCPoint				Position;
+	const char*						Texture;
+
+	XGTilePoint						Position;
 
 	int								Health;
 	int								HealthMax;

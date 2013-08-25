@@ -2,7 +2,6 @@
 #define __XGBATTLE_H__
 
 #include "cocos2d.h"
-#include "XGPlayer.h"
 
 class XGPlayer;
 
@@ -32,6 +31,8 @@ public:
 	XGPlayer*				ActivePlayer;
 
 	int						Turn;
+
+
 };
 
 

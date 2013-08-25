@@ -1,5 +1,6 @@
 #include "XGPlayer.h"
 
+#include "XGControlCenter.h"
 #include "XGBattle.h"
 #include "XGUnit.h"
 #include "XGFootman.h"
@@ -20,11 +21,28 @@ XGPlayer::~XGPlayer()
 	}
 }
 
-bool XGPlayer::init()
+XGPlayer* XGPlayer::create(XGControlCenter* controlCenter, XGBattle* battle)
+{
+	XGPlayer* player = new XGPlayer();
+	if(player && player->init(controlCenter, battle))
+	{
+		player->autorelease();
+		return player;
+	}
+	else
+	{
+		CC_SAFE_DELETE(player);
+		return NULL;
+	}
+}
+
+bool XGPlayer::init(XGControlCenter* controlCenter, XGBattle* battle)
 {
 	bool ret = false;
 	do 
 	{
+		ControlCenter = controlCenter;
+		Battle = battle;
 		ret = true;
 	} while (0);
 
@@ -76,6 +94,7 @@ bool XGPlayer::SpawnTeam(CCArray* TeamInfo)
 	{
 		XGUnitInfo* UnitInfo = dynamic_cast<XGUnitInfo*>(UnitInfoObj);
 		XGUnit* Unit = SpawnUnit(UnitInfo->UnitType, UnitInfo->SpawnLocation);
+		ControlCenter->spawnUnit(Unit, UnitInfo->SpawnLocation);
 		Units->addObject(Unit);
 	}
 
@@ -83,17 +102,17 @@ bool XGPlayer::SpawnTeam(CCArray* TeamInfo)
 }
 
 
-XGUnit* XGPlayer::SpawnUnit(EUnitType type, CCPoint& Pos)
+XGUnit* XGPlayer::SpawnUnit(EUnitType type, XGTilePoint Pos)
 {
 	XGUnit* Unit = NULL;
 
 	switch(type)
 	{
 	case EUT_Footman:
-		Unit = XGFootman::create(this, Pos);
+		Unit = XGFootman::create(ControlCenter, this, Pos);
 		break;
 	case EUT_Grunt:
-		Unit = XGGrunt::create(this, Pos);
+		Unit = XGGrunt::create(ControlCenter, this, Pos);
 		break;
 	default:
 		break;

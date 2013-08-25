@@ -1,5 +1,5 @@
 #include "XGTile.h"
-
+#include "XGGameData.h"
 USING_NS_CC;
 
 // XGTilePoint
@@ -79,6 +79,7 @@ int XGMapSize::getTileNum() const
 XGTile::XGTile()
 	: Position(-1, -1)
 	, Geography(eTileGeo_Normal)
+	, bBlock(false)	
 {
 }
 
@@ -86,7 +87,7 @@ XGTile::~XGTile()
 {
 }
 
-bool XGTile::init(CCPoint position)
+bool XGTile::init(XGTilePoint position)
 {
 	do
 	{
@@ -110,7 +111,7 @@ CCObject* XGTile::copyWithZone(CCZone* pZone)
 	return pReturnValue;
 }
 
-XGTile* XGTile::create(CCPoint position)
+XGTile* XGTile::create(XGTilePoint position)
 {
 	XGTile* pReturnValue = new XGTile();
 	if (pReturnValue)
@@ -130,10 +131,10 @@ XGTile* XGTile::create(CCPoint position)
 
 XGTile* XGTile::createWithXY(int x, int y)
 {
-	return create(CCPoint(x, y));
+	return create(XGTilePoint(x, y));
 }
 
 int XGTile::tileDistanceTo(XGTile* pTarget)
 {
-	return static_cast<int>(Position.x - pTarget->Position.x + Position.y - pTarget->Position.y);
+	return GetDistance(Position, pTarget->Position);
 }

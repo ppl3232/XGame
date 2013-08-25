@@ -4,6 +4,9 @@
 #include "cocos2d.h"
 
 #include "XGGameInfo.h"
+#include "XGTile.h"
+
+class XGUnit;
 
 class XGControlCenter: public cocos2d::CCObject
 {
@@ -19,6 +22,10 @@ public:
 // method
 public:
 	static XGControlCenter* create(XGGameInfo* pGameInfo);
+
+	void spawnUnit(XGUnit* pUnit, XGTilePoint desPos);
+	void moveUnit(XGUnit* pUnit, XGTilePoint desPos);
+	void dieUnit(XGUnit* pUnit);
 
 // member
 protected:

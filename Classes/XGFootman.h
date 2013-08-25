@@ -2,6 +2,7 @@
 #define __XGFOOTMAN_H__
 
 #include "cocos2d.h"
+
 #include "XGUnit.h"
 
 class XGFootman : public XGUnit
@@ -13,8 +14,8 @@ public:
 
 	// create & init
 public:
-	virtual bool init(XGPlayer* Player,cocos2d::CCPoint& Pos);
-	static XGFootman* create(XGPlayer* Player,cocos2d::CCPoint& Pos);
+	virtual bool init(XGControlCenter* ControlCenter, XGPlayer* Player, XGTilePoint Pos);
+	static XGFootman* create(XGControlCenter* ControlCenter, XGPlayer* Player, XGTilePoint Pos);
 
 	// method
 public:

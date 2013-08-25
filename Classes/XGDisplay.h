@@ -28,10 +28,13 @@ public:
 
 	// please ensure object not in a same tile by yourself
 	// @return true if add tile object successfully
-	bool AddTileObject(XGTilePoint pos, const char* filename);
+	bool addTileObject(XGTilePoint pos, const char* filename);
 	// please ensure object not in a same tile by yourself
 	// @return true if move tile object successfully
-	bool MoveTileObject(XGTilePoint fromPos, XGTilePoint toPos);
+	bool moveTileObject(XGTilePoint fromPos, XGTilePoint toPos);
+	// please ensure object not in a same tile by yourself
+	// @return true if remove tile object successfully
+	bool removeTileObject(XGTilePoint pos);
 
 	void changeFogAt(XGTilePoint pos, bool isShow);
 	void changeFogInRange(XGTilePoint pos, int range, bool isShow);

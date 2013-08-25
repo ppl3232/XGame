@@ -1,5 +1,8 @@
 #include "XGBattle.h"
 
+#include "XGPlayer.h"
+#include "XGInput.h"
+
 USING_NS_CC;
 
 XGBattle::XGBattle()
@@ -36,6 +39,7 @@ void XGBattle::AddPlayer(XGPlayer* kPlayer)
 
 void XGBattle::BeginNewTurn()
 {
+
 	CCAssert(arrPlayers->count() != 0, "Empty Player array!!!");
 	if(Turn == 0)
 	{

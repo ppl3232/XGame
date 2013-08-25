@@ -1,5 +1,5 @@
-#include "XGInput.h"
 
+#include "XGInput.h"
 #include "XGGameInfo.h"
 
 USING_NS_CC;
@@ -28,7 +28,7 @@ bool XGInput::init()
 	return false;
 }
 
-void XGInput::setControlUnit(XGPlayerUnit* pControlUnit)
+void XGInput::setControlUnit(XGUnit* pControlUnit)
 {
 	CurrentControlUnit = pControlUnit;
 }
@@ -44,6 +44,7 @@ void XGInput::ccTouchMoved(CCTouch* pTouch, CCEvent* pEvent)
 
 void XGInput::ccTouchEnded(CCTouch* pTouch, CCEvent* pEvent)
 {
+	battle->BeginNewTurn(); // for test
 }
 
 void XGInput::ccTouchCancelled(CCTouch* pTouch, CCEvent* pEvent)

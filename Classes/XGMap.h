@@ -32,8 +32,12 @@ public:
 		return MapSize;
 	}
 
+	cocos2d::CCArray* GetTilesWithinRange(XGTilePoint origin, int range);
 
-// member
+	void SetOccupied(XGTilePoint Pos);
+	void ClearOccupied(XGTilePoint Pos);
+
+	// member
 protected:
 	XGMapSize						MapSize;
 	cocos2d::CCArray*				TileInfo;

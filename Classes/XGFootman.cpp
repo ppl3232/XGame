@@ -17,12 +17,12 @@ XGFootman::~XGFootman()
 
 }
 
-bool XGFootman::init(XGPlayer* Player,cocos2d::CCPoint& Pos)
+bool XGFootman::init(XGControlCenter* ControlCenter, XGPlayer* Player, XGTilePoint Pos)
 {
 	bool ret = false;
 	do 
 	{
-		CC_BREAK_IF(!XGUnit::init(Player, Pos, "Footman.png"));
+		CC_BREAK_IF(!XGUnit::init(ControlCenter, Player, Pos, "Footman.png"));
 		ret = true;;
 	} while (0);
 
@@ -31,10 +31,10 @@ bool XGFootman::init(XGPlayer* Player,cocos2d::CCPoint& Pos)
 }
 
 
-XGFootman* XGFootman::create(XGPlayer* Player, CCPoint& Pos)
+XGFootman* XGFootman::create(XGControlCenter* ControlCenter, XGPlayer* Player, XGTilePoint Pos)
 {
 	XGFootman* Footman = new XGFootman();
-	if(Footman && Footman->init(Player, Pos))
+	if(Footman && Footman->init(ControlCenter, Player, Pos))
 	{
 		Footman->autorelease();
 		return Footman;

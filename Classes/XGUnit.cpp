@@ -1,12 +1,18 @@
 #include "XGUnit.h"
 
+#include "XGGameInfo.h"
+#include "XGControlCenter.h"
+#include "XGPlayer.h"
+#include "XGMap.h"
+
 USING_NS_CC;
 
 XGUnit::XGUnit()
-	: CurActionPoint(0)
+	: ControlCenter(NULL)
+	, CurActionPoint(0)
 	, Type(EUT_Unknow)
 	, Player(NULL)
-	, Sprite(NULL)
+	, Texture(NULL)
 	, Health(10)
 	, HealthMax(10)
 	, Power(2)
@@ -26,16 +32,15 @@ CCObject* XGUnit::copyWithZone(CCZone* pZone)
 	return NULL;
 }
 
-bool XGUnit::init(XGPlayer* Player, CCPoint& Pos, const char* Texture)
+bool XGUnit::init(XGControlCenter* ControlCenter, XGPlayer* Player, XGTilePoint Pos, const char* Texture)
 {
 	bool ret = false;
 	do 
 	{
+		this->ControlCenter = ControlCenter;
 		this->Player = Player;
 		this->Position = Pos;
-
-		Sprite = CCSprite::create(Texture);
-		CC_BREAK_IF(!Sprite);
+		this->Texture = Texture;
 
 		ret = true;
 	} while (0);
@@ -43,27 +48,21 @@ bool XGUnit::init(XGPlayer* Player, CCPoint& Pos, const char* Texture)
 	return ret;
 }
 
-void XGUnit::setPosition(const cocos2d::CCPoint &Pos)
-{
-	Position = Pos;
-	
-}
-
-CCPoint& XGUnit::getPosition()
+XGTilePoint& XGUnit::GetPosition()
 {
 	return Position;
 }
 
-CCSprite* XGUnit::getSprite()
+void XGUnit::OnPositionChanged(XGTilePoint NewPos)
 {
-	return Sprite;
+	Position = NewPos;
 }
 
 
-XGUnit* XGUnit::create(XGPlayer* Player, CCPoint& Pos, const char* Texture)
+XGUnit* XGUnit::create(XGControlCenter* ControlCenter, XGPlayer* Player, XGTilePoint Pos, const char* Texture)
 {
 	XGUnit* unit = new XGUnit();
-	if(unit && unit->init(Player, Pos, Texture))
+	if(unit && unit->init(ControlCenter, Player, Pos, Texture))
 	{
 		unit->autorelease();
 		return unit;
@@ -96,8 +95,9 @@ bool XGUnit::CheckForEndTurn()
 	return CurActionPoint <= 0;
 }
 
-void XGUnit::OnNormalActionDone()
+void XGUnit::OnNormalActionDone(int ap)
 {
+	CurActionPoint -= ap;
 	if(CheckForEndTurn())
 	{
 		Player->CheckForEndTurn();
@@ -106,17 +106,20 @@ void XGUnit::OnNormalActionDone()
 
 void XGUnit::OnEndTurnActionDone()
 {
+	CurActionPoint = 0;
 	Player->CheckForEndTurn();
 }
 
-void XGUnit::ActionMove(XGUnit* target)
+void XGUnit::ActionMove(XGTilePoint Pos)
 {
-
+	ControlCenter->moveUnit(this, Pos);
+	OnNormalActionDone(1);
 };
 
 void XGUnit::ActionAttack(XGUnit* target)
 {
-
+	target->TakeDamage(Power, this);
+	OnEndTurnActionDone();
 };
 
 
@@ -159,6 +162,57 @@ bool XGUnit::Died(XGUnit* Killer)
 	}
 
 	bDead = true;
+	ControlCenter->dieUnit(this);
+	Player->Units->removeObject(this);
 
 	return true;
+}
+
+
+CCArray* XGUnit::GetMoveableTiles()
+{
+	CCArray* MoveableTiles = NULL;
+	XGMap* map = XGGameInfo::getGameInfo()->getMap();
+
+	MoveableTiles = map->GetTilesWithinRange(Position, Speed);
+
+	CCArray* TilesNeedRemove = CCArray::create();
+
+	for(unsigned int i = 0; i < MoveableTiles->count(); i++)
+	{
+		XGTile* it = dynamic_cast<XGTile*>(MoveableTiles->objectAtIndex(i));
+		if(it->bBlock)
+		{
+			TilesNeedRemove->addObject(it);
+		}
+	}
+
+	MoveableTiles->removeObjectsInArray(TilesNeedRemove);
+
+	return MoveableTiles;
+}
+
+CCArray* XGUnit::GetAttackableTiles(XGTilePoint Origin)
+{
+	XGMap* map = XGGameInfo::getGameInfo()->getMap();
+	return map->GetTilesWithinRange(Origin, Range);
+}
+
+CCArray* XGUnit::GetPotentialAttackableTiles()
+{
+	CCArray* PotentialTiles = CCArray::create();
+	CCArray* MoveableTiles = GetMoveableTiles();
+	for (unsigned int i = 0; i < MoveableTiles->count(); i++)
+	{
+		XGTile* pTile = dynamic_cast<XGTile*>(MoveableTiles->objectAtIndex(i));
+		PotentialTiles->addObjectsFromArray(GetAttackableTiles(pTile->Position));
+	}
+
+	return PotentialTiles;
+}
+
+
+float XGUnit::GetHealthRatio()
+{
+	return float(Health) / HealthMax;
 }

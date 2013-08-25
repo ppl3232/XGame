@@ -5,7 +5,9 @@
 
 #include "XGGameData.h"
 
-class XGBattle;
+#include "XGBattle.h"
+
+class XGControlCenter;
 class XGUnit;
 
 class XGPlayer : public cocos2d::CCObject
@@ -17,8 +19,8 @@ public:
 
 	// create & init
 public:
-	CREATE_FUNC(XGPlayer);
-	virtual bool init();
+	static XGPlayer* create(XGControlCenter* controlCenter, XGBattle* battle);
+	virtual bool init(XGControlCenter* controlCenter, XGBattle* battle);
 
 	// method
 public:
@@ -30,14 +32,13 @@ public:
 	
 
 	virtual bool SpawnTeam(cocos2d::CCArray* TeamInfo);
-	virtual XGUnit* SpawnUnit(EUnitType type, cocos2d::CCPoint& Pos);
+	virtual XGUnit* SpawnUnit(EUnitType type, XGTilePoint Pos);
 
 	// member
 public:
+	XGControlCenter*	ControlCenter;
 	XGBattle*			Battle;
 	cocos2d::CCArray*	Units;
-
-
 };
 
 #endif

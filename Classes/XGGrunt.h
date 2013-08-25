@@ -2,6 +2,7 @@
 #define __XGDEMON_H__
 
 #include "cocos2d.h"
+
 #include "XGUnit.h"
 
 class XGGrunt : public XGUnit
@@ -13,8 +14,8 @@ public:
 
 	// create & init
 public:
-	virtual bool init(XGPlayer* Player, cocos2d::CCPoint& Pos);
-	static XGGrunt* create(XGPlayer* Player, cocos2d::CCPoint& Pos);
+	virtual bool init(XGControlCenter* ControlCenter, XGPlayer* Player, XGTilePoint Pos);
+	static XGGrunt* create(XGControlCenter* ControlCenter, XGPlayer* Player, XGTilePoint Pos);
 
 	// method
 public:

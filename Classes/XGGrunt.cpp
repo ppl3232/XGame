@@ -17,12 +17,12 @@ XGGrunt::~XGGrunt()
 
 }
 
-bool XGGrunt::init(XGPlayer* Player, cocos2d::CCPoint& Pos)
+bool XGGrunt::init(XGControlCenter* ControlCenter, XGPlayer* Player, XGTilePoint Pos)
 {
 	bool ret = false;
 	do 
 	{
-		CC_BREAK_IF(!XGUnit::init(Player, Pos, "Grunt.png"));
+		CC_BREAK_IF(!XGUnit::init(ControlCenter, Player, Pos, "Grunt.png"));
 		ret = true;;
 	} while (0);
 
@@ -31,10 +31,10 @@ bool XGGrunt::init(XGPlayer* Player, cocos2d::CCPoint& Pos)
 }
 
 
-XGGrunt* XGGrunt::create(XGPlayer* Player, CCPoint& Pos)
+XGGrunt* XGGrunt::create(XGControlCenter* ControlCenter, XGPlayer* Player, XGTilePoint Pos)
 {
 	XGGrunt* Grunt = new XGGrunt();
-	if(Grunt && Grunt->init(Player, Pos))
+	if(Grunt && Grunt->init(ControlCenter, Player, Pos))
 	{
 		Grunt->autorelease();
 		return Grunt;

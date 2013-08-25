@@ -51,7 +51,7 @@ bool XGDisplay::init(XGGameInitInfo* pInitInfo)
 		TileObjSprites->retain();
 
 		TileFogSprites = CCArray::create();
-		CC_BREAK_IF(TileFogSprites);
+		CC_BREAK_IF(!TileFogSprites);
 		for (unsigned int i = 0; i < tileNum; i++)
 		{
 			CCSprite* tileFogSprite = CCSprite::create("FogCoverTile.png");
@@ -64,7 +64,8 @@ bool XGDisplay::init(XGGameInitInfo* pInitInfo)
 			tileFogSprite->setContentSize(TileSize);
 			tileFogSprite->setPosition(CCPoint(
 				TileSize.width*(tileX+0.5), TileSize.height*(tileY+0.5)));
-			TileObjSprites->addObject(tileFogSprite);
+			tileFogSprite->setVisible(false);
+			TileFogSprites->addObject(tileFogSprite);
 			addChild(tileFogSprite, TileFogZOrder);
 		}
 		CC_BREAK_IF(TileFogSprites->count() != tileNum);
@@ -140,7 +141,7 @@ void XGDisplay::setTileBkToAll(const char* filename)
 	}
 }
 
-bool XGDisplay::AddTileObject(XGTilePoint pos, const char* filename)
+bool XGDisplay::addTileObject(XGTilePoint pos, const char* filename)
 {
 	// add obj sprite
 	CCSprite* pNewTileObj = CCSprite::create(filename);
@@ -151,11 +152,12 @@ bool XGDisplay::AddTileObject(XGTilePoint pos, const char* filename)
 	pNewTileObj->setContentSize(TileSize);
 	pNewTileObj->setPosition(getTileCenterPos(pos));
 	TileObjSprites->addObject(pNewTileObj);
+	addChild(pNewTileObj, TileObjZOrder);
 
 	return true;
 }
 
-bool XGDisplay::MoveTileObject(XGTilePoint fromPos, XGTilePoint toPos)
+bool XGDisplay::moveTileObject(XGTilePoint fromPos, XGTilePoint toPos)
 {
 	CCObject* pObj = NULL;
 	CCARRAY_FOREACH(TileObjSprites, pObj)
@@ -173,6 +175,26 @@ bool XGDisplay::MoveTileObject(XGTilePoint fromPos, XGTilePoint toPos)
 	}
 
 	return false;
+}
+
+bool XGDisplay::removeTileObject(XGTilePoint pos)
+{
+	CCObject* pObj = NULL;
+	CCARRAY_FOREACH(TileObjSprites, pObj)
+	{
+		CCSprite* pSprite = dynamic_cast<CCSprite*>(pObj);
+		if (pSprite)
+		{
+			// find target obj
+			if (getTileLocation(pSprite->getPosition()).equals(pos))
+			{
+				TileObjSprites->removeObject(pObj);
+				return true;
+			}
+		}
+	}
+
+	return false;	
 }
 
 void XGDisplay::changeFogAt(XGTilePoint pos, bool isShow)

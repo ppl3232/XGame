@@ -18,6 +18,9 @@ public:
 	bool equals(const XGTilePoint& target) const;
 };
 
+#define tile(x,y) XGTilePoint(x, y)
+
+
 class XGMapSize
 {
 public:
@@ -51,7 +54,7 @@ public:
 
 // override
 public:
-	virtual bool init(cocos2d::CCPoint position);
+	virtual bool init(XGTilePoint position);
 
 // override
 public:
@@ -59,19 +62,18 @@ public:
 
 // method
 public:
-	static XGTile* create(cocos2d::CCPoint position);
+	static XGTile* create(XGTilePoint position);
 	static XGTile* createWithXY(int x, int y);
-
-	cocos2d::CCPoint getPosition();
-	TileGeoType getGeography();
 
 	int tileDistanceTo(XGTile* pTarget);
 
 // member
-protected:
+public:
 	// position of tile, not in pixel
-	cocos2d::CCPoint				Position;
+	XGTilePoint						Position;
 	TileGeoType						Geography;
+
+	bool							bBlock;
 };
 
 #endif  // __XG_TILE_H__
