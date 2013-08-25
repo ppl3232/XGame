@@ -12,8 +12,8 @@ public:
 
 	// create & init
 public:
-	static XGAIPlayer* create(XGBattle* battle);
-	virtual bool init(XGBattle* battle);
+	static XGAIPlayer* create(XGControlCenter* controlCenter, XGBattle* battle);
+	virtual bool init(XGControlCenter* controlCenter, XGBattle* battle);
 
 	// method
 	virtual void BeginTurn();

@@ -1,5 +1,8 @@
 #include "XGControlCenter.h"
 
+#include "XGUnit.h"
+#include "XGDisplay.h"
+
 USING_NS_CC;
 
 XGControlCenter::XGControlCenter()
@@ -41,4 +44,19 @@ XGControlCenter* XGControlCenter::create(XGGameInfo* pGameInfo)
 	}
 
 	return pReturnValue;
+}
+
+void XGControlCenter::spawnUnit(XGUnit* pUnit, cocos2d::CCPoint& desPos)
+{
+	GameInfo->getDisplay()->addTileObject(desPos, pUnit->Texture);
+}
+
+void XGControlCenter::moveUnit(XGUnit* pUnit, cocos2d::CCPoint& desPos)
+{
+	GameInfo->getDisplay()->moveTileObject(pUnit->GetPosition(), desPos);
+}
+
+void XGControlCenter::dieUnit(XGUnit* pUnit)
+{
+	GameInfo->getDisplay()->removeTileObject(pUnit->GetPosition());
 }

@@ -8,7 +8,7 @@ XGFootman::XGFootman()
 	Health = 10;
 	HealthMax = 10;
 	Power = 2;
-	Speed = 3;
+	Move  = 20; //for test;
 	Range = 1;
 }
 
@@ -17,12 +17,12 @@ XGFootman::~XGFootman()
 
 }
 
-bool XGFootman::init(XGPlayer* Player, XGDisplay* Canvas ,cocos2d::CCPoint& Pos)
+bool XGFootman::init(XGGameInfo* info ,XGPlayer* player, cocos2d::CCPoint& pos)
 {
 	bool ret = false;
 	do 
 	{
-		CC_BREAK_IF(!XGUnit::init(Player, Canvas, Pos, "Footman.png"));
+		CC_BREAK_IF(!XGUnit::init(info, player, pos, "Footman.png"));
 		ret = true;;
 	} while (0);
 
@@ -31,10 +31,11 @@ bool XGFootman::init(XGPlayer* Player, XGDisplay* Canvas ,cocos2d::CCPoint& Pos)
 }
 
 
-XGFootman* XGFootman::create(XGPlayer* Player, XGDisplay* Canvas, CCPoint& Pos)
+
+XGFootman* XGFootman::create(XGGameInfo* info, XGPlayer* player, CCPoint& pos)
 {
 	XGFootman* Footman = new XGFootman();
-	if(Footman && Footman->init(Player, Canvas, Pos))
+	if(Footman && Footman->init(info, player, pos))
 	{
 		Footman->autorelease();
 		return Footman;

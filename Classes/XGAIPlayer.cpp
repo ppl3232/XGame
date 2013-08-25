@@ -1,4 +1,6 @@
 #include "XGAIPlayer.h"
+
+#include "XGPlayer.h"
 #include "XGUnit.h"
 #include "XGTile.h"
 
@@ -14,10 +16,10 @@ XGAIPlayer::~XGAIPlayer()
 
 }
 
-XGAIPlayer* XGAIPlayer::create(XGBattle* battle)
+XGAIPlayer* XGAIPlayer::create(XGControlCenter* controlCenter, XGBattle* battle)
 {
 	XGAIPlayer* player = new XGAIPlayer();
-	if(player && player->init(battle))
+	if(player && player->init(controlCenter, battle))
 	{
 		player->autorelease();
 		return player;
@@ -30,12 +32,12 @@ XGAIPlayer* XGAIPlayer::create(XGBattle* battle)
 }
 
 
-bool XGAIPlayer::init(XGBattle* battle)
+bool XGAIPlayer::init(XGControlCenter* controlCenter, XGBattle* battle)
 {
 	bool ret = false;
 	do 
 	{
-		XGPlayer::init(battle);
+		XGPlayer::init(controlCenter, battle);
 		ret = true;
 	} while (0);
 
@@ -50,7 +52,7 @@ void XGAIPlayer::BeginTurn()
 	CCLOG("[Turn] BeginTurn %p", this);
 	XGPlayer::BeginTurn();
 
-	for(int i = 0; i < Units->count(); i++)
+	for(unsigned int i = 0; i < Units->count(); i++)
 	{
 		XGUnit* kUnit = dynamic_cast<XGUnit*>(Units->objectAtIndex(i));
 		AITacticsSimple(kUnit);
@@ -81,7 +83,7 @@ void XGAIPlayer::AITacticsSimple(XGUnit* Unit)
 		XGUnit* target = FindClosestTarget(Unit);
 		if(target != NULL)
 		{
-			CCPoint pos = FindClosestPointWithTarget(Unit, target);
+			cocos2d::CCPoint pos = FindClosestPointWithTarget(Unit, target);
 			Unit->ActionMove(pos);
 			Unit->ActionForceEndTurn();
 		}
@@ -95,7 +97,7 @@ AttackPos* XGAIPlayer::GetBestAttackPos(XGUnit* Unit, cocos2d::CCArray* Potentia
 
 	int MaxScore = 0;
 	AttackPos* BestAP = NULL;
-	for(int i = 0; i < PotentialPos->count(); i++)
+	for(unsigned int i = 0; i < PotentialPos->count(); i++)
 	{
 		AttackPos* ap = dynamic_cast<AttackPos*>(PotentialPos->objectAtIndex(i));
 		int score = CalAttackPos(Unit, ap);
@@ -131,15 +133,15 @@ CCArray* XGAIPlayer::GetAttackPos(XGUnit* Unit)
 {
 	CCArray* PotentialPos = CCArray::create();
 	CCArray* MoveableTiles = Unit->GetMoveableTiles();
-	for(int i = 0; i < MoveableTiles->count(); i++)
+	for(unsigned int i = 0; i < MoveableTiles->count(); i++)
 	{
 		XGTile* mTile = dynamic_cast<XGTile*>(MoveableTiles->objectAtIndex(i));
 		CCArray* AttackableTiles = Unit->GetAttackableTiles(mTile->Position);
-		for(int j = 0; j < AttackableTiles->count(); j++)
+		for(unsigned int j = 0; j < AttackableTiles->count(); j++)
 		{
 			XGTile* aTile = dynamic_cast<XGTile*>(AttackableTiles->objectAtIndex(j));
 			CCArray* AllTargets = GetAllTargets();
-			for(int k = 0; k < AllTargets->count(); k++)
+			for(unsigned int k = 0; k < AllTargets->count(); k++)
 			{
 				XGUnit* tUnit = dynamic_cast<XGUnit*>(AllTargets->objectAtIndex(k));
 				if(tUnit->Position.equals(aTile->Position))
@@ -162,7 +164,7 @@ XGUnit* XGAIPlayer::FindClosestTarget(XGUnit* Unit)
 	XGUnit* ClosestTarget = NULL;
 	int MinDis = 1000;
 	CCArray* AllTargets = GetAllTargets();
-	for(int i = 0; i < AllTargets->count(); i++)
+	for(unsigned int i = 0; i < AllTargets->count(); i++)
 	{
 		XGUnit* kUnit = dynamic_cast<XGUnit*>(AllTargets->objectAtIndex(i));
 		int dis = GetDistance(kUnit->Position, Unit->Position);
@@ -176,12 +178,12 @@ XGUnit* XGAIPlayer::FindClosestTarget(XGUnit* Unit)
 	return ClosestTarget;
 }
 
-CCPoint& XGAIPlayer::FindClosestPointWithTarget(XGUnit* Unit, XGUnit* Target)
+cocos2d::CCPoint& XGAIPlayer::FindClosestPointWithTarget(XGUnit* Unit, XGUnit* Target)
 {
 	int MinDis = 1000;
-	CCPoint pos;
+	cocos2d::CCPoint pos;
 	CCArray* MoveableTiles = Unit->GetMoveableTiles();
-	for(int i = 0; i < MoveableTiles->count(); i++)
+	for(unsigned int i = 0; i < MoveableTiles->count(); i++)
 	{
 		XGTile* tile = dynamic_cast<XGTile*>(MoveableTiles->objectAtIndex(i));
 		int dis = GetDistance(tile->Position, Target->Position);

@@ -1,18 +1,22 @@
 #include "XGUnit.h"
-#include "XGTile.h"
+
+#include "XGGameInfo.h"
+#include "XGControlCenter.h"
+#include "XGPlayer.h"
 #include "XGMap.h"
 
 USING_NS_CC;
 
 XGUnit::XGUnit()
-	: CurActionPoint(0)
+	: ControlCenter(NULL)
+	, CurActionPoint(0)
 	, Type(EUT_Unknow)
 	, Player(NULL)
-	, Sprite(NULL)
+	, Texture(NULL)
 	, Health(10)
 	, HealthMax(10)
+	, Move(2)
 	, Power(2)
-	, Speed(2)
 	, Range(1)
 	, bDead(false)
 {
@@ -20,6 +24,7 @@ XGUnit::XGUnit()
 
 XGUnit::~XGUnit()
 {
+	Navigation->release();
 }
 
 
@@ -28,18 +33,26 @@ CCObject* XGUnit::copyWithZone(CCZone* pZone)
 	return NULL;
 }
 
-bool XGUnit::init(XGPlayer* Player, XGDisplay* Canvas, CCPoint& Pos, const char* Texture)
+
+bool XGUnit::init(XGGameInfo* info, XGPlayer* Player, CCPoint& Pos, const char* Texture)
 {
 	bool ret = false;
 	do 
 	{
+		this->ControlCenter = ControlCenter;
 		this->Player = Player;
-		this->Canvas = Canvas;
+		this->Canvas = info->getDisplay();
 		this->Position = Pos;
+
+		Navigation = NavigationHandle::create(info);
+		CC_BREAK_IF(!Navigation);
+		Navigation->retain();
+
 
 		Sprite = CCSprite::create(Texture);
 		CC_BREAK_IF(!Sprite);
 		this->Canvas->AddUnit(this);
+
 
 		ret = true;
 	} while (0);
@@ -47,36 +60,22 @@ bool XGUnit::init(XGPlayer* Player, XGDisplay* Canvas, CCPoint& Pos, const char*
 	return ret;
 }
 
-void XGUnit::SetPosition(CCPoint &Pos)
-{
-	CCPoint OldPos = ccp(Position.x, Position.y);
-	Position = Pos;
-	OnPositionChange(OldPos);
-	
-}
-
-void XGUnit::OnPositionChange(CCPoint& OldPos)
-{
-	Canvas->Map->ClearOccupied(OldPos);
-	Canvas->Map->SetOccupied(Position);
-	Canvas->OnUnitPosChange(this);
-}
-
-CCPoint& XGUnit::getPosition()
+cocos2d::CCPoint& XGUnit::GetPosition()
 {
 	return Position;
 }
 
-CCSprite* XGUnit::getSprite()
+void XGUnit::OnPositionChanged(cocos2d::CCPoint& NewPos)
 {
-	return Sprite;
+	Position = NewPos;
 }
 
 
-XGUnit* XGUnit::create(XGPlayer* Player, XGDisplay* Canvas, CCPoint& Pos, const char* Texture)
+
+XGUnit* XGUnit::create(XGGameInfo* info, XGPlayer* Player, CCPoint& Pos, const char* Texture)
 {
 	XGUnit* unit = new XGUnit();
-	if(unit && unit->init(Player, Canvas, Pos, Texture))
+	if(unit && unit->init(info, Player, Pos, Texture))
 	{
 		unit->autorelease();
 		return unit;
@@ -124,9 +123,9 @@ void XGUnit::OnEndTurnActionDone()
 	Player->CheckForEndTurn();
 }
 
-void XGUnit::ActionMove(CCPoint& Pos)
+void XGUnit::ActionMove(cocos2d::CCPoint& Pos)
 {
-	SetPosition(Pos);
+	ControlCenter->moveUnit(this, Pos);
 	OnNormalActionDone(1);
 };
 
@@ -134,7 +133,6 @@ void XGUnit::ActionAttack(XGUnit* target)
 {
 	target->TakeDamage(Power, this);
 	OnEndTurnActionDone();
-
 };
 
 
@@ -177,7 +175,7 @@ bool XGUnit::Died(XGUnit* Killer)
 	}
 
 	bDead = true;
-	Canvas->RemoveUnit(this);
+	ControlCenter->dieUnit(this);
 	Player->Units->removeObject(this);
 
 	return true;
@@ -187,8 +185,10 @@ bool XGUnit::Died(XGUnit* Killer)
 CCArray* XGUnit::GetMoveableTiles()
 {
 	CCArray* MoveableTiles = NULL;
+	XGMap* map = XGGameInfo::getGameInfo()->getMap();
 
-	MoveableTiles = Canvas->Map->GetTilesWithinRange(Position, Speed);
+	MoveableTiles = Canvas->Map->GetTilesWithinRange(Position, Move);
+
 
 	CCArray* TilesNeedRemove = CCArray::create();
 
@@ -206,19 +206,20 @@ CCArray* XGUnit::GetMoveableTiles()
 	return MoveableTiles;
 }
 
-CCArray* XGUnit::GetAttackableTiles(CCPoint& Origin)
+CCArray* XGUnit::GetAttackableTiles(cocos2d::CCPoint& Origin)
 {
-	return Canvas->Map->GetTilesWithinRange(Origin, Range);
+	XGMap* map = XGGameInfo::getGameInfo()->getMap();
+	return map->GetTilesWithinRange(Origin, Range);
 }
 
 CCArray* XGUnit::GetPotentialAttackableTiles()
 {
 	CCArray* PotentialTiles = CCArray::create();
 	CCArray* MoveableTiles = GetMoveableTiles();
-	for(int i = 0; i < MoveableTiles->count(); i++)
+	for(unsigned int i = 0; i < MoveableTiles->count(); i++)
 	{
-		XGTile* kTile = dynamic_cast<XGTile*>(MoveableTiles->objectAtIndex(i));
-		PotentialTiles->addObjectsFromArray(GetAttackableTiles(kTile->Position));
+		XGTile* pTile = dynamic_cast<XGTile*>(MoveableTiles->objectAtIndex(i));
+		PotentialTiles->addObjectsFromArray(GetAttackableTiles(pTile->Position));
 	}
 
 	return PotentialTiles;
@@ -229,3 +230,21 @@ float XGUnit::GetHealthRatio()
 {
 	return float(Health) / HealthMax;
 }
+
+
+/************************************************************************/
+/* Path-finding                                                         */
+/************************************************************************/
+
+
+bool XGUnit::PathFindingMove(cocos2d::CCPoint& dest)
+{
+	if(Navigation->FindPathWithMove(Position, dest, Move))
+	{
+		Canvas->ClearPath();
+		Canvas->DrawPath(Navigation->GetPath());
+		return true;
+	}
+	return false;
+}
+

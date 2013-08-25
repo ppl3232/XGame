@@ -3,6 +3,8 @@
 
 #include "cocos2d.h"
 
+#include "XGTile.h"
+
 class XGUnit;
 
 const int MAX_ACTION_POINT = 2;

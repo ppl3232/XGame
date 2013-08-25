@@ -3,6 +3,8 @@
 
 #include "cocos2d.h"
 
+#include "XGTile.h"
+
 class XGGameInitInfo: public cocos2d::CCObject
 {
 // constructor/destructor
@@ -16,7 +18,7 @@ public:
 
 // member
 public:
-	cocos2d::CCSize					MapSize;
+	XGMapSize						MapSize;
 	cocos2d::CCArray*				MapTiles;
 	cocos2d::CCArray*				Units;
 };

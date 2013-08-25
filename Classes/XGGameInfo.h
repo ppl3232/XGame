@@ -36,12 +36,15 @@ public:
 public:
 	CREATE_FUNC(XGGameInfo);
 
+	static XGGameInfo* getGameInfo();
+
 	XGGameInitInfo* getGameInitInfo(const char* filename);
 
 	XGInput* getInput();
 	XGDisplay* getDisplay();
 	XGControlCenter* getControlCenter();
 	XGMap* getMap();
+	XGBattle* GetBattle();
 
 	bool InitBattle();
 	void DestoryBattle();
@@ -53,12 +56,11 @@ public:
 
 
 // member
+public:
+	static const int				GameInfoTag = 1;
 protected:
 	// control center
 	XGControlCenter*				ControlCenter;
-
-	// game flow (turn based)
-	XGGameFlow*						GameFlow;
 
 	// map
 	XGMap*							Map;

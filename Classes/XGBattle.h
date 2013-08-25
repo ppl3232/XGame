@@ -2,7 +2,6 @@
 #define __XGBATTLE_H__
 
 #include "cocos2d.h"
-#include "XGPlayer.h"
 
 class XGPlayer;
 
@@ -25,6 +24,8 @@ public:
 	void BeginNewTurn();
 
 	void Start();
+
+	XGPlayer* GetPlayer(); //  for test;
 
 	// member
 public:

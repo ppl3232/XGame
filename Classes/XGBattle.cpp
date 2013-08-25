@@ -1,4 +1,6 @@
 #include "XGBattle.h"
+
+#include "XGPlayer.h"
 #include "XGInput.h"
 
 USING_NS_CC;
@@ -22,7 +24,6 @@ bool XGBattle::init()
 	bool ret = false;
 	do 
 	{
-
 		ret = true;
 	} while (0);
 
@@ -68,4 +69,11 @@ void XGBattle::BeginNewTurn()
 void XGBattle::Start()
 {
 	BeginNewTurn();
+}
+
+
+// for test;
+XGPlayer* XGBattle::GetPlayer()
+{
+	return dynamic_cast<XGPlayer*>(arrPlayers->objectAtIndex(0));
 }

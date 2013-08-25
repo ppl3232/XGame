@@ -22,9 +22,6 @@ bool XGMap::init(XGGameInitInfo* pInitInfo)
 		CC_BREAK_IF(!TileInfo);
 		CC_BREAK_IF(int(MapSize.width)*int(MapSize.height) != TileInfo->count());
 		TileInfo->retain();
-		
-		MapSize.width = floor(MapSize.width);
-		MapSize.height = floor(MapSize.height);
 
 		return true;
 	}
@@ -51,30 +48,10 @@ XGMap* XGMap::create(XGGameInitInfo* pInitInfo)
 	return pReturnValue;
 }
 
-XGTile* XGMap::getTileAt(int x, int y)
-{
-	return dynamic_cast<XGTile*>(TileInfo->objectAtIndex(y*MapSize.width+x));
-}
-
-unsigned int XGMap::getSizeX()
-{
-	return MapSize.height;
-}
 
 
 
-unsigned int XGMap::getSizeY()
-{
-	return MapSize.width;
-}
-
-unsigned int XGMap::getTileNum()
-{
-	return getSizeX()*getSizeY();
-}
-
-
-CCArray* XGMap::GetTilesWithinRange(cocos2d::CCPoint origin, int range)
+CCArray* XGMap::GetTilesWithinRange(CCPoint& origin, int range)
 {
 	XGTile* OriginTile = getTileAt(origin.x, origin.y);
 	CCArray* Tiles = CCArray::create();
@@ -92,15 +69,50 @@ CCArray* XGMap::GetTilesWithinRange(cocos2d::CCPoint origin, int range)
 }
 
 
-void XGMap::SetOccupied(CCPoint& Pos)
+CCArray* XGMap::GetWalkableTileWithinRange(CCPoint& origin, int range)
+{
+	CCArray* TileInRange = GetTilesWithinRange(origin, range);
+	CCArray* TileRemove = CCArray::create();
+	CCObject* TileObj = NULL;
+	CCARRAY_FOREACH(TileInRange, TileObj)
+	{
+		XGTile* kTile = dynamic_cast<XGTile*>(TileObj);
+		if(kTile->bBlock)
+		{
+			TileRemove->addObject(kTile);
+		}
+	}
+
+	TileInRange->removeObjectsInArray(TileRemove);
+
+	return TileInRange;
+}
+
+std::vector<CCPoint> XGMap::GetAdjacentPos(CCPoint& origin)
+{
+	std::vector<CCPoint> AdjacentPos;
+	CCArray* TileInRange = GetWalkableTileWithinRange(origin, 1);
+	CCObject* TileObj = NULL;
+	CCARRAY_FOREACH(TileInRange, TileObj)
+	{
+		XGTile* kTile = dynamic_cast<XGTile*>(TileObj);
+		if(!kTile->Position.equals(origin))
+		{
+			AdjacentPos.push_back(kTile->Position);
+		}
+	}
+	return AdjacentPos;
+}
+
+
+void XGMap::SetOccupied(cocos2d::CCPoint& Pos)
 {
 	XGTile* tile = getTileAt(Pos.x, Pos.y);
 	tile->bBlock = true;
 }
 
-void XGMap::ClearOccupied(CCPoint& Pos)
+void XGMap::ClearOccupied(cocos2d::CCPoint& Pos)
 {
 	XGTile* tile = getTileAt(Pos.x, Pos.y);
 	tile->bBlock = false;
 }
-

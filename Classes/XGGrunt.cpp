@@ -8,7 +8,7 @@ XGGrunt::XGGrunt()
 	HealthMax = 20;
 	Health = HealthMax;
 	Power = 3;
-	Speed = 2;
+	Move  = 2;
 	Range = 1;
 }
 
@@ -17,12 +17,13 @@ XGGrunt::~XGGrunt()
 
 }
 
-bool XGGrunt::init(XGPlayer* Player, XGDisplay* Canvas ,cocos2d::CCPoint& Pos)
+
+bool XGGrunt::init(XGGameInfo* info ,XGPlayer* player, cocos2d::CCPoint& pos)
 {
 	bool ret = false;
 	do 
 	{
-		CC_BREAK_IF(!XGUnit::init(Player, Canvas, Pos, "Grunt.png"));
+		CC_BREAK_IF(!XGUnit::init(info, player, pos, "Grunt.png"));
 		ret = true;;
 	} while (0);
 
@@ -31,10 +32,10 @@ bool XGGrunt::init(XGPlayer* Player, XGDisplay* Canvas ,cocos2d::CCPoint& Pos)
 }
 
 
-XGGrunt* XGGrunt::create(XGPlayer* Player, XGDisplay* Canvas, CCPoint& Pos)
+XGGrunt* XGGrunt::create(XGGameInfo* info ,XGPlayer* player, cocos2d::CCPoint& pos)
 {
 	XGGrunt* Grunt = new XGGrunt();
-	if(Grunt && Grunt->init(Player, Canvas, Pos))
+	if(Grunt && Grunt->init(info, player, pos))
 	{
 		Grunt->autorelease();
 		return Grunt;

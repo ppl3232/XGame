@@ -2,11 +2,14 @@
 #define __XGPLAYER_H__
 
 #include "cocos2d.h"
-#include "XGBattle.h"
-#include "XGDisplay.h"
-#include "XGGameData.h"
 
-class XGBattle;
+#include "XGGameData.h"
+#include "XGGameInfo.h"
+
+#include "XGBattle.h"
+
+class XGControlCenter;
+class XGUnit;
 
 class XGPlayer : public cocos2d::CCObject
 {
@@ -17,8 +20,8 @@ public:
 
 	// create & init
 public:
-	static XGPlayer* create(XGBattle* battle);
-	virtual bool init(XGBattle* battle);
+	static XGPlayer* create(XGControlCenter* controlCenter, XGBattle* battle);
+	virtual bool init(XGControlCenter* controlCenter, XGBattle* battle);
 
 	// method
 public:
@@ -28,16 +31,14 @@ public:
 	virtual void BeginTurn();
 	virtual void EndTurn();
 	
-
-	virtual bool SpawnTeam(XGDisplay* Canvas, cocos2d::CCArray* TeamInfo);
-	virtual XGUnit* SpawnUnit(EUnitType type, XGDisplay* Canvas, cocos2d::CCPoint& Pos);
+	virtual bool SpawnTeam(XGGameInfo* info, cocos2d::CCArray* TeamInfo);
+	virtual XGUnit* SpawnUnit(XGGameInfo* info, EUnitType type, cocos2d::CCPoint& Pos);
 
 	// member
 public:
+	XGControlCenter*	ControlCenter;
 	XGBattle*			Battle;
 	cocos2d::CCArray*	Units;
-
-
 };
 
 #endif

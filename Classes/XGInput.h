@@ -4,6 +4,7 @@
 #include "cocos2d.h"
 #include "XGUnit.h"
 #include "XGBattle.h"
+#include "XGGameInfo.h"
 
 
 class XGInput: public cocos2d::CCLayer
@@ -35,6 +36,7 @@ protected:
 	XGUnit*					CurrentControlUnit;
 public:
 	XGBattle*				battle; // for test
+	XGGameInfo*				GameInfo;
 };
 
 #endif  // __XG_INPUT_H__

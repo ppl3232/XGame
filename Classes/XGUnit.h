@@ -2,11 +2,16 @@
 #define __XG_UNIT_H__
 
 #include "cocos2d.h"
-#include "XGPlayer.h"
-#include "XGDisplay.h"
+
 #include "XGGameData.h"
+#include "XGGameInfo.h"
+#include "NavigationHandle.h"
+#include "XGTile.h"
+#include "XGDisplay.h"
+
 
 class XGPlayer;
+class XGControlCenter;
 
 class XGUnit: public cocos2d::CCObject
 {
@@ -19,14 +24,15 @@ public:
 public:
 	
     virtual CCObject* copyWithZone(cocos2d::CCZone* pZone);
-	virtual bool init(XGPlayer* Player, XGDisplay* Canvas, cocos2d::CCPoint& Pos, const char* Texture);
-	static XGUnit* create(XGPlayer* Player, XGDisplay* Canvas, cocos2d::CCPoint& Pos, const char* Texture);
+
+	virtual bool init(XGGameInfo* info, XGPlayer* Player, cocos2d::CCPoint& Pos, const char* Texture);
+	static XGUnit* create(XGGameInfo* info, XGPlayer* Player, cocos2d::CCPoint& Pos, const char* Texture);
+
 
 // method
 public:
-	virtual void SetPosition(cocos2d::CCPoint &Pos);
-	virtual cocos2d::CCPoint &getPosition();
-	virtual void OnPositionChange(cocos2d::CCPoint& OldPos);
+	cocos2d::CCPoint& GetPosition();
+	virtual void OnPositionChanged(cocos2d::CCPoint& NewPos);
 
 	// turn logic
 	virtual void BeginTurn();
@@ -51,10 +57,11 @@ public:
 	virtual cocos2d::CCArray* GetAttackableTiles(cocos2d::CCPoint& Origin);
 	virtual cocos2d::CCArray* GetPotentialAttackableTiles();
 
+	// path-finding
+	virtual bool PathFindingMove(cocos2d::CCPoint& dest);
+
 	// getter & setter
 	int getActionPoint() {return CurActionPoint;}
-
-	cocos2d::CCSprite* getSprite();
 
 	// property
 	float GetHealthRatio();
@@ -62,21 +69,25 @@ public:
 
 // member
 public:
+	XGControlCenter*				ControlCenter;
+	XGGameInfo*						GameInfo;
 	EUnitType						Type;
 	int								CurActionPoint;
 	XGPlayer*						Player;
 	cocos2d::CCSprite*				Sprite;
-
-	cocos2d::CCPoint				Position;
+	const char*						Texture;
 	XGDisplay*						Canvas;
+	cocos2d::CCPoint				Position;
 
 	int								Health;
 	int								HealthMax;
 	int								Power;
-	int								Speed;
+	int								Move;
 	int								Range;
 
 	bool							bDead;
+
+	NavigationHandle*				Navigation;
 
 
 };
