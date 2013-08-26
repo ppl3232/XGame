@@ -48,8 +48,7 @@ public:
 	TilePoint getTileLocation(cocos2d::CCPoint posInPixel);
 
 
-	void drawPath(cocos2d::CCArray* Path);
-	void clearPath();
+	void debugDrawPath(cocos2d::CCArray* Path);
 
 protected:
 	cocos2d::CCSprite* getTileSpriteInArray(TilePoint pos, cocos2d::CCArray* pArray);

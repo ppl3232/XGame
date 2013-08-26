@@ -63,6 +63,5 @@ void XGControlCenter::dieUnit(XGUnit* pUnit)
 
 void XGControlCenter::potentiallyMoveUnit(XGUnit* pUnit, CCArray* desPos)
 {
-	GameInfo->getDisplay()->clearPath();
-	GameInfo->getDisplay()->drawPath(desPos);
+	GameInfo->getDisplay()->debugDrawPath(desPos);
 }

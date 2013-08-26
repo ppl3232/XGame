@@ -298,19 +298,7 @@ CCSprite* XGDisplay::getTileSpriteInArray(TilePoint pos, CCArray* pArray)
 		pArray->objectAtIndex(pos.x+pos.y*MapSize.width));
 }
 
-void XGDisplay::drawPath(cocos2d::CCArray* Path)
-{
-	for(unsigned int i = 0; i < Path->count(); i++)
-	{
-		PathNode* node = dynamic_cast<PathNode*>(Path->objectAtIndex(i));
-		CCSprite* vNode = CCSprite::create("PathNode.png");
-		vNode->setPosition(getTileCenterPos(node->position));
-		this->addChild(vNode);
-		DebugDraws->addObject(vNode);
-	}
-}
-
-void XGDisplay::clearPath()
+void XGDisplay::debugDrawPath(cocos2d::CCArray* Path)
 {
 	for(unsigned int i = 0; i < DebugDraws->count(); i++)
 	{
@@ -319,4 +307,13 @@ void XGDisplay::clearPath()
 	}
 
 	DebugDraws->removeAllObjects();
+
+	for(unsigned int i = 0; i < Path->count(); i++)
+	{
+		PathNode* node = dynamic_cast<PathNode*>(Path->objectAtIndex(i));
+		CCSprite* vNode = CCSprite::create("PathNode.png");
+		vNode->setPosition(getTileCenterPos(node->position));
+		this->addChild(vNode);
+		DebugDraws->addObject(vNode);
+	}
 }
