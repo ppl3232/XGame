@@ -5,7 +5,7 @@ USING_NS_CC;
 
 // PathNode function start
 
-PathNode* PathNode::create(CCPoint& pos)
+PathNode* PathNode::create(TilePoint pos)
 {
 	PathNode* node = new PathNode();
 	if(node && node->init(pos))
@@ -20,7 +20,7 @@ PathNode* PathNode::create(CCPoint& pos)
 	}
 }
 
-bool PathNode::init(CCPoint& pos)
+bool PathNode::init(TilePoint pos)
 {
 	bool ret = false;
 	do 
@@ -128,7 +128,7 @@ void NavigationHandle::ClearGraphPathInfo()
 }
 
 
-PathNode* NavigationHandle::GetNode(CCPoint& pos)
+PathNode* NavigationHandle::GetNode(TilePoint pos)
 {
 	for(unsigned int i = 0; i < Graph->count(); i++)
 	{
@@ -143,7 +143,7 @@ PathNode* NavigationHandle::GetNode(CCPoint& pos)
 }
 
 
-bool NavigationHandle::FindPathWithMove(cocos2d::CCPoint& start, cocos2d::CCPoint& end, int move)
+bool NavigationHandle::FindPathWithMove(TilePoint start, TilePoint end, int move)
 {
 	if(FindPath(start,end) && Path->count() <= move)
 	{
@@ -153,7 +153,7 @@ bool NavigationHandle::FindPathWithMove(cocos2d::CCPoint& start, cocos2d::CCPoin
 	return false;
 }
 
-bool NavigationHandle::FindPath(cocos2d::CCPoint& start, cocos2d::CCPoint& end)
+bool NavigationHandle::FindPath(TilePoint start, TilePoint end)
 {
 	bool bFindPath = false;
 
@@ -237,7 +237,7 @@ CCArray* NavigationHandle::InsertOpenList(cocos2d::CCArray* openList, PathNode* 
 	return openList;
 }
 
-int NavigationHandle::CalHScore(CCPoint& from, CCPoint& to)
+int NavigationHandle::CalHScore(TilePoint from, TilePoint to)
 {
 	return GetDistance(from, to);
 }
@@ -254,7 +254,7 @@ int NavigationHandle::CalGScore(PathNode* parent, int edgeCost)
 CCArray* NavigationHandle::GetAdjacentNode(PathNode* origin)
 {
 	CCArray* AdjacentNode = CCArray::create();
-	std::vector<CCPoint> AdjacentPos = GameInfo->getMap()->GetAdjacentPos(origin->position);
+	std::vector<TilePoint> AdjacentPos = GameInfo->getMap()->GetAdjacentPos(origin->position);
 	for(int i = 0; i < AdjacentPos.size(); i++)
 	{
 		PathNode* node = GetNode(AdjacentPos[i]);
@@ -264,7 +264,7 @@ CCArray* NavigationHandle::GetAdjacentNode(PathNode* origin)
 	return AdjacentNode;
 }
 
-bool NavigationHandle::GetNextMoveLocation(cocos2d::CCPoint& pos)
+bool NavigationHandle::GetNextMoveLocation(TilePoint pos)
 {
 
 	return false;

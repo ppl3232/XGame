@@ -22,7 +22,7 @@ public:
 	virtual void AITacticsSimple(XGUnit* Unit);
 
 	virtual XGUnit* FindClosestTarget(XGUnit* Unit);
-	virtual cocos2d::CCPoint& FindClosestPointWithTarget(XGUnit* Unit, XGUnit* Target);
+	virtual TilePoint FindClosestPointWithTarget(XGUnit* Unit, XGUnit* Target);
 	virtual cocos2d::CCArray* GetAttackPos(XGUnit* Unit);
 	virtual cocos2d::CCArray* GetAllTargets();
 	virtual AttackPos* GetBestAttackPos(XGUnit* Unit, cocos2d::CCArray* PotentialPos);

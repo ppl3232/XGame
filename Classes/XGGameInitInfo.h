@@ -18,7 +18,7 @@ public:
 
 // member
 public:
-	XGMapSize						MapSize;
+	TileMapSize						MapSize;
 	cocos2d::CCArray*				MapTiles;
 	cocos2d::CCArray*				Units;
 };

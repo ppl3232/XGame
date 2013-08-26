@@ -2,74 +2,74 @@
 #include "XGGameData.h"
 USING_NS_CC;
 
-// XGTilePoint
-XGTilePoint::XGTilePoint()
+// TilePoint
+TilePoint::TilePoint()
 {
 	setPoint(0, 0);
 }
 
-XGTilePoint::XGTilePoint(int x, int y)
+TilePoint::TilePoint(int x, int y)
 {
 	setPoint(x, y);
 }
 
-XGTilePoint::XGTilePoint(const XGTilePoint& other)
+TilePoint::TilePoint(const TilePoint& other)
 {
 	setPoint(other.x, other.y);
 }
 
-XGTilePoint& XGTilePoint::operator = (const XGTilePoint& other)
+TilePoint TilePoint::operator = (const TilePoint other)
 {
 	setPoint(other.x, other.y);
 	return *this;
 }
 
-void XGTilePoint::setPoint(int x, int y)
+void TilePoint::setPoint(int x, int y)
 {
 	this->x = x;
 	this->y = y;
 }
 
-bool XGTilePoint::equals(const XGTilePoint& target) const
+bool TilePoint::equals(const TilePoint target) const
 {
 	return (target.x == x && target.y == y);
 }
 
 
-// XGMapSize
-XGMapSize::XGMapSize()
+// TileMapSize
+TileMapSize::TileMapSize()
 {
 	setSize(0, 0);
 }
 
-XGMapSize::XGMapSize(int width, int height)
+TileMapSize::TileMapSize(int width, int height)
 {
 	setSize(width, height);
 }
 
-XGMapSize::XGMapSize(const XGMapSize& other)
+TileMapSize::TileMapSize(const TileMapSize& other)
 {
 	setSize(other.width, other.height);
 }
 
-XGMapSize& XGMapSize::operator = (const XGMapSize& other)
+TileMapSize& TileMapSize::operator = (const TileMapSize& other)
 {
 	setSize(other.width, other.height);
 	return *this;
 }
 
-void XGMapSize::setSize(int width, int height)
+void TileMapSize::setSize(int width, int height)
 {
 	this->width = width;
 	this->height = height;
 }
 
-bool XGMapSize::equals(const XGMapSize& target) const
+bool TileMapSize::equals(const TileMapSize& target) const
 {
 	return (target.width == width && target.height == height);
 }
 
-int XGMapSize::getTileNum() const
+int TileMapSize::getTileNum() const
 {
 	return width*height;
 }
@@ -87,7 +87,7 @@ XGTile::~XGTile()
 {
 }
 
-bool XGTile::init(cocos2d::CCPoint& position)
+bool XGTile::init(TilePoint position)
 {
 	do
 	{
@@ -111,7 +111,7 @@ CCObject* XGTile::copyWithZone(CCZone* pZone)
 	return pReturnValue;
 }
 
-XGTile* XGTile::create(cocos2d::CCPoint& position)
+XGTile* XGTile::create(TilePoint position)
 {
 	XGTile* pReturnValue = new XGTile();
 	if (pReturnValue)
@@ -131,7 +131,7 @@ XGTile* XGTile::create(cocos2d::CCPoint& position)
 
 XGTile* XGTile::createWithXY(int x, int y)
 {
-	return create(ccp(x, y));
+	return create(TilePoint(x, y));
 }
 
 int XGTile::tileDistanceTo(XGTile* pTarget)

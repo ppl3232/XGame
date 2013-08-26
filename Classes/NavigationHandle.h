@@ -8,8 +8,8 @@
 class PathNode : public cocos2d::CCObject
 {
 public:
-	static PathNode* create(cocos2d::CCPoint& pos);
-	virtual bool init(cocos2d::CCPoint& pos);
+	static PathNode* create(TilePoint pos);
+	virtual bool init(TilePoint pos);
 	
 
 public:
@@ -19,7 +19,7 @@ public:
 
 
 public:
-	cocos2d::CCPoint	position;
+	TilePoint	position;
 	int					gScore;
 	int					hScore;
 	PathNode*			parent;
@@ -38,20 +38,20 @@ public:
 public:
 	
 	
-	bool FindPath(cocos2d::CCPoint& start, cocos2d::CCPoint& end);
-	bool FindPathWithMove(cocos2d::CCPoint& start, cocos2d::CCPoint& end, int move);
+	bool FindPath(TilePoint start, TilePoint end);
+	bool FindPathWithMove(TilePoint start, TilePoint end, int move);
 	cocos2d::CCArray* GetPath();
-	bool GetNextMoveLocation(cocos2d::CCPoint& pos);
+	bool GetNextMoveLocation(TilePoint pos);
 	
 	cocos2d::CCArray* GetAdjacentNode(PathNode* origin);
 
-	int CalHScore(cocos2d::CCPoint& from, cocos2d::CCPoint& to);
+	int CalHScore(TilePoint from, TilePoint to);
 	int CalGScore(PathNode* node, int edgeCost);
 	cocos2d::CCArray* InsertOpenList(cocos2d::CCArray* openList, PathNode* node);
 
 	bool InitGraph();
 	void ClearGraphPathInfo();
-	PathNode* GetNode(cocos2d::CCPoint& pos);
+	PathNode* GetNode(TilePoint pos);
 	
 
 public:

@@ -49,7 +49,7 @@ bool XGGameInfo::init()
 		CC_BREAK_IF(!GameInput);
 		addChild(GameInput, InputZOrder);
 
-		GameDisplay = XGDisplay::create(pGameInitInfo, Map);
+		GameDisplay = XGDisplay::create(pGameInitInfo);
 		CC_BREAK_IF(!GameDisplay);
 		addChild(GameDisplay, DisplayZOrder);
 
@@ -113,7 +113,7 @@ XGGameInitInfo* XGGameInfo::getGameInitInfo(const char* filename)
 	{
 		pGameInitInfo = XGGameInitInfo::create();
 		int sizeX = 10, sizeY = 10;
-		pGameInitInfo->MapSize = XGMapSize(sizeX, sizeY);
+		pGameInitInfo->MapSize = TileMapSize(sizeX, sizeY);
 		pGameInitInfo->MapTiles = CCArray::createWithCapacity(sizeX*sizeY);
 		if (!pGameInitInfo)
 		{
@@ -190,7 +190,7 @@ CCArray* XGGameInfo::getHumanTeam(int Num)
 	CCArray* TeamInfo = CCArray::createWithCapacity(1);
 	for(int i = 0; i < Num; i++)
 	{
-		XGUnitInfo* info = XGUnitInfo::create(EUT_Footman, ccp(i,0));
+		XGUnitInfo* info = XGUnitInfo::create(EUT_Footman, TilePoint(i,0));
 		TeamInfo->addObject(info);
 	}
 
@@ -201,7 +201,7 @@ CCArray* XGGameInfo::getOrcTeam(int Num)
 	CCArray* TeamInfo = CCArray::createWithCapacity(1);
 	for(int i = 0; i < Num; i++)
 	{
-		XGUnitInfo* info = XGUnitInfo::create(EUT_Grunt, ccp(9-i,9));
+		XGUnitInfo* info = XGUnitInfo::create(EUT_Grunt, TilePoint(9-i,9));
 		TeamInfo->addObject(info);
 	}
 

@@ -27,22 +27,22 @@ public:
 			TileInfo->objectAtIndex(y*MapSize.width+x));		
 	}
 
-	XGMapSize getMapSize()
+	TileMapSize getMapSize()
 	{
 		return MapSize;
 	}
 
-	cocos2d::CCArray* GetTilesWithinRange(cocos2d::CCPoint& origin, int range);
-	cocos2d::CCArray* GetWalkableTileWithinRange(cocos2d::CCPoint& origin, int range);
-	std::vector<cocos2d::CCPoint> GetAdjacentPos(cocos2d::CCPoint& origin);
+	cocos2d::CCArray* GetTilesWithinRange(TilePoint origin, int range);
+	cocos2d::CCArray* GetWalkableTileWithinRange(TilePoint origin, int range);
+	std::vector<TilePoint> GetAdjacentPos(TilePoint origin);
 
-	void SetOccupied(cocos2d::CCPoint& Pos);
-	void ClearOccupied(cocos2d::CCPoint& Pos);
+	void SetOccupied(TilePoint Pos);
+	void ClearOccupied(TilePoint Pos);
 
 	// member
 public:
 
-	XGMapSize						MapSize;
+	TileMapSize						MapSize;
 	cocos2d::CCArray*				TileInfo;
 };
 

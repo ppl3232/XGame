@@ -103,7 +103,7 @@ bool XGPlayer::SpawnTeam(XGGameInfo* info, CCArray* TeamInfo)
 
 
 
-XGUnit* XGPlayer::SpawnUnit(XGGameInfo* info, EUnitType type,CCPoint& Pos)
+XGUnit* XGPlayer::SpawnUnit(XGGameInfo* info, EUnitType type,TilePoint Pos)
 {
 	XGUnit* Unit = NULL;
 

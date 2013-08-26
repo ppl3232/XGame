@@ -1,6 +1,7 @@
 #include "XGDisplay.h"
 
 #include "XGGameInitInfo.h"
+#include "NavigationHandle.h"
 
 USING_NS_CC;
 
@@ -14,34 +15,31 @@ XGDisplay::XGDisplay()
 
 XGDisplay::~XGDisplay()
 {
-
-	TileObjects->release();
-	DebugDraws->release();
-
 	TileBkSprites->release();
 	TileObjSprites->release();
-
+	TileFogSprites->release();
+	DebugDraws->release();
 }
 
-bool XGDisplay::init(XGGameInitInfo* pInitInfo, XGMap* map)
+bool XGDisplay::init(XGGameInitInfo* pInitInfo)
 {
 	do
 	{
 		CC_BREAK_IF(!CCLayer::init());
-		Map = map;
 		MapSize = pInitInfo->MapSize;
 		unsigned int tileNum = MapSize.getTileNum();
 		TileBkSprites = CCArray::createWithCapacity(tileNum);
 		CC_BREAK_IF(!TileBkSprites);
 		for (unsigned int i = 0; i < tileNum; i++)
 		{
-			XGTile* tile = dynamic_cast<XGTile*>(Map->TileInfo->objectAtIndex(i));
 			CCSprite* tileSprite = CCSprite::create();
 			if (!tileSprite)
 			{
 				break;
 			}
-			tileSprite->setPosition(GetPositionForTileCoord(tile->Position));
+			TilePoint tilePos(i%MapSize.width, i/MapSize.width);
+			tileSprite->setContentSize(TileSize);
+			tileSprite->setPosition(getTileCenterPos(tilePos));
 			TileBkSprites->addObject(tileSprite);
 			addChild(tileSprite);
 		}
@@ -61,11 +59,9 @@ bool XGDisplay::init(XGGameInitInfo* pInitInfo, XGMap* map)
 			{
 				break;
 			}
-			int tileX = i % MapSize.width;
-			int tileY = i / MapSize.width;
+			TilePoint tilePos(i%MapSize.width, i/MapSize.width);
 			tileFogSprite->setContentSize(TileSize);
-			tileFogSprite->setPosition(CCPoint(
-				TileSize.width*(tileX+0.5), TileSize.height*(tileY+0.5)));
+			tileFogSprite->setPosition(getTileCenterPos(tilePos));
 			tileFogSprite->setVisible(false);
 			TileFogSprites->addObject(tileFogSprite);
 			addChild(tileFogSprite, TileFogZOrder);
@@ -75,7 +71,9 @@ bool XGDisplay::init(XGGameInitInfo* pInitInfo, XGMap* map)
 
 		setTileBkToAll("tile.png");
 
-		DebugDraws = new CCArray();
+		DebugDraws = CCArray::create();
+		CC_BREAK_IF(!DebugDraws);
+		DebugDraws->retain();
 
 		return true;
 	}
@@ -84,12 +82,12 @@ bool XGDisplay::init(XGGameInitInfo* pInitInfo, XGMap* map)
 	return false;
 }
 
-XGDisplay* XGDisplay::create(XGGameInitInfo* pInitInfo,XGMap* map)
+XGDisplay* XGDisplay::create(XGGameInitInfo* pInitInfo)
 {
 	XGDisplay* pReturnValue = new XGDisplay();
 	if (pReturnValue)
 	{
-		if (pReturnValue->init(pInitInfo, map))
+		if (pReturnValue->init(pInitInfo))
 		{
 			pReturnValue->autorelease();
 		}
@@ -102,7 +100,7 @@ XGDisplay* XGDisplay::create(XGGameInitInfo* pInitInfo,XGMap* map)
 	return pReturnValue;
 }
 
-void XGDisplay::setTileBkAt(cocos2d::CCPoint& pos, const char* filename)
+void XGDisplay::setTileBkAt(TilePoint pos, const char* filename)
 {
 	CCSprite* pFogSprite = getTileSpriteInArray(pos, TileBkSprites);
 	if (pFogSprite)
@@ -111,7 +109,7 @@ void XGDisplay::setTileBkAt(cocos2d::CCPoint& pos, const char* filename)
 	}	
 }
 
-void XGDisplay::setTileBkInRange(cocos2d::CCPoint& pos, int range, const char* filename)
+void XGDisplay::setTileBkInRange(TilePoint pos, int range, const char* filename)
 {
 	CCObject* pTileBkSpriteObj = NULL;
 	int curX = 0, curY = 0;
@@ -134,25 +132,14 @@ void XGDisplay::setTileBkInRange(cocos2d::CCPoint& pos, int range, const char* f
 
 void XGDisplay::setTileBkToAll(const char* filename)
 {
-	for(unsigned int i = 0; i < Map->TileInfo->count(); i++)
+	CCObject* pTileObj = NULL;
+	CCARRAY_FOREACH(TileBkSprites, pTileObj)
 	{
-		XGTile* tile = dynamic_cast<XGTile*>(Map->TileInfo->objectAtIndex(i));
-		CCSprite* tileSprite = dynamic_cast<CCSprite*>(TileBkSprites->objectAtIndex(i));
-		
-		if(i%7 == 0 || i%79==0)
+		CCSprite* pTileSprite = dynamic_cast<CCSprite*>(pTileObj);
+		if (pTileSprite)
 		{
-			tile->bBlock = true;
+			pTileSprite->initWithFile(filename);
 		}
-		if(tile->bBlock)
-		{
-			tileSprite->initWithFile("TileFog.png");
-		}
-		else
-		{
-			tileSprite->initWithFile("Tile.png");
-		}
-
-		//CCLOG("[Nav] display tile %d %f %f %d", i, tile->Position.x, tile->Position.y, tile->bBlock);
 	}
 }
 
@@ -160,7 +147,7 @@ void XGDisplay::setTileBkToAll(const char* filename)
 
 
 
-bool XGDisplay::addTileObject(cocos2d::CCPoint& pos, const char* filename)
+bool XGDisplay::addTileObject(TilePoint pos, const char* filename)
 {
 	// add obj sprite
 	CCSprite* pNewTileObj = CCSprite::create(filename);
@@ -176,7 +163,7 @@ bool XGDisplay::addTileObject(cocos2d::CCPoint& pos, const char* filename)
 	return true;
 }
 
-bool XGDisplay::moveTileObject(cocos2d::CCPoint& fromPos, cocos2d::CCPoint& toPos)
+bool XGDisplay::moveTileObject(TilePoint fromPos, TilePoint toPos)
 {
 	CCObject* pObj = NULL;
 	CCARRAY_FOREACH(TileObjSprites, pObj)
@@ -196,7 +183,7 @@ bool XGDisplay::moveTileObject(cocos2d::CCPoint& fromPos, cocos2d::CCPoint& toPo
 	return false;
 }
 
-bool XGDisplay::removeTileObject(cocos2d::CCPoint& pos)
+bool XGDisplay::removeTileObject(TilePoint pos)
 {
 	CCObject* pObj = NULL;
 	CCARRAY_FOREACH(TileObjSprites, pObj)
@@ -216,7 +203,7 @@ bool XGDisplay::removeTileObject(cocos2d::CCPoint& pos)
 	return false;	
 }
 
-void XGDisplay::changeFogAt(cocos2d::CCPoint& pos, bool isShow)
+void XGDisplay::changeFogAt(TilePoint pos, bool isShow)
 {
 	CCSprite* pFogSprite = getTileSpriteInArray(pos, TileFogSprites);
 	if (pFogSprite)
@@ -225,7 +212,7 @@ void XGDisplay::changeFogAt(cocos2d::CCPoint& pos, bool isShow)
 	}
 }
 
-void XGDisplay::changeFogInRange(cocos2d::CCPoint& pos, int range, bool isShow)
+void XGDisplay::changeFogInRange(TilePoint pos, int range, bool isShow)
 {
 	CCObject* pFogSpriteObj = NULL;
 	int curX = 0, curY = 0;
@@ -294,35 +281,36 @@ void XGDisplay::setTileSize(CCSize tileSize)
 	}
 }
 
-CCPoint XGDisplay::getTileCenterPos(cocos2d::CCPoint& pos)
+CCPoint XGDisplay::getTileCenterPos(TilePoint pos)
 {
 	return CCPoint(TileSize.width*(0.5+pos.x), TileSize.height*(0.5+pos.y));
 }
 
-cocos2d::CCPoint& XGDisplay::getTileLocation(CCPoint posInPixel)
+TilePoint XGDisplay::getTileLocation(CCPoint posInPixel)
 {
-	return ccp(posInPixel.x/TileSize.width,
+	return TilePoint(posInPixel.x/TileSize.width,
 		posInPixel.y/TileSize.height);
 }
 
-CCSprite* XGDisplay::getTileSpriteInArray(cocos2d::CCPoint& pos, CCArray* pArray)
+CCSprite* XGDisplay::getTileSpriteInArray(TilePoint pos, CCArray* pArray)
 {
-	return NULL;
+	return dynamic_cast<CCSprite*>(
+		pArray->objectAtIndex(pos.x+pos.y*MapSize.width));
 }
 
-void XGDisplay::DrawPath(cocos2d::CCArray* Path)
+void XGDisplay::drawPath(cocos2d::CCArray* Path)
 {
 	for(unsigned int i = 0; i < Path->count(); i++)
 	{
 		PathNode* node = dynamic_cast<PathNode*>(Path->objectAtIndex(i));
 		CCSprite* vNode = CCSprite::create("PathNode.png");
-		vNode->setPosition(GetPositionForTileCoord(node->position));
+		vNode->setPosition(getTileCenterPos(node->position));
 		this->addChild(vNode);
 		DebugDraws->addObject(vNode);
 	}
 }
 
-void XGDisplay::ClearPath()
+void XGDisplay::clearPath()
 {
 	for(unsigned int i = 0; i < DebugDraws->count(); i++)
 	{
@@ -331,37 +319,4 @@ void XGDisplay::ClearPath()
 	}
 
 	DebugDraws->removeAllObjects();
-}
-
-
-void XGDisplay::AddUnit(XGUnit* unit)
-{
-	this->addChild(unit->Sprite, TileObjZOrder);
-	Map->SetOccupied(unit->Position);
-	OnUnitPositionChanged(unit);
-}
-void XGDisplay::RemoveUnit(XGUnit* unit)
-{
-	this->removeChild(unit->Sprite);
-	Map->ClearOccupied(unit->Position);
-}
-void XGDisplay::OnUnitPositionChanged(XGUnit* unit)
-{
-	unit->Sprite->setPosition(GetPositionForTileCoord(unit->Position));
-}
-
-
-
-CCPoint XGDisplay::GetTileCoordForPosition(CCPoint pos)
-{
-	int x = pos.x / TileSize.width;
-	int y = (MapSize.height * TileSize.height - pos.y) / TileSize.height;
-	return ccp(x,y);
-}
-
-CCPoint XGDisplay::GetPositionForTileCoord(CCPoint pos)
-{
-	int x = pos.x * TileSize.width + TileSize.width / 2;
-	int y = (MapSize.height - pos.y) * TileSize.height - TileSize.height / 2;
-	return ccp(x,y);
 }

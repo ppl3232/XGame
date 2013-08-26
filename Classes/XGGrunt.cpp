@@ -18,7 +18,7 @@ XGGrunt::~XGGrunt()
 }
 
 
-bool XGGrunt::init(XGGameInfo* info ,XGPlayer* player, cocos2d::CCPoint& pos)
+bool XGGrunt::init(XGGameInfo* info ,XGPlayer* player, TilePoint pos)
 {
 	bool ret = false;
 	do 
@@ -32,7 +32,7 @@ bool XGGrunt::init(XGGameInfo* info ,XGPlayer* player, cocos2d::CCPoint& pos)
 }
 
 
-XGGrunt* XGGrunt::create(XGGameInfo* info ,XGPlayer* player, cocos2d::CCPoint& pos)
+XGGrunt* XGGrunt::create(XGGameInfo* info ,XGPlayer* player, TilePoint pos)
 {
 	XGGrunt* Grunt = new XGGrunt();
 	if(Grunt && Grunt->init(info, player, pos))

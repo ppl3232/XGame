@@ -34,14 +34,13 @@ CCObject* XGUnit::copyWithZone(CCZone* pZone)
 }
 
 
-bool XGUnit::init(XGGameInfo* info, XGPlayer* Player, CCPoint& Pos, const char* Texture)
+bool XGUnit::init(XGGameInfo* info, XGPlayer* Player, TilePoint Pos, const char* Texture)
 {
 	bool ret = false;
 	do 
 	{
 		this->ControlCenter = ControlCenter;
 		this->Player = Player;
-		this->Canvas = info->getDisplay();
 		this->Position = Pos;
 
 		Navigation = NavigationHandle::create(info);
@@ -51,7 +50,6 @@ bool XGUnit::init(XGGameInfo* info, XGPlayer* Player, CCPoint& Pos, const char* 
 
 		Sprite = CCSprite::create(Texture);
 		CC_BREAK_IF(!Sprite);
-		this->Canvas->AddUnit(this);
 
 
 		ret = true;
@@ -60,19 +58,19 @@ bool XGUnit::init(XGGameInfo* info, XGPlayer* Player, CCPoint& Pos, const char* 
 	return ret;
 }
 
-cocos2d::CCPoint& XGUnit::GetPosition()
+TilePoint XGUnit::GetPosition()
 {
 	return Position;
 }
 
-void XGUnit::OnPositionChanged(cocos2d::CCPoint& NewPos)
+void XGUnit::OnPositionChanged(TilePoint NewPos)
 {
 	Position = NewPos;
 }
 
 
 
-XGUnit* XGUnit::create(XGGameInfo* info, XGPlayer* Player, CCPoint& Pos, const char* Texture)
+XGUnit* XGUnit::create(XGGameInfo* info, XGPlayer* Player, TilePoint Pos, const char* Texture)
 {
 	XGUnit* unit = new XGUnit();
 	if(unit && unit->init(info, Player, Pos, Texture))
@@ -123,7 +121,7 @@ void XGUnit::OnEndTurnActionDone()
 	Player->CheckForEndTurn();
 }
 
-void XGUnit::ActionMove(cocos2d::CCPoint& Pos)
+void XGUnit::ActionMove(TilePoint Pos)
 {
 	ControlCenter->moveUnit(this, Pos);
 	OnNormalActionDone(1);
@@ -187,7 +185,7 @@ CCArray* XGUnit::GetMoveableTiles()
 	CCArray* MoveableTiles = NULL;
 	XGMap* map = XGGameInfo::getGameInfo()->getMap();
 
-	MoveableTiles = Canvas->Map->GetTilesWithinRange(Position, Move);
+	MoveableTiles = map->GetTilesWithinRange(Position, Move);
 
 
 	CCArray* TilesNeedRemove = CCArray::create();
@@ -206,7 +204,7 @@ CCArray* XGUnit::GetMoveableTiles()
 	return MoveableTiles;
 }
 
-CCArray* XGUnit::GetAttackableTiles(cocos2d::CCPoint& Origin)
+CCArray* XGUnit::GetAttackableTiles(TilePoint Origin)
 {
 	XGMap* map = XGGameInfo::getGameInfo()->getMap();
 	return map->GetTilesWithinRange(Origin, Range);
@@ -237,12 +235,11 @@ float XGUnit::GetHealthRatio()
 /************************************************************************/
 
 
-bool XGUnit::PathFindingMove(cocos2d::CCPoint& dest)
+bool XGUnit::PathFindingMove(TilePoint dest)
 {
 	if(Navigation->FindPathWithMove(Position, dest, Move))
 	{
-		Canvas->ClearPath();
-		Canvas->DrawPath(Navigation->GetPath());
+		ControlCenter->potentiallyMoveUnit(this, Navigation->GetPath());
 		return true;
 	}
 	return false;

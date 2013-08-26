@@ -25,14 +25,14 @@ public:
 	
     virtual CCObject* copyWithZone(cocos2d::CCZone* pZone);
 
-	virtual bool init(XGGameInfo* info, XGPlayer* Player, cocos2d::CCPoint& Pos, const char* Texture);
-	static XGUnit* create(XGGameInfo* info, XGPlayer* Player, cocos2d::CCPoint& Pos, const char* Texture);
+	virtual bool init(XGGameInfo* info, XGPlayer* Player, TilePoint Pos, const char* Texture);
+	static XGUnit* create(XGGameInfo* info, XGPlayer* Player, TilePoint Pos, const char* Texture);
 
 
 // method
 public:
-	cocos2d::CCPoint& GetPosition();
-	virtual void OnPositionChanged(cocos2d::CCPoint& NewPos);
+	TilePoint GetPosition();
+	virtual void OnPositionChanged(TilePoint NewPos);
 
 	// turn logic
 	virtual void BeginTurn();
@@ -41,7 +41,7 @@ public:
 	virtual bool CheckForEndTurn();
 	virtual void OnNormalActionDone(int ap);
 	virtual void OnEndTurnActionDone();
-	virtual void ActionMove(cocos2d::CCPoint& Pos);
+	virtual void ActionMove(TilePoint Pos);
 	virtual void ActionAttack(XGUnit* target);
 	virtual void ActionSkill(XGUnit* target);
 	virtual void ActionForceEndTurn();
@@ -54,11 +54,11 @@ public:
 	// move
 	
 	virtual cocos2d::CCArray* GetMoveableTiles();
-	virtual cocos2d::CCArray* GetAttackableTiles(cocos2d::CCPoint& Origin);
+	virtual cocos2d::CCArray* GetAttackableTiles(TilePoint Origin);
 	virtual cocos2d::CCArray* GetPotentialAttackableTiles();
 
 	// path-finding
-	virtual bool PathFindingMove(cocos2d::CCPoint& dest);
+	virtual bool PathFindingMove(TilePoint dest);
 
 	// getter & setter
 	int getActionPoint() {return CurActionPoint;}
@@ -76,8 +76,7 @@ public:
 	XGPlayer*						Player;
 	cocos2d::CCSprite*				Sprite;
 	const char*						Texture;
-	XGDisplay*						Canvas;
-	cocos2d::CCPoint				Position;
+	TilePoint						Position;
 
 	int								Health;
 	int								HealthMax;

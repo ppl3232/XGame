@@ -3,37 +3,37 @@
 
 #include "cocos2d.h"
 
-class XGTilePoint
+class TilePoint
 {
 public:
 	int x;
 	int y;
 
 public:
-	XGTilePoint();
-	XGTilePoint(int x, int y);
-	XGTilePoint(const XGTilePoint& other);
-	XGTilePoint& operator = (const XGTilePoint& other);
+	TilePoint();
+	TilePoint(int x, int y);
+	TilePoint(const TilePoint& other);
+	TilePoint operator = (const TilePoint other);
 	void setPoint(int x, int y);
-	bool equals(const XGTilePoint& target) const;
+	bool equals(const TilePoint target) const;
 };
 
-#define tile(x,y) XGTilePoint(x, y)
+#define tile(x,y) TilePoint(x, y)
 
 
-class XGMapSize
+class TileMapSize
 {
 public:
 	int width;
 	int height;
 
 public:
-	XGMapSize();
-	XGMapSize(int width, int height);
-	XGMapSize(const XGMapSize& other);
-	XGMapSize& operator = (const XGMapSize& other);
+	TileMapSize();
+	TileMapSize(int width, int height);
+	TileMapSize(const TileMapSize& other);
+	TileMapSize& operator = (const TileMapSize& other);
 	void setSize(int width, int height);
-	bool equals(const XGMapSize& target) const;
+	bool equals(const TileMapSize& target) const;
 	int getTileNum() const;
 };
 
@@ -54,7 +54,7 @@ public:
 
 // override
 public:
-	virtual bool init(cocos2d::CCPoint& position);
+	virtual bool init(TilePoint position);
 
 // override
 public:
@@ -62,7 +62,7 @@ public:
 
 // method
 public:
-	static XGTile* create(cocos2d::CCPoint& position);
+	static XGTile* create(TilePoint position);
 	static XGTile* createWithXY(int x, int y);
 
 	int tileDistanceTo(XGTile* pTarget);
@@ -70,7 +70,7 @@ public:
 // member
 public:
 	// position of tile, not in pixel
-	cocos2d::CCPoint				Position;
+	TilePoint				Position;
 	TileGeoType						Geography;
 
 	bool							bBlock;

@@ -28,26 +28,26 @@ enum EUnitType
 class AttackPos : public cocos2d::CCObject
 {
 public:
-	static AttackPos* create(cocos2d::CCPoint& Pos, XGUnit* target);
-	virtual bool init(cocos2d::CCPoint& Pos, XGUnit* target);
+	static AttackPos* create(TilePoint Pos, XGUnit* target);
+	virtual bool init(TilePoint Pos, XGUnit* target);
 
 public:
-	cocos2d::CCPoint	Position;
+	TilePoint	Position;
 	XGUnit*				Target;
 };
 
 class XGUnitInfo : public cocos2d::CCObject
 {
 public:
-	virtual bool init(EUnitType type, cocos2d::CCPoint& pos);
-	static XGUnitInfo* create(EUnitType type, cocos2d::CCPoint& pos);
+	virtual bool init(EUnitType type, TilePoint pos);
+	static XGUnitInfo* create(EUnitType type, TilePoint pos);
 
 public:
 	EUnitType			UnitType;
-	cocos2d::CCPoint	SpawnLocation;
+	TilePoint	SpawnLocation;
 };
 
-inline int GetDistance(cocos2d::CCPoint& from, cocos2d::CCPoint& to)
+inline int GetDistance(TilePoint from, TilePoint to)
 {
 	return static_cast<int>(abs(from.x - to.x) + abs(from.y - to.y));
 }

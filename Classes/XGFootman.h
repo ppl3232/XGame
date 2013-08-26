@@ -14,8 +14,8 @@ public:
 
 	// create & init
 public:
-	virtual bool init(XGGameInfo* info ,XGPlayer* player, cocos2d::CCPoint& pos);
-	static XGFootman* create(XGGameInfo* info ,XGPlayer* player, cocos2d::CCPoint& pos);
+	virtual bool init(XGGameInfo* info ,XGPlayer* player, TilePoint pos);
+	static XGFootman* create(XGGameInfo* info ,XGPlayer* player, TilePoint pos);
 
 	// method
 public:

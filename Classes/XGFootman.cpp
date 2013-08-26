@@ -17,7 +17,7 @@ XGFootman::~XGFootman()
 
 }
 
-bool XGFootman::init(XGGameInfo* info ,XGPlayer* player, cocos2d::CCPoint& pos)
+bool XGFootman::init(XGGameInfo* info ,XGPlayer* player, TilePoint pos)
 {
 	bool ret = false;
 	do 
@@ -32,7 +32,7 @@ bool XGFootman::init(XGGameInfo* info ,XGPlayer* player, cocos2d::CCPoint& pos)
 
 
 
-XGFootman* XGFootman::create(XGGameInfo* info, XGPlayer* player, CCPoint& pos)
+XGFootman* XGFootman::create(XGGameInfo* info, XGPlayer* player, TilePoint pos)
 {
 	XGFootman* Footman = new XGFootman();
 	if(Footman && Footman->init(info, player, pos))

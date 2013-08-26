@@ -1,7 +1,7 @@
 #include "XGGameData.h"
 
 
-bool XGUnitInfo::init(EUnitType type, cocos2d::CCPoint& pos)
+bool XGUnitInfo::init(EUnitType type, TilePoint pos)
 {
 	UnitType		= type;
 	SpawnLocation	= pos;
@@ -9,7 +9,7 @@ bool XGUnitInfo::init(EUnitType type, cocos2d::CCPoint& pos)
 	return true;
 }
 
-XGUnitInfo* XGUnitInfo::create(EUnitType type, cocos2d::CCPoint& pos)
+XGUnitInfo* XGUnitInfo::create(EUnitType type, TilePoint pos)
 {
 	XGUnitInfo* info = new XGUnitInfo();
 	if(info && info->init(type, pos))
@@ -25,7 +25,7 @@ XGUnitInfo* XGUnitInfo::create(EUnitType type, cocos2d::CCPoint& pos)
 }
 
 
-bool AttackPos::init(cocos2d::CCPoint& Pos, XGUnit* target)
+bool AttackPos::init(TilePoint Pos, XGUnit* target)
 {
 	Position		= Pos;
 	Target			= target;
@@ -33,7 +33,7 @@ bool AttackPos::init(cocos2d::CCPoint& Pos, XGUnit* target)
 	return true;
 }
 
-AttackPos* AttackPos::create(cocos2d::CCPoint& Pos, XGUnit* target)
+AttackPos* AttackPos::create(TilePoint Pos, XGUnit* target)
 {
 	AttackPos* ap = new AttackPos();
 	if(ap && ap->init(Pos, target))

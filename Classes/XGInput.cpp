@@ -46,7 +46,7 @@ void XGInput::ccTouchMoved(CCTouch* pTouch, CCEvent* pEvent)
 void XGInput::ccTouchEnded(CCTouch* pTouch, CCEvent* pEvent)
 {
 	//battle->BeginNewTurn(); // for test
-	CCPoint touchPos = GameInfo->getDisplay()->GetTileCoordForPosition(pTouch->getLocation());
+	TilePoint touchPos = GameInfo->getDisplay()->getTileLocation(pTouch->getLocation());
 
 	CCArray* PlayerUnits = GameInfo->GetBattle()->GetPlayer()->Units;
 	for(unsigned int i = 0; i < PlayerUnits->count(); i++)

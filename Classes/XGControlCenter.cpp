@@ -46,12 +46,12 @@ XGControlCenter* XGControlCenter::create(XGGameInfo* pGameInfo)
 	return pReturnValue;
 }
 
-void XGControlCenter::spawnUnit(XGUnit* pUnit, cocos2d::CCPoint& desPos)
+void XGControlCenter::spawnUnit(XGUnit* pUnit, TilePoint desPos)
 {
 	GameInfo->getDisplay()->addTileObject(desPos, pUnit->Texture);
 }
 
-void XGControlCenter::moveUnit(XGUnit* pUnit, cocos2d::CCPoint& desPos)
+void XGControlCenter::moveUnit(XGUnit* pUnit, TilePoint desPos)
 {
 	GameInfo->getDisplay()->moveTileObject(pUnit->GetPosition(), desPos);
 }
@@ -59,4 +59,10 @@ void XGControlCenter::moveUnit(XGUnit* pUnit, cocos2d::CCPoint& desPos)
 void XGControlCenter::dieUnit(XGUnit* pUnit)
 {
 	GameInfo->getDisplay()->removeTileObject(pUnit->GetPosition());
+}
+
+void XGControlCenter::potentiallyMoveUnit(XGUnit* pUnit, CCArray* desPos)
+{
+	GameInfo->getDisplay()->clearPath();
+	GameInfo->getDisplay()->drawPath(desPos);
 }

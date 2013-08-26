@@ -32,7 +32,7 @@ public:
 	virtual void EndTurn();
 	
 	virtual bool SpawnTeam(XGGameInfo* info, cocos2d::CCArray* TeamInfo);
-	virtual XGUnit* SpawnUnit(XGGameInfo* info, EUnitType type, cocos2d::CCPoint& Pos);
+	virtual XGUnit* SpawnUnit(XGGameInfo* info, EUnitType type, TilePoint Pos);
 
 	// member
 public:

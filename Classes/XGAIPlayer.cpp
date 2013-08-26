@@ -83,7 +83,7 @@ void XGAIPlayer::AITacticsSimple(XGUnit* Unit)
 		XGUnit* target = FindClosestTarget(Unit);
 		if(target != NULL)
 		{
-			cocos2d::CCPoint pos = FindClosestPointWithTarget(Unit, target);
+			TilePoint pos = FindClosestPointWithTarget(Unit, target);
 			Unit->ActionMove(pos);
 			Unit->ActionForceEndTurn();
 		}
@@ -178,10 +178,10 @@ XGUnit* XGAIPlayer::FindClosestTarget(XGUnit* Unit)
 	return ClosestTarget;
 }
 
-cocos2d::CCPoint& XGAIPlayer::FindClosestPointWithTarget(XGUnit* Unit, XGUnit* Target)
+TilePoint XGAIPlayer::FindClosestPointWithTarget(XGUnit* Unit, XGUnit* Target)
 {
 	int MinDis = 1000;
-	cocos2d::CCPoint pos;
+	TilePoint pos;
 	CCArray* MoveableTiles = Unit->GetMoveableTiles();
 	for(unsigned int i = 0; i < MoveableTiles->count(); i++)
 	{
@@ -194,7 +194,7 @@ cocos2d::CCPoint& XGAIPlayer::FindClosestPointWithTarget(XGUnit* Unit, XGUnit* T
 		}
 	}
 
-	return ccp(pos.x, pos.y);
+	return TilePoint(pos.x, pos.y);
 }
 
 

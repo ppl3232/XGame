@@ -51,7 +51,7 @@ XGMap* XGMap::create(XGGameInitInfo* pInitInfo)
 
 
 
-CCArray* XGMap::GetTilesWithinRange(CCPoint& origin, int range)
+CCArray* XGMap::GetTilesWithinRange(TilePoint origin, int range)
 {
 	XGTile* OriginTile = getTileAt(origin.x, origin.y);
 	CCArray* Tiles = CCArray::create();
@@ -69,7 +69,7 @@ CCArray* XGMap::GetTilesWithinRange(CCPoint& origin, int range)
 }
 
 
-CCArray* XGMap::GetWalkableTileWithinRange(CCPoint& origin, int range)
+CCArray* XGMap::GetWalkableTileWithinRange(TilePoint origin, int range)
 {
 	CCArray* TileInRange = GetTilesWithinRange(origin, range);
 	CCArray* TileRemove = CCArray::create();
@@ -88,9 +88,9 @@ CCArray* XGMap::GetWalkableTileWithinRange(CCPoint& origin, int range)
 	return TileInRange;
 }
 
-std::vector<CCPoint> XGMap::GetAdjacentPos(CCPoint& origin)
+std::vector<TilePoint> XGMap::GetAdjacentPos(TilePoint origin)
 {
-	std::vector<CCPoint> AdjacentPos;
+	std::vector<TilePoint> AdjacentPos;
 	CCArray* TileInRange = GetWalkableTileWithinRange(origin, 1);
 	CCObject* TileObj = NULL;
 	CCARRAY_FOREACH(TileInRange, TileObj)
@@ -105,13 +105,13 @@ std::vector<CCPoint> XGMap::GetAdjacentPos(CCPoint& origin)
 }
 
 
-void XGMap::SetOccupied(cocos2d::CCPoint& Pos)
+void XGMap::SetOccupied(TilePoint Pos)
 {
 	XGTile* tile = getTileAt(Pos.x, Pos.y);
 	tile->bBlock = true;
 }
 
-void XGMap::ClearOccupied(cocos2d::CCPoint& Pos)
+void XGMap::ClearOccupied(TilePoint Pos)
 {
 	XGTile* tile = getTileAt(Pos.x, Pos.y);
 	tile->bBlock = false;
