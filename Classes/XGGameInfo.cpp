@@ -111,28 +111,7 @@ XGGameInitInfo* XGGameInfo::getGameInitInfo(const char* filename)
 	if (filename == NULL)
 	// use debug info
 	{
-		pGameInitInfo = XGGameInitInfo::create();
-		int sizeX = 10, sizeY = 10;
-		pGameInitInfo->MapSize = TileMapSize(sizeX, sizeY);
-		pGameInitInfo->MapTiles = CCArray::createWithCapacity(sizeX*sizeY);
-		if (!pGameInitInfo)
-		{
-			return NULL;
-		}
-		for (int i = 0; i < sizeX*sizeY; i++)
-		{
-			XGTile* pTile = XGTile::createWithXY(i%sizeX, i/sizeY);
-			pGameInitInfo->MapTiles->addObject(pTile);
-		}
-
-		//for(int i = 0; i < pGameInitInfo->MapTiles->count(); i++)
-		//{
-		//	XGTile* tile = dynamic_cast<XGTile*>(pGameInitInfo->MapTiles->objectAtIndex(i));
-		//	CCLOG("[Nav] init tile %f %f %d", tile->Position.x, tile->Position.y, tile->bBlock);
-		//}
-
-
-		pGameInitInfo->Units = CCArray::create();
+		pGameInitInfo = XGGameInitInfo::createDebug();
 	}
 	else
 	{

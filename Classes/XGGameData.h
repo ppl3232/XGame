@@ -32,7 +32,7 @@ public:
 	virtual bool init(TilePoint Pos, XGUnit* target);
 
 public:
-	TilePoint	Position;
+	TilePoint			Position;
 	XGUnit*				Target;
 };
 
@@ -44,7 +44,7 @@ public:
 
 public:
 	EUnitType			UnitType;
-	TilePoint	SpawnLocation;
+	TilePoint			SpawnLocation;
 };
 
 inline int GetDistance(TilePoint from, TilePoint to)

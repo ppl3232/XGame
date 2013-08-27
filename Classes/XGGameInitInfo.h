@@ -3,7 +3,7 @@
 
 #include "cocos2d.h"
 
-#include "XGTile.h"
+#include "XGGameData.h"
 
 class XGGameInitInfo: public cocos2d::CCObject
 {
@@ -14,16 +14,21 @@ public:
 
 // method
 public:
-	virtual bool initDebugInfo();
+	virtual bool initDebug();
 
+public:
 	static XGGameInitInfo* create();
-	static XGGameInitInfo* createDebugInfo();
+	static XGGameInitInfo* createDebug();
 
 // member
 public:
 	TileMapSize						MapSize;
+	// storage XGTile
 	cocos2d::CCArray*				MapTiles;
-	cocos2d::CCArray*				Units;
+	// storage XGUnitInfo
+	cocos2d::CCArray*				PlayerUnits;
+	// storage XGUnitInfo
+	cocos2d::CCArray*				EnemyUnits;
 };
 
 #endif  // __XG_GAME_INIT_H__

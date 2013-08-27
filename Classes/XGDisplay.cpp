@@ -32,16 +32,13 @@ bool XGDisplay::init(XGGameInitInfo* pInitInfo)
 		CC_BREAK_IF(!TileBkSprites);
 		for (unsigned int i = 0; i < tileNum; i++)
 		{
-			CCSprite* tileSprite = CCSprite::create();
-			if (!tileSprite)
-			{
-				break;
-			}
+			CCSprite* pTileSprite = CCSprite::create();
+			CC_BREAK_IF(!pTileSprite);
 			TilePoint tilePos(i%MapSize.width, i/MapSize.width);
-			tileSprite->setContentSize(TileSize);
-			tileSprite->setPosition(getTileCenterPos(tilePos));
-			TileBkSprites->addObject(tileSprite);
-			addChild(tileSprite);
+			pTileSprite->setContentSize(TileSize);
+			pTileSprite->setPosition(getTileCenterPos(tilePos));
+			TileBkSprites->addObject(pTileSprite);
+			addChild(pTileSprite);
 		}
 		CC_BREAK_IF(TileBkSprites->count() != tileNum);
 		TileBkSprites->retain();
@@ -54,17 +51,14 @@ bool XGDisplay::init(XGGameInitInfo* pInitInfo)
 		CC_BREAK_IF(!TileFogSprites);
 		for (unsigned int i = 0; i < tileNum; i++)
 		{
-			CCSprite* tileFogSprite = CCSprite::create("FogCoverTile.png");
-			if (!tileFogSprite)
-			{
-				break;
-			}
+			CCSprite* pTileFogSprite = CCSprite::create("FogCoverTile.png");
+			CC_BREAK_IF(!pTileFogSprite);
 			TilePoint tilePos(i%MapSize.width, i/MapSize.width);
-			tileFogSprite->setContentSize(TileSize);
-			tileFogSprite->setPosition(getTileCenterPos(tilePos));
-			tileFogSprite->setVisible(false);
-			TileFogSprites->addObject(tileFogSprite);
-			addChild(tileFogSprite, TileFogZOrder);
+			pTileFogSprite->setContentSize(TileSize);
+			pTileFogSprite->setPosition(getTileCenterPos(tilePos));
+			pTileFogSprite->setVisible(false);
+			TileFogSprites->addObject(pTileFogSprite);
+			addChild(pTileFogSprite, TileFogZOrder);
 		}
 		CC_BREAK_IF(TileFogSprites->count() != tileNum);
 		TileFogSprites->retain();
