@@ -14,7 +14,10 @@ public:
 
 // method
 public:
+	virtual bool initDebugInfo();
+
 	static XGGameInitInfo* create();
+	static XGGameInitInfo* createDebugInfo();
 
 // member
 public:

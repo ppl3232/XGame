@@ -70,7 +70,7 @@ public:
 // member
 public:
 	// position of tile, not in pixel
-	TilePoint				Position;
+	TilePoint						Position;
 	TileGeoType						Geography;
 
 	bool							bBlock;
