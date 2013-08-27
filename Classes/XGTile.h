@@ -3,6 +3,8 @@
 
 #include "cocos2d.h"
 
+class TileMapSize;
+
 class TilePoint
 {
 public:
@@ -16,6 +18,8 @@ public:
 	TilePoint operator = (const TilePoint other);
 	void setPoint(int x, int y);
 	bool equals(const TilePoint target) const;
+
+	static TilePoint createFromIndex(int indexInArray, TileMapSize mapSize);
 };
 
 #define tile(x,y) TilePoint(x, y)
@@ -70,7 +74,7 @@ public:
 // member
 public:
 	// position of tile, not in pixel
-	TilePoint				Position;
+	TilePoint						Position;
 	TileGeoType						Geography;
 
 	bool							bBlock;

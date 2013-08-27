@@ -35,6 +35,11 @@ bool TilePoint::equals(const TilePoint target) const
 	return (target.x == x && target.y == y);
 }
 
+TilePoint TilePoint::createFromIndex(int indexInArray, TileMapSize mapSize)
+{
+	return TilePoint(indexInArray%mapSize.width, indexInArray/mapSize.width);
+}
+
 
 // TileMapSize
 TileMapSize::TileMapSize()

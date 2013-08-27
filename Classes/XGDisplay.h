@@ -3,8 +3,7 @@
 
 #include "cocos2d.h"
 
-#include "XGTile.h"
-#include "XGMap.h"
+#include "XGGameData.h"
 
 class XGGameInitInfo;
 
