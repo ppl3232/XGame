@@ -48,6 +48,8 @@ public:
 	// @return a tile position using a giving pixel position
 	TilePoint getTileLocation(cocos2d::CCPoint posInPixel);
 
+	TilePoint GetTileCoordForPosition(cocos2d::CCPoint pos);
+	cocos2d::CCPoint GetPositionForTileCoord(TilePoint pos);
 
 	void debugDrawPath(cocos2d::CCArray* Path);
 

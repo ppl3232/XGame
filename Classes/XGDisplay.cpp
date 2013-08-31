@@ -36,7 +36,7 @@ bool XGDisplay::init(XGGameInitInfo* pInitInfo)
 			CC_BREAK_IF(!pTileSprite);
 			TilePoint tilePos(i%MapSize.width, i/MapSize.width);
 			pTileSprite->setContentSize(TileSize);
-			pTileSprite->setPosition(getTileCenterPos(tilePos));
+			pTileSprite->setPosition(GetPositionForTileCoord(tilePos));
 			TileBkSprites->addObject(pTileSprite);
 			addChild(pTileSprite);
 		}
@@ -55,7 +55,7 @@ bool XGDisplay::init(XGGameInitInfo* pInitInfo)
 			CC_BREAK_IF(!pTileFogSprite);
 			TilePoint tilePos(i%MapSize.width, i/MapSize.width);
 			pTileFogSprite->setContentSize(TileSize);
-			pTileFogSprite->setPosition(getTileCenterPos(tilePos));
+			pTileFogSprite->setPosition(GetPositionForTileCoord(tilePos));
 			pTileFogSprite->setVisible(false);
 			TileFogSprites->addObject(pTileFogSprite);
 			addChild(pTileFogSprite, TileFogZOrder);
@@ -176,12 +176,14 @@ bool XGDisplay::addTileObject(TilePoint pos, const char* filename)
 		return false;
 	}
 	pNewTileObj->setContentSize(TileSize);
-	pNewTileObj->setPosition(getTileCenterPos(pos));
+	pNewTileObj->setPosition(GetPositionForTileCoord(pos));
 	TileObjSprites->addObject(pNewTileObj);
 	addChild(pNewTileObj, TileObjZOrder);
 
 	return true;
 }
+
+
 
 bool XGDisplay::moveTileObject(TilePoint fromPos, TilePoint toPos)
 {
@@ -192,9 +194,9 @@ bool XGDisplay::moveTileObject(TilePoint fromPos, TilePoint toPos)
 		if (pSprite)
 		{
 			// find target obj
-			if (getTileLocation(pSprite->getPosition()).equals(fromPos))
+			if (GetTileCoordForPosition(pSprite->getPosition()).equals(fromPos))
 			{
-				pSprite->setPosition(getTileCenterPos(toPos));
+				pSprite->setPosition(GetPositionForTileCoord(toPos));
 				return true;
 			}
 		}
@@ -202,6 +204,9 @@ bool XGDisplay::moveTileObject(TilePoint fromPos, TilePoint toPos)
 
 	return false;
 }
+
+
+
 
 bool XGDisplay::removeTileObject(TilePoint pos)
 {
@@ -212,7 +217,7 @@ bool XGDisplay::removeTileObject(TilePoint pos)
 		if (pSprite)
 		{
 			// find target obj
-			if (getTileLocation(pSprite->getPosition()).equals(pos))
+			if (GetTileCoordForPosition(pSprite->getPosition()).equals(pos))
 			{
 				TileObjSprites->removeObject(pObj);
 				return true;
@@ -301,6 +306,21 @@ void XGDisplay::setTileSize(CCSize tileSize)
 	}
 }
 
+
+TilePoint XGDisplay::GetTileCoordForPosition(CCPoint pos)
+{
+	int x = pos.x / TileSize.width;
+	int y = (MapSize.height * TileSize.height - pos.y) / TileSize.height;
+	return TilePoint(x,y);
+}
+
+CCPoint XGDisplay::GetPositionForTileCoord(TilePoint pos)
+{
+	int x = pos.x * TileSize.width + TileSize.width / 2;
+	int y = (MapSize.height - pos.y) * TileSize.height - TileSize.height / 2;
+	return ccp(x,y);
+}
+
 CCPoint XGDisplay::getTileCenterPos(TilePoint pos)
 {
 	return CCPoint(TileSize.width*(0.5+pos.x), TileSize.height*(0.5+pos.y));
@@ -332,8 +352,13 @@ void XGDisplay::debugDrawPath(cocos2d::CCArray* Path)
 	{
 		PathNode* node = dynamic_cast<PathNode*>(Path->objectAtIndex(i));
 		CCSprite* vNode = CCSprite::create("PathNode.png");
-		vNode->setPosition(getTileCenterPos(node->position));
+		vNode->setPosition(GetPositionForTileCoord(node->position));
 		this->addChild(vNode);
 		DebugDraws->addObject(vNode);
 	}
 }
+
+
+
+
+
