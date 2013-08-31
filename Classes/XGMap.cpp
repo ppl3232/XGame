@@ -18,10 +18,19 @@ bool XGMap::init(XGGameInitInfo* pInitInfo)
 	{
 		CC_BREAK_IF(!pInitInfo);
 		MapSize = pInitInfo->MapSize;
-		TileInfo = dynamic_cast<CCArray*>(pInitInfo->MapTiles->copy());
+		//TileInfo = dynamic_cast<CCArray*>(pInitInfo->MapTiles->copy());
+		//it seems copy doesn't work here
+		TileInfo = pInitInfo->MapTiles;
 		CC_BREAK_IF(!TileInfo);
 		CC_BREAK_IF(int(MapSize.width)*int(MapSize.height) != TileInfo->count());
 		TileInfo->retain();
+
+		//debug
+		//for (int i = 0; i < TileInfo->count(); i++)
+		//{
+		//	XGTile* pTile = dynamic_cast<XGTile*>(TileInfo->objectAtIndex(i));
+		//	CCLOG("[Debug] TileInfo status %d", pTile->bBlock);
+		//}
 
 		return true;
 	}

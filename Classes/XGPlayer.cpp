@@ -5,6 +5,8 @@
 #include "XGUnit.h"
 #include "XGFootman.h"
 #include "XGGrunt.h"
+#include "XGMap.h"
+#include "XGTile.h"
 
 USING_NS_CC;
 
@@ -95,7 +97,10 @@ bool XGPlayer::SpawnTeam(XGGameInfo* info, CCArray* TeamInfo)
 	{
 		XGUnitInfo* UnitInfo = dynamic_cast<XGUnitInfo*>(UnitInfoObj);
 		XGUnit* Unit = SpawnUnit(info, UnitInfo->UnitType, UnitInfo->SpawnLocation);
-		Units->addObject(Unit);
+		if(Unit != NULL)
+		{
+			Units->addObject(Unit);
+		}
 	}
 
 	return true;
@@ -106,6 +111,13 @@ bool XGPlayer::SpawnTeam(XGGameInfo* info, CCArray* TeamInfo)
 XGUnit* XGPlayer::SpawnUnit(XGGameInfo* info, EUnitType type,TilePoint Pos)
 {
 	XGUnit* Unit = NULL;
+
+	XGTile* tile = info->getMap()->getTileAt(Pos.x, Pos.y);
+	if(tile->bBlock)
+	{
+		CCLOG("[Game] Spawn failed due to Block on pos");
+		return NULL;
+	}
 
 	switch(type)
 	{

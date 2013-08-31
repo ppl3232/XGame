@@ -49,6 +49,13 @@ bool XGGameInitInfo::initDebug()
 		}
 		MapTiles->retain();
 
+		//debug
+		//for (int i = 0; i < MapTiles->count(); i++)
+		//{
+		//	XGTile* pTile = dynamic_cast<XGTile*>(MapTiles->objectAtIndex(i));
+		//	CCLOG("[Debug] MapTiles status %d", pTile->bBlock);
+		//}
+
 		PlayerUnits = CCArray::createWithCapacity(PlayerNum);
 		CC_BREAK_IF(!PlayerUnits);
 		for (int i = 0; i < PlayerNum; i++)

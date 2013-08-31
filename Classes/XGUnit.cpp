@@ -39,18 +39,19 @@ bool XGUnit::init(XGGameInfo* info, XGPlayer* Player, TilePoint Pos, const char*
 	bool ret = false;
 	do 
 	{
-		this->ControlCenter = ControlCenter;
+		
 		this->Player = Player;
 		this->Position = Pos;
-
+		this->Texture = Texture;
+		ControlCenter = info->getControlCenter();
 		Navigation = NavigationHandle::create(info);
 		CC_BREAK_IF(!Navigation);
 		Navigation->retain();
 
-
 		Sprite = CCSprite::create(Texture);
 		CC_BREAK_IF(!Sprite);
-
+		
+		ControlCenter->spawnUnit(this, Pos);
 
 		ret = true;
 	} while (0);

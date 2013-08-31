@@ -21,8 +21,10 @@ public:
 // method
 public:
 	static XGDisplay* create(XGGameInitInfo* pInitInfo);
+
 	void setTileBkAt(TilePoint pos, const char* filename);
 	void setTileBkInRange(TilePoint pos, int range, const char* filename);
+	void setTileBkToAll(const char* NormalTexture, const char* BlockTexture, cocos2d::CCArray* MapTiles);
 	void setTileBkToAll(const char* filename);
 
 	// please ensure object not in a same tile by yourself

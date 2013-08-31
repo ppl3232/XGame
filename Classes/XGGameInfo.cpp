@@ -72,8 +72,11 @@ XGGameInfo* XGGameInfo::getGameInfo()
 	return g;
 }
 
-// end
 
+
+/*********************************/
+/*		   Battle  Init          */
+/*********************************/
 bool XGGameInfo::InitBattle()
 {
 	bool ret = false;
@@ -83,19 +86,14 @@ bool XGGameInfo::InitBattle()
 		CC_BREAK_IF(!Battle);
 		Battle->retain();
 
-		XGPlayer* player_1 = XGPlayer::create(ControlCenter,Battle);
-		CC_BREAK_IF(!player_1);
-		player_1->SpawnTeam(this, getHumanTeam(1));
-		Battle->AddPlayer(player_1);
+		XGPlayer* player = XGPlayer::create(ControlCenter,Battle);
+		CC_BREAK_IF(!player);
+		player->SpawnTeam(this, getHumanTeam(2));
+		Battle->AddPlayer(player);
 
-		//XGAIPlayer* NewAI_2 = XGAIPlayer::create(Battle);
-		//CC_BREAK_IF(!NewAI_2);
-		//NewAI_2->SpawnTeam(this, getOrcTeam(1));
-		//Battle->AddPlayer(NewAI_2);
+		this->scheduleOnce(schedule_selector(XGGameInfo::BattleStart), 2); // to-do delay battle start time
 
-		this->scheduleOnce(schedule_selector(XGGameInfo::BattleStart), 2);
-
-		GameInput->GameInfo = this; // for test
+		GameInput->GameInfo = this;
 
 		ret = true;
 	} while (0);
@@ -103,6 +101,48 @@ bool XGGameInfo::InitBattle()
 	return ret;
 }
 
+void XGGameInfo::BattleStart(float dt)
+{
+	Battle->Start();
+}
+
+XGBattle* XGGameInfo::GetBattle()
+{
+	return Battle;
+}
+
+void XGGameInfo::DestoryBattle()
+{
+	if(Battle != NULL)
+	{
+		Battle->arrPlayers->removeAllObjects();
+		Battle->release();
+	}
+}
+
+CCArray* XGGameInfo::getHumanTeam(int Num)
+{
+	CCArray* TeamInfo = CCArray::createWithCapacity(1);
+	for(int i = 0; i < Num; i++)
+	{
+		XGUnitInfo* info = XGUnitInfo::create(EUT_Footman, TilePoint(i,0));
+		TeamInfo->addObject(info);
+	}
+
+	return TeamInfo;
+}
+CCArray* XGGameInfo::getOrcTeam(int Num)
+{
+	CCArray* TeamInfo = CCArray::createWithCapacity(1);
+	for(int i = 0; i < Num; i++)
+	{
+		XGUnitInfo* info = XGUnitInfo::create(EUT_Grunt, TilePoint(9-i,9));
+		TeamInfo->addObject(info);
+	}
+
+	return TeamInfo;
+}
+// Battle Init end
 
 
 XGGameInitInfo* XGGameInfo::getGameInitInfo(const char* filename)
@@ -143,48 +183,4 @@ XGMap* XGGameInfo::getMap()
 
 
 
-XGBattle* XGGameInfo::GetBattle()
-{
-	return Battle;
-}
-
-
-void XGGameInfo::DestoryBattle()
-{
-	if(Battle != NULL)
-	{
-		Battle->arrPlayers->removeAllObjects();
-		Battle->release();
-	}
-}
-
-void XGGameInfo::BattleStart(float dt)
-{
-	Battle->Start();
-}
-
-// config function
-CCArray* XGGameInfo::getHumanTeam(int Num)
-{
-	CCArray* TeamInfo = CCArray::createWithCapacity(1);
-	for(int i = 0; i < Num; i++)
-	{
-		XGUnitInfo* info = XGUnitInfo::create(EUT_Footman, TilePoint(i,0));
-		TeamInfo->addObject(info);
-	}
-
-	return TeamInfo;
-}
-CCArray* XGGameInfo::getOrcTeam(int Num)
-{
-	CCArray* TeamInfo = CCArray::createWithCapacity(1);
-	for(int i = 0; i < Num; i++)
-	{
-		XGUnitInfo* info = XGUnitInfo::create(EUT_Grunt, TilePoint(9-i,9));
-		TeamInfo->addObject(info);
-	}
-
-	return TeamInfo;
-}
-// end
 

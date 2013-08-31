@@ -63,7 +63,7 @@ bool XGDisplay::init(XGGameInitInfo* pInitInfo)
 		CC_BREAK_IF(TileFogSprites->count() != tileNum);
 		TileFogSprites->retain();
 
-		setTileBkToAll("tile.png");
+		setTileBkToAll("Tile.png","TileBlock.png", pInitInfo->MapTiles);
 
 		DebugDraws = CCArray::create();
 		CC_BREAK_IF(!DebugDraws);
@@ -124,9 +124,35 @@ void XGDisplay::setTileBkInRange(TilePoint pos, int range, const char* filename)
 	}	
 }
 
+
+// overload function for display info from original Map-Tiles data
+void XGDisplay::setTileBkToAll(const char* NormalTexture, const char* BlockTexture, CCArray* MapTiles)
+{
+	CCObject* pTileObj = NULL;
+
+	for(int i = 0; i < MapTiles->count(); i++)
+	{
+		XGTile* tile = dynamic_cast<XGTile*>(MapTiles->objectAtIndex(i));
+		CCSprite* tileSprite = dynamic_cast<CCSprite*>(TileBkSprites->objectAtIndex(i));
+		if(tile && tileSprite)
+		{
+			if(tile->bBlock)
+			{
+				tileSprite->initWithFile(BlockTexture);
+			}
+			else
+			{
+				tileSprite->initWithFile(NormalTexture);
+			}
+
+		}
+	}
+}
+
 void XGDisplay::setTileBkToAll(const char* filename)
 {
 	CCObject* pTileObj = NULL;
+
 	CCARRAY_FOREACH(TileBkSprites, pTileObj)
 	{
 		CCSprite* pTileSprite = dynamic_cast<CCSprite*>(pTileObj);
