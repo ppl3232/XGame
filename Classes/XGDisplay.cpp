@@ -349,7 +349,7 @@ void XGDisplay::debugDrawPath(cocos2d::CCArray* Path)
 	}
 }
 
-bool XGDisplay::moveTileObject(TilePoint fromPos, TilePoint toPos, float interval)
+bool XGDisplay::moveTileObject(TilePoint fromPos, TilePoint toPos)
 {
 	CCObject* pObj = NULL;
 	CCARRAY_FOREACH(TileObjSprites, pObj)
@@ -361,15 +361,45 @@ bool XGDisplay::moveTileObject(TilePoint fromPos, TilePoint toPos, float interva
 			CCLOG("[Game] moveTileObject");
 			if (GetTileCoordForPosition(pSprite->getPosition()).equals(fromPos))
 			{
-				CCLOG("[Game] succeed");
-				LatentMove(pSprite, GetPositionForTileCoord(toPos), interval);
-				//pSprite->setPosition(GetPositionForTileCoord(toPos));
+				pSprite->setPosition(GetPositionForTileCoord(toPos));
 				return true;
 			}
 		}
 	}
 
 	return false;
+}
+
+
+bool XGDisplay::moveTileObject(TilePoint fromPos, cocos2d::CCArray* Path)
+{
+	CCObject* pObj = NULL;
+	CCArray* actions = CCArray::create();
+	CCARRAY_FOREACH(TileObjSprites, pObj)
+	{
+		CCSprite* pSprite = dynamic_cast<CCSprite*>(pObj);
+		if (pSprite && GetTileCoordForPosition(pSprite->getPosition()).equals(fromPos))
+		{
+			for(int i = 0; i < Path->count(); i++)
+			{
+				TilePoint* tile = dynamic_cast<TilePoint*>(Path->objectAtIndex(i));
+				CCFiniteTimeAction* actionMove = CCMoveTo::create(0.2, GetPositionForTileCoord(*tile));
+				actions->addObject(actionMove);
+			}
+			CCFiniteTimeAction* actionMoveDone = CCCallFuncN::create( this, callfuncN_selector(XGDisplay::MoveTileObjectFinished));
+			actions->addObject(actionMoveDone);
+			CCSequence* seq = CCSequence::create(actions);
+			pSprite->runAction(seq);
+			return true;
+		}
+	}
+
+	return false;
+}
+
+void XGDisplay::MoveTileObjectFinished(cocos2d::CCNode* sender)
+{
+
 }
 
 void XGDisplay::LatentMove(CCSprite* target, CCPoint dest, float interval)

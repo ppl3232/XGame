@@ -5,7 +5,7 @@
 
 class TileMapSize;
 
-class TilePoint
+class TilePoint : public cocos2d::CCObject
 {
 public:
 	int x;

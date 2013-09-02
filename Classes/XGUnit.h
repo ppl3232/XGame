@@ -32,7 +32,7 @@ public:
 // method
 public:
 	TilePoint GetPosition();
-	virtual void OnPositionChanged(TilePoint NewPos);
+	void SetPosition(TilePoint NewPos);
 
 	// turn logic
 	virtual void BeginTurn();
@@ -46,7 +46,6 @@ public:
 	virtual void ActionSkill(XGUnit* target);
 	virtual void ActionForceEndTurn();
 
-	void ScheduleMove(float dt);
 	
 
 	// battle logic
@@ -71,7 +70,7 @@ public:
 
 
 	// test code
-	void ScheduleTest(float dt);
+	// void ScheduleTest(float dt);
 
 // member
 public:

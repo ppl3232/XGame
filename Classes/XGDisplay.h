@@ -32,7 +32,10 @@ public:
 	bool addTileObject(TilePoint pos, const char* filename);
 	// please ensure object not in a same tile by yourself
 	// @return true if move tile object successfully
-	bool moveTileObject(TilePoint fromPos, TilePoint toPos, float interval);
+	bool moveTileObject(TilePoint fromPos, TilePoint toPos);
+	bool moveTileObject(TilePoint fromPos, cocos2d::CCArray* Path);
+	void MoveTileObjectFinished(cocos2d::CCNode* sender);
+
 	// please ensure object not in a same tile by yourself
 	// @return true if remove tile object successfully
 	bool removeTileObject(TilePoint pos);

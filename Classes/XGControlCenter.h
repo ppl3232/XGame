@@ -24,7 +24,8 @@ public:
 	static XGControlCenter* create(XGGameInfo* pGameInfo);
 
 	void spawnUnit(XGUnit* pUnit, TilePoint desPos);
-	void moveUnit(XGUnit* pUnit, TilePoint desPos, float interval);
+	void moveUnit(XGUnit* pUnit, TilePoint desPos);
+	void moveUnit(XGUnit* pUnit, cocos2d::CCArray* Path);
 	void dieUnit(XGUnit* pUnit);
 	void potentiallyMoveUnit(XGUnit* pUnit, cocos2d::CCArray* desPos);
 

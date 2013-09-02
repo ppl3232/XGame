@@ -65,10 +65,6 @@ bool XGUnit::init(XGGameInfo* info, XGPlayer* Player, TilePoint Pos, const char*
 	return ret;
 }
 
-void XGUnit::ScheduleTest(float dt)
-{
-	CCLog("[Test] Schedule test!");
-}
 
 
 
@@ -77,12 +73,10 @@ TilePoint XGUnit::GetPosition()
 	return Position;
 }
 
-void XGUnit::OnPositionChanged(TilePoint NewPos)
+void XGUnit::SetPosition(TilePoint NewPos)
 {
 	Position = NewPos;
 }
-
-
 
 XGUnit* XGUnit::create(XGGameInfo* info, XGPlayer* Player, TilePoint Pos, const char* Texture)
 {
@@ -259,29 +253,9 @@ void XGUnit::ActionMove(TilePoint Destination)
 {
 	if(Navigation->FindPathWithMove(Position, Destination, MovePoint))
 	{
-		CCLOG("[Game] set schedule %f",Speed);
-
-		//schedule(schedule_selector(XGUnit::ScheduleMove), Speed - 0.5);
-	}
-};
-
-
-
-
-void XGUnit::ScheduleMove(float dt)
-{
-	TilePoint NextPos;
-
-	if(Navigation->GetNextMoveLocation(NextPos))
-	{
-		CCLOG("[Game] Move unit %d %d",NextPos.x, NextPos.y);
-		ControlCenter->moveUnit(this, NextPos, Speed);
-		OnPositionChanged(NextPos);
-	}
-	else
-	{
-		this->unschedule(schedule_selector(XGUnit::ScheduleMove));
+		ControlCenter->moveUnit(this, Navigation->GetPath());
+		SetPosition(Destination);
 		OnNormalActionDone(1);
 	}
-}
+};
 

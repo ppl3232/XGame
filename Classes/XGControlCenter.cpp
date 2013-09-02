@@ -51,9 +51,15 @@ void XGControlCenter::spawnUnit(XGUnit* pUnit, TilePoint desPos)
 	GameInfo->getDisplay()->addTileObject(desPos, pUnit->Texture);
 }
 
-void XGControlCenter::moveUnit(XGUnit* pUnit, TilePoint desPos, float interval)
+void XGControlCenter::moveUnit(XGUnit* pUnit, TilePoint desPos)
 {
-	GameInfo->getDisplay()->moveTileObject(pUnit->GetPosition(), desPos, interval);
+	GameInfo->getDisplay()->moveTileObject(pUnit->GetPosition(), desPos);
+}
+
+
+void XGControlCenter::moveUnit(XGUnit* pUnit, CCArray* Path)
+{
+	GameInfo->getDisplay()->moveTileObject(pUnit->GetPosition(), Path);
 }
 
 void XGControlCenter::dieUnit(XGUnit* pUnit)

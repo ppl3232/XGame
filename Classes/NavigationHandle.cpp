@@ -284,7 +284,13 @@ bool NavigationHandle::GetNextMoveLocation(TilePoint& NextPos)
 
 cocos2d::CCArray* NavigationHandle::GetPath()
 {
-	return Path;
+	CCArray* SimplePath = CCArray::create();
+	for(int i = 0; i < Path->count(); i++)
+	{
+		PathNode* node = dynamic_cast<PathNode*>(Path->objectAtIndex(i));
+		SimplePath->addObject(&node->position);
+	}
+	return SimplePath;
 }
 
 
