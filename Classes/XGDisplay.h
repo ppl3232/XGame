@@ -32,7 +32,7 @@ public:
 	bool addTileObject(TilePoint pos, const char* filename);
 	// please ensure object not in a same tile by yourself
 	// @return true if move tile object successfully
-	bool moveTileObject(TilePoint fromPos, TilePoint toPos);
+	bool moveTileObject(TilePoint fromPos, TilePoint toPos, float interval);
 	// please ensure object not in a same tile by yourself
 	// @return true if remove tile object successfully
 	bool removeTileObject(TilePoint pos);
@@ -52,6 +52,14 @@ public:
 	cocos2d::CCPoint GetPositionForTileCoord(TilePoint pos);
 
 	void debugDrawPath(cocos2d::CCArray* Path);
+
+	// move sprite
+	void LatentMove(cocos2d::CCSprite* target, cocos2d::CCPoint dest, float interval);
+	void LatentMoveFinished(cocos2d::CCNode* sender);
+
+
+	// test code
+	void ScheduleTest(float dt);
 
 protected:
 	cocos2d::CCSprite* getTileSpriteInArray(TilePoint pos, cocos2d::CCArray* pArray);

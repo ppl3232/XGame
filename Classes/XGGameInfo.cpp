@@ -56,12 +56,24 @@ bool XGGameInfo::init()
 		CC_BREAK_IF(!InitBattle());
 
 		pGameInitInfo->release();
+
+
+		//Battle->ActivePlayer->SpawnUnit(this, EUT_Footman, TilePoint(2,2));
+		//test code
+		//this->schedule(schedule_selector(XGGameInfo::ScheduleTest), 2.0);
+
 		return true;
 	}
 	while (false);
 
 	return false;
 }
+
+void XGGameInfo::ScheduleTest(float dt)
+{
+	CCLog("[Test] test schedule");
+}
+
 
 XGGameInfo* XGGameInfo::getGameInfo()
 {

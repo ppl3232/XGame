@@ -55,6 +55,10 @@ public:
 	cocos2d::CCArray* getOrcTeam(int num);
 
 
+	// test code
+	void ScheduleTest(float dt);
+
+
 // member
 public:
 	static const int				GameInfoTag = 1;

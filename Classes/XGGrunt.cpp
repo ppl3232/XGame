@@ -8,7 +8,7 @@ XGGrunt::XGGrunt()
 	HealthMax = 20;
 	Health = HealthMax;
 	Power = 3;
-	Move  = 2;
+	MovePoint  = 2;
 	Range = 1;
 }
 

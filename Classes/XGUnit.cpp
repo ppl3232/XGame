@@ -15,15 +15,17 @@ XGUnit::XGUnit()
 	, Texture(NULL)
 	, Health(10)
 	, HealthMax(10)
-	, Move(2)
+	, MovePoint(2)
 	, Power(2)
 	, Range(1)
+	, Speed(2.0)
 	, bDead(false)
 {
 }
 
 XGUnit::~XGUnit()
 {
+	//GameInfo->removeChild(this);
 	Navigation->release();
 }
 
@@ -39,7 +41,7 @@ bool XGUnit::init(XGGameInfo* info, XGPlayer* Player, TilePoint Pos, const char*
 	bool ret = false;
 	do 
 	{
-		
+		this->GameInfo = info;
 		this->Player = Player;
 		this->Position = Pos;
 		this->Texture = Texture;
@@ -53,11 +55,22 @@ bool XGUnit::init(XGGameInfo* info, XGPlayer* Player, TilePoint Pos, const char*
 		
 		ControlCenter->spawnUnit(this, Pos);
 
+		// test code
+
+		//info->addChild(this);
+
 		ret = true;
 	} while (0);
 
 	return ret;
 }
+
+void XGUnit::ScheduleTest(float dt)
+{
+	CCLog("[Test] Schedule test!");
+}
+
+
 
 TilePoint XGUnit::GetPosition()
 {
@@ -122,11 +135,6 @@ void XGUnit::OnEndTurnActionDone()
 	Player->CheckForEndTurn();
 }
 
-void XGUnit::ActionMove(TilePoint Pos)
-{
-	ControlCenter->moveUnit(this, Pos);
-	OnNormalActionDone(1);
-};
 
 void XGUnit::ActionAttack(XGUnit* target)
 {
@@ -186,7 +194,7 @@ CCArray* XGUnit::GetMoveableTiles()
 	CCArray* MoveableTiles = NULL;
 	XGMap* map = XGGameInfo::getGameInfo()->getMap();
 
-	MoveableTiles = map->GetTilesWithinRange(Position, Move);
+	MoveableTiles = map->GetTilesWithinRange(Position, MovePoint);
 
 
 	CCArray* TilesNeedRemove = CCArray::create();
@@ -238,11 +246,42 @@ float XGUnit::GetHealthRatio()
 
 bool XGUnit::PathFindingMove(TilePoint dest)
 {
-	if(Navigation->FindPathWithMove(Position, dest, Move))
+	if(Navigation->FindPathWithMove(Position, dest, MovePoint))
 	{
 		ControlCenter->potentiallyMoveUnit(this, Navigation->GetPath());
 		return true;
 	}
 	return false;
+}
+
+
+void XGUnit::ActionMove(TilePoint Destination)
+{
+	if(Navigation->FindPathWithMove(Position, Destination, MovePoint))
+	{
+		CCLOG("[Game] set schedule %f",Speed);
+
+		//schedule(schedule_selector(XGUnit::ScheduleMove), Speed - 0.5);
+	}
+};
+
+
+
+
+void XGUnit::ScheduleMove(float dt)
+{
+	TilePoint NextPos;
+
+	if(Navigation->GetNextMoveLocation(NextPos))
+	{
+		CCLOG("[Game] Move unit %d %d",NextPos.x, NextPos.y);
+		ControlCenter->moveUnit(this, NextPos, Speed);
+		OnPositionChanged(NextPos);
+	}
+	else
+	{
+		this->unschedule(schedule_selector(XGUnit::ScheduleMove));
+		OnNormalActionDone(1);
+	}
 }
 

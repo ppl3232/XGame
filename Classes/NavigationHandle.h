@@ -41,7 +41,7 @@ public:
 	bool FindPath(TilePoint start, TilePoint end);
 	bool FindPathWithMove(TilePoint start, TilePoint end, int move);
 	cocos2d::CCArray* GetPath();
-	bool GetNextMoveLocation(TilePoint pos);
+	bool GetNextMoveLocation(TilePoint& pos);
 	
 	cocos2d::CCArray* GetAdjacentNode(PathNode* origin);
 
@@ -58,6 +58,7 @@ public:
 	XGGameInfo*					GameInfo;
 	cocos2d::CCArray*			Path;
 	cocos2d::CCArray*			Graph;
+	int							PathIndex;
 };
 
 

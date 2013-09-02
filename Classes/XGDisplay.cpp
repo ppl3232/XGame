@@ -69,12 +69,21 @@ bool XGDisplay::init(XGGameInitInfo* pInitInfo)
 		CC_BREAK_IF(!DebugDraws);
 		DebugDraws->retain();
 
+		//test code
+		//this->schedule(schedule_selector(XGDisplay::ScheduleTest), 2.0);
+
 		return true;
 	}
 	while(false);
 
 	return false;
 }
+
+void XGDisplay::ScheduleTest(float dt)
+{
+	CCLog("[Test] Schedule test!");
+}
+
 
 XGDisplay* XGDisplay::create(XGGameInitInfo* pInitInfo)
 {
@@ -185,25 +194,7 @@ bool XGDisplay::addTileObject(TilePoint pos, const char* filename)
 
 
 
-bool XGDisplay::moveTileObject(TilePoint fromPos, TilePoint toPos)
-{
-	CCObject* pObj = NULL;
-	CCARRAY_FOREACH(TileObjSprites, pObj)
-	{
-		CCSprite* pSprite = dynamic_cast<CCSprite*>(pObj);
-		if (pSprite)
-		{
-			// find target obj
-			if (GetTileCoordForPosition(pSprite->getPosition()).equals(fromPos))
-			{
-				pSprite->setPosition(GetPositionForTileCoord(toPos));
-				return true;
-			}
-		}
-	}
 
-	return false;
-}
 
 
 
@@ -356,6 +347,42 @@ void XGDisplay::debugDrawPath(cocos2d::CCArray* Path)
 		this->addChild(vNode);
 		DebugDraws->addObject(vNode);
 	}
+}
+
+bool XGDisplay::moveTileObject(TilePoint fromPos, TilePoint toPos, float interval)
+{
+	CCObject* pObj = NULL;
+	CCARRAY_FOREACH(TileObjSprites, pObj)
+	{
+		CCSprite* pSprite = dynamic_cast<CCSprite*>(pObj);
+		if (pSprite)
+		{
+			// find target obj
+			CCLOG("[Game] moveTileObject");
+			if (GetTileCoordForPosition(pSprite->getPosition()).equals(fromPos))
+			{
+				CCLOG("[Game] succeed");
+				LatentMove(pSprite, GetPositionForTileCoord(toPos), interval);
+				//pSprite->setPosition(GetPositionForTileCoord(toPos));
+				return true;
+			}
+		}
+	}
+
+	return false;
+}
+
+void XGDisplay::LatentMove(CCSprite* target, CCPoint dest, float interval)
+{
+	CCFiniteTimeAction* actionMove = CCMoveTo::create(interval, dest);
+	CCFiniteTimeAction* actionMoveDone = CCCallFuncN::create( this, callfuncN_selector(XGDisplay::LatentMoveFinished));
+	target->runAction( CCSequence::create(actionMove, actionMoveDone, NULL) );
+	CCLOG("[Move] LatentMove %p", target);
+}
+
+void XGDisplay::LatentMoveFinished(CCNode* sender)
+{
+	CCSprite* sprite = dynamic_cast<CCSprite*>(sender);
 }
 
 

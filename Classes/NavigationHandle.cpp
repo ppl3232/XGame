@@ -93,7 +93,7 @@ bool NavigationHandle::init(XGGameInfo* info)
 	{
 		GameInfo = info;
 		Path = new CCArray();
-
+		PathIndex = 0;
 		InitGraph();
 		ret = true;
 	} while (0);
@@ -125,6 +125,10 @@ void NavigationHandle::ClearGraphPathInfo()
 		PathNode* node = dynamic_cast<PathNode*>(Graph->objectAtIndex(i));
 		node->ClearPathInfo();
 	}
+
+	Path->removeAllObjects();
+	PathIndex = 0;
+	
 }
 
 
@@ -153,13 +157,16 @@ bool NavigationHandle::FindPathWithMove(TilePoint start, TilePoint end, int move
 	return false;
 }
 
+
+
+
 bool NavigationHandle::FindPath(TilePoint start, TilePoint end)
 {
 	bool bFindPath = false;
-
-	Path->removeAllObjects();
 	CCArray* openList =  CCArray::create();
 	CCArray* closedList = CCArray::create();
+
+	ClearGraphPathInfo();
 
 	PathNode* startNode = GetNode(start);
 	PathNode* endNode = GetNode(end);
@@ -264,10 +271,15 @@ CCArray* NavigationHandle::GetAdjacentNode(PathNode* origin)
 	return AdjacentNode;
 }
 
-bool NavigationHandle::GetNextMoveLocation(TilePoint pos)
+bool NavigationHandle::GetNextMoveLocation(TilePoint& NextPos)
 {
+	if( PathIndex >= Path->count())
+		return false;
 
-	return false;
+	PathNode* node = dynamic_cast<PathNode*>(Path->objectAtIndex(PathIndex));
+	NextPos = node->position;
+	PathIndex++;
+	return true;
 }
 
 cocos2d::CCArray* NavigationHandle::GetPath()

@@ -13,7 +13,7 @@
 class XGPlayer;
 class XGControlCenter;
 
-class XGUnit: public cocos2d::CCObject
+class XGUnit: public cocos2d::CCNode
 {
 // constructor/destructor
 public:
@@ -45,6 +45,8 @@ public:
 	virtual void ActionAttack(XGUnit* target);
 	virtual void ActionSkill(XGUnit* target);
 	virtual void ActionForceEndTurn();
+
+	void ScheduleMove(float dt);
 	
 
 	// battle logic
@@ -67,6 +69,10 @@ public:
 	float GetHealthRatio();
 	EUnitType getType(){return Type;}
 
+
+	// test code
+	void ScheduleTest(float dt);
+
 // member
 public:
 	XGControlCenter*				ControlCenter;
@@ -81,8 +87,9 @@ public:
 	int								Health;
 	int								HealthMax;
 	int								Power;
-	int								Move;
+	int								MovePoint;
 	int								Range;
+	float							Speed;
 
 	bool							bDead;
 

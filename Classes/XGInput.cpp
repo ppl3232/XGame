@@ -61,7 +61,7 @@ void XGInput::ccTouchEnded(CCTouch* pTouch, CCEvent* pEvent)
 
 	if(CurrentControlUnit != NULL)
 	{
-		CurrentControlUnit->PathFindingMove(touchPos);
+		CurrentControlUnit->ActionMove(touchPos);
 	}
 	
 

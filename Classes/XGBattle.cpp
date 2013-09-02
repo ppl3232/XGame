@@ -24,6 +24,7 @@ bool XGBattle::init()
 	bool ret = false;
 	do 
 	{
+
 		ret = true;
 	} while (0);
 
