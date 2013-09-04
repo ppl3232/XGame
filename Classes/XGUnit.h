@@ -46,7 +46,8 @@ public:
 	virtual void ActionSkill(XGUnit* target);
 	virtual void ActionForceEndTurn();
 
-	
+
+	virtual void OnActionMoveFinished();
 
 	// battle logic
 	virtual void TakeDamage(int DamageAmount, XGUnit* DamageCauser);

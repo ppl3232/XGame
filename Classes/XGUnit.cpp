@@ -255,7 +255,12 @@ void XGUnit::ActionMove(TilePoint Destination)
 	{
 		ControlCenter->moveUnit(this, Navigation->GetPath());
 		SetPosition(Destination);
-		OnNormalActionDone(1);
 	}
 };
+
+
+void XGUnit::OnActionMoveFinished()
+{
+	OnNormalActionDone(1);
+}
 

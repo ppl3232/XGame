@@ -60,9 +60,30 @@ void XGAIPlayer::BeginTurn()
 	
 }
 
+void XGAIPlayer::OnUnitMoveEnd(XGUnit* unit)
+{
+
+}
+
+void XGAIPlayer::OnUnitTurnEnd(XGUnit* unit)
+{
+
+}
+
+XGUnit* XGAIPlayer::GetNextAvailableUnit()
+{
+	for(unsigned int i = 0; i < Units->count(); i++)
+	{
+		XGUnit* kUnit = dynamic_cast<XGUnit*>(Units->objectAtIndex(i));
+		
+	}
+}
+
+
+
 void XGAIPlayer::EndTurn()
 {
-	//XGPlayer::EndTurn();
+	XGPlayer::EndTurn();
 	CCLOG("[Turn] EndTurn %p", this);
 }
 

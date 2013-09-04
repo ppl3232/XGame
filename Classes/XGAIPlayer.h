@@ -29,6 +29,11 @@ public:
 	virtual XGPlayer* GetEnemyPlayer();
 	virtual float CalAttackPos(XGUnit* Unit, AttackPos* ap);
 
+	virtual void OnUnitMoveEnd(XGUnit* unit);
+	virtual void OnUnitTurnEnd(XGUnit* unit);
+
+	virtual XGUnit* GetNextAvailableUnit();
+
 public:
 
 	// member

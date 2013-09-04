@@ -134,7 +134,7 @@ void XGGameInfo::DestoryBattle()
 
 CCArray* XGGameInfo::getHumanTeam(int Num)
 {
-	CCArray* TeamInfo = CCArray::createWithCapacity(1);
+	CCArray* TeamInfo = CCArray::create();
 	for(int i = 0; i < Num; i++)
 	{
 		XGUnitInfo* info = XGUnitInfo::create(EUT_Footman, TilePoint(i,0));
@@ -145,7 +145,7 @@ CCArray* XGGameInfo::getHumanTeam(int Num)
 }
 CCArray* XGGameInfo::getOrcTeam(int Num)
 {
-	CCArray* TeamInfo = CCArray::createWithCapacity(1);
+	CCArray* TeamInfo = CCArray::create();
 	for(int i = 0; i < Num; i++)
 	{
 		XGUnitInfo* info = XGUnitInfo::create(EUT_Grunt, TilePoint(9-i,9));

@@ -371,14 +371,15 @@ bool XGDisplay::moveTileObject(TilePoint fromPos, TilePoint toPos)
 }
 
 
-bool XGDisplay::moveTileObject(TilePoint fromPos, cocos2d::CCArray* Path)
+bool XGDisplay::moveTileObject(XGUnit* unit, cocos2d::CCArray* Path)
 {
+	CurrentMoveUnit = unit;
 	CCObject* pObj = NULL;
 	CCArray* actions = CCArray::create();
 	CCARRAY_FOREACH(TileObjSprites, pObj)
 	{
 		CCSprite* pSprite = dynamic_cast<CCSprite*>(pObj);
-		if (pSprite && GetTileCoordForPosition(pSprite->getPosition()).equals(fromPos))
+		if (pSprite && GetTileCoordForPosition(pSprite->getPosition()).equals(unit->GetPosition()))
 		{
 			for(int i = 0; i < Path->count(); i++)
 			{
@@ -399,7 +400,11 @@ bool XGDisplay::moveTileObject(TilePoint fromPos, cocos2d::CCArray* Path)
 
 void XGDisplay::MoveTileObjectFinished(cocos2d::CCNode* sender)
 {
-
+	if(CurrentMoveUnit != NULL)
+	{
+		CurrentMoveUnit->OnActionMoveFinished();
+		CurrentMoveUnit = NULL;
+	}
 }
 
 void XGDisplay::LatentMove(CCSprite* target, CCPoint dest, float interval)

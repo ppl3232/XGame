@@ -2,7 +2,7 @@
 #define __XG_DISPLAY_H__
 
 #include "cocos2d.h"
-
+#include "XGUnit.h"
 #include "XGGameData.h"
 
 class XGGameInitInfo;
@@ -33,7 +33,7 @@ public:
 	// please ensure object not in a same tile by yourself
 	// @return true if move tile object successfully
 	bool moveTileObject(TilePoint fromPos, TilePoint toPos);
-	bool moveTileObject(TilePoint fromPos, cocos2d::CCArray* Path);
+	bool moveTileObject(XGUnit* unit, cocos2d::CCArray* Path);
 	void MoveTileObjectFinished(cocos2d::CCNode* sender);
 
 	// please ensure object not in a same tile by yourself
@@ -84,6 +84,12 @@ protected:
 	static const int				TileFogZOrder = 300;
 
 	cocos2d::CCArray*				DebugDraws;
+
+
+public:
+
+	XGUnit*							CurrentMoveUnit;
+
 };
 
 #endif  // __XG_DISPLAY_H__
