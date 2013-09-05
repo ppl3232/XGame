@@ -390,6 +390,7 @@ bool XGDisplay::moveTileObject(XGUnit* unit, cocos2d::CCArray* Path)
 		{
 			for(int i = 0; i < Path->count(); i++)
 			{
+				
 				TilePoint* tile = dynamic_cast<TilePoint*>(Path->objectAtIndex(i));
 				CCFiniteTimeAction* actionMove = CCMoveTo::create(0.2, GetPositionForTileCoord(*tile));
 				actions->addObject(actionMove);

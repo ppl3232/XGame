@@ -149,6 +149,14 @@ PathNode* NavigationHandle::GetNode(TilePoint pos)
 
 bool NavigationHandle::FindPathWithMove(TilePoint start, TilePoint end, int move)
 {
+	if(start.equals(end))
+	{
+		Path->removeAllObjects();
+		PathNode* endNode = GetNode(end);
+		Path->addObject(endNode);
+		return true;
+	}
+
 	if(FindPath(start,end) && Path->count() <= move)
 	{
 		return true;

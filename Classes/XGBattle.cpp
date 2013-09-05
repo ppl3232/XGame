@@ -37,6 +37,11 @@ void XGBattle::AddPlayer(XGPlayer* kPlayer)
 	arrPlayers->addObject(kPlayer);
 }
 
+void XGBattle::End()
+{
+	CCLOG("[Game] battle end");
+}
+
 void XGBattle::BeginNewTurn()
 {
 

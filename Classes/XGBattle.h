@@ -25,6 +25,8 @@ public:
 
 	void Start();
 
+	void End();
+
 	XGPlayer* GetPlayer(); //  for test;
 
 	// member

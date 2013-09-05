@@ -16,7 +16,7 @@ public:
 	virtual bool init(XGControlCenter* controlCenter, XGBattle* battle);
 
 	// method
-	virtual void BeginTurn();
+	virtual bool BeginTurn();
 	virtual void EndTurn();
 
 	//virtual void AITacticsSimple(XGUnit* Unit);

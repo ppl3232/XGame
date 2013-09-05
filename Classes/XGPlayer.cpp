@@ -52,15 +52,44 @@ bool XGPlayer::init(XGControlCenter* controlCenter, XGBattle* battle)
 }
 
 
-
-void XGPlayer::BeginTurn()
+bool XGPlayer::CheckLose()
 {
+	bool bLose;
+
+	bLose = true;
+
+	for(int i = 0; i < Units->count(); i++)
+	{
+		XGUnit* unit = dynamic_cast<XGUnit*>(Units->objectAtIndex(i));
+		if(!unit->bDead)
+		{
+			bLose = false;
+		}
+	}
+
+	if(bLose)
+	{
+		Battle->End();
+		return true;
+	}
+	return false;
+}
+
+bool XGPlayer::BeginTurn()
+{
+	if(CheckLose())
+	{
+		return false;
+	}
+
 	CCObject* UnitObj = NULL;
 	CCARRAY_FOREACH(Units, UnitObj)
 	{
 		XGUnit* kUnit = dynamic_cast<XGUnit*>(UnitObj);
 		kUnit->BeginTurn();
 	}
+
+	return true;
 }
 
 void XGPlayer::EndTurn()

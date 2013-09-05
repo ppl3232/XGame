@@ -52,6 +52,9 @@ bool XGUnit::init(XGGameInfo* info, XGPlayer* Player, TilePoint Pos, const char*
 		CC_BREAK_IF(!Navigation);
 		Navigation->retain();
 
+		AICombatInfo = XGAICombatInfo::create();
+		AICombatInfo->retain();
+
 		Sprite = CCSprite::create(Texture);
 		CC_BREAK_IF(!Sprite);
 		
@@ -102,6 +105,7 @@ XGUnit* XGUnit::create(XGGameInfo* info, XGPlayer* Player, TilePoint Pos, const 
 void XGUnit::BeginTurn()
 {
 	ResetActionPoint();
+	AICombatInfo->SetAICombatInfo(EAction_None, TilePoint(0,0), NULL);
 }
 
 void XGUnit::EndTurn(){}
@@ -113,7 +117,7 @@ void XGUnit::ResetActionPoint()
 
 bool XGUnit::IsAvailable()
 {
-	return CurActionPoint > 0;
+	return !bDead && CurActionPoint > 0;
 }
 
 bool XGUnit::CheckForEndTurn()
@@ -134,7 +138,7 @@ void XGUnit::OnNormalActionDone(int ap)
 void XGUnit::OnEndTurnActionDone()
 {
 	CurActionPoint = 0;
-	Player->CheckForEndTurn();
+	//Player->CheckForEndTurn();
 }
 
 
@@ -171,12 +175,13 @@ bool XGUnit::Died(XGUnit* Killer)
 		return false;
 	}
 
-	CCLog("[Unit] died!!");
+	CCLog("[Unit] died!! %p",this);
 
 	bDead = true;
 	ControlCenter->dieUnit(this);
-	Player->Units->removeObject(this);
-
+	GameInfo->getMap()->ClearOccupied(Position);
+	Player->CheckLose();
+	//Player->Units->removeObject(this);
 	return true;
 }
 
@@ -194,6 +199,8 @@ CCArray* XGUnit::GetMoveableTiles()
 	for(unsigned int i = 0; i < MoveableTiles->count(); i++)
 	{
 		XGTile* it = dynamic_cast<XGTile*>(MoveableTiles->objectAtIndex(i));
+		if(it->Position.equals(Position))
+			continue;
 		if(it->bBlock || !Navigation->FindPathWithMove(Position, it->Position, MovePoint))
 		{
 			TilesNeedRemove->addObject(it);
@@ -249,12 +256,6 @@ bool XGUnit::PathFindingMove(TilePoint dest)
 
 void XGUnit::ActionMove(TilePoint Destination)
 {
-	if(Position.equals(Destination))
-	{
-		OnActionMoveFinished();
-		return;
-	}
-
 	if(Navigation->FindPathWithMove(Position, Destination, MovePoint))
 	{
 		CCLOG("[Game] Path find from %d-%d to %d-%d",Position.x, Position.y, Destination.x,
@@ -269,16 +270,11 @@ void XGUnit::ActionMove(TilePoint Destination)
 
 void XGUnit::SetAICombatInfo(XGAICombatInfo* kAICombatInfo)
 {
-	if(AICombatInfo == NULL)
-	{
-		AICombatInfo = XGAICombatInfo::create();
-		AICombatInfo->retain();
-		AICombatInfo->SetAICombatInfo(kAICombatInfo->AIAction, kAICombatInfo->Position, kAICombatInfo->Target);
-	}
-	else
-	{
-		AICombatInfo->SetAICombatInfo(kAICombatInfo->AIAction, kAICombatInfo->Position, kAICombatInfo->Target);
-	}
+	CCLOG("[Unit] SetCombatInfo %d %p %d %d", kAICombatInfo->AIAction, 
+		kAICombatInfo->Target, kAICombatInfo->Position.x, kAICombatInfo->Position.y);
+
+	AICombatInfo->SetAICombatInfo(kAICombatInfo->AIAction, kAICombatInfo->Position, kAICombatInfo->Target);
+	
 }
 
 
@@ -292,6 +288,7 @@ void XGUnit::OnActionMoveFinished()
 void XGUnit::ActionAttack(XGUnit* target)
 {
 	target->TakeDamage(Power, this);
+	OnEndTurnActionDone();
 	Player->OnUnitTurnEnd(this);
 };
 

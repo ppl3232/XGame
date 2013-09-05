@@ -26,9 +26,9 @@ public:
 	// method
 public:
 	virtual bool CheckForEndTurn();
+	virtual bool CheckLose();
 
-
-	virtual void BeginTurn();
+	virtual bool BeginTurn();
 	virtual void EndTurn();
 	
 	virtual bool SpawnTeam(XGGameInfo* info, cocos2d::CCArray* TeamInfo);

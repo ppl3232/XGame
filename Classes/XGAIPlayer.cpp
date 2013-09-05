@@ -47,10 +47,11 @@ bool XGAIPlayer::init(XGControlCenter* controlCenter, XGBattle* battle)
 
 // ai logic
 
-void XGAIPlayer::BeginTurn()
+bool XGAIPlayer::BeginTurn()
 {
 	CCLOG("[Turn] BeginTurn %p", this);
-	XGPlayer::BeginTurn();
+	if(!XGPlayer::BeginTurn())
+		return false;
 	
 	XGUnit* NextActionUnit = GetNextAvailableUnit();
 	if(NextActionUnit != NULL)
@@ -62,12 +63,15 @@ void XGAIPlayer::BeginTurn()
 	{
 		EndTurn();
 	}
+	return true;
 	
 }
 
 void XGAIPlayer::AIThinking(XGUnit* unit)
 {
 	CCLOG("[Game] AIThinking");
+
+	
 
 	CCArray* PossibleInfo = GetCombatInfo(unit);
 	if(PossibleInfo->count() != 0)
@@ -95,7 +99,7 @@ void XGAIPlayer::AIExecuteMove(XGUnit* unit)
 
 	CCLOG("[Game] AIExecuteMove %p %d-%d",unit,info->Position.x, info->Position.y);
 
-	if(info != NULL)
+	if(info != NULL || info->AIAction == EAction_None)
 	{
 		unit->ActionMove(info->Position);
 	}
@@ -111,9 +115,9 @@ void XGAIPlayer::AIEXecuteAttack(XGUnit* unit)
 {
 	XGAICombatInfo* info = unit->GetAICombatInfo();
 
-	CCLOG("[Game] AIEXecuteAttack %p %p",unit,info);
+	CCLOG("[Game] AIEXecuteAttack %p %p",unit,info->Target);
 
-	if(info != NULL)
+	if(info != NULL && info->AIAction == EAction_MoveAttack)
 	{
 		unit->ActionAttack(info->Target);
 	}
@@ -183,8 +187,8 @@ XGUnit* XGAIPlayer::GetNextAvailableUnit()
 
 void XGAIPlayer::EndTurn()
 {
-	XGPlayer::EndTurn();
 	CCLOG("[Turn] EndTurn %p", this);
+	XGPlayer::EndTurn();
 }
 
 
@@ -227,6 +231,12 @@ float XGAIPlayer::EvaluteCombatInfo(XGUnit* Unit, XGAICombatInfo* info)
 	{
 		score *= 1.2;
 	}
+
+	if(Unit->Position.equals(info->Position))
+	{
+		CCLOG("[AI] We perfer stay");
+		score *= 1.2;
+	}
 	
 	return score;
 }
@@ -246,7 +256,7 @@ CCArray* XGAIPlayer::GetCombatInfo(XGUnit* Unit)
 			for(unsigned int k = 0; k < AllTargets->count(); k++)
 			{
 				XGUnit* tUnit = dynamic_cast<XGUnit*>(AllTargets->objectAtIndex(k));
-				if(tUnit->Position.equals(aTile->Position))
+				if(tUnit->Position.equals(aTile->Position) && !tUnit->bDead)
 				{
 					XGAICombatInfo* info = XGAICombatInfo::create();
 					info->SetAICombatInfo(EAction_None, mTile->Position, tUnit);

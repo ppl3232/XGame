@@ -46,3 +46,9 @@ XGGrunt* XGGrunt::create(XGGameInfo* info ,XGPlayer* player, TilePoint pos)
 		return NULL;
 	}
 }
+
+void XGGrunt::TakeDamage(int DamageAmount, XGUnit* DamageCauser)
+{
+	CCLOG("[Unit] Grunt %d %d %d",DamageAmount, Health, HealthMax);
+	XGUnit::TakeDamage(DamageAmount, DamageCauser);
+}

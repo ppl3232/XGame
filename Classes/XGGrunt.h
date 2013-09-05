@@ -16,7 +16,7 @@ public:
 public:
 	virtual bool init(XGGameInfo* info ,XGPlayer* player, TilePoint pos);
 	static XGGrunt* create(XGGameInfo* info ,XGPlayer* player, TilePoint pos);
-
+	virtual void TakeDamage(int DamageAmount, XGUnit* DamageCauser);
 
 	// method
 public:
