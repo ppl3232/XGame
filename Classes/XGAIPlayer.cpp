@@ -51,32 +51,132 @@ void XGAIPlayer::BeginTurn()
 {
 	CCLOG("[Turn] BeginTurn %p", this);
 	XGPlayer::BeginTurn();
-
-	for(unsigned int i = 0; i < Units->count(); i++)
+	
+	XGUnit* NextActionUnit = GetNextAvailableUnit();
+	if(NextActionUnit != NULL)
 	{
-		XGUnit* kUnit = dynamic_cast<XGUnit*>(Units->objectAtIndex(i));
-		AITacticsSimple(kUnit);
+		AIThinking(NextActionUnit);
+		AIExecuteMove(NextActionUnit);
+	}
+	else
+	{
+		EndTurn();
 	}
 	
 }
 
+void XGAIPlayer::AIThinking(XGUnit* unit)
+{
+	CCLOG("[Game] AIThinking");
+
+	CCArray* PossibleInfo = GetCombatInfo(unit);
+	if(PossibleInfo->count() != 0)
+	{
+		XGAICombatInfo* info = GetBestCombatInfo(unit, PossibleInfo);
+		info->SetAIAction(EAction_MoveAttack);
+		unit->SetAICombatInfo(info);
+	}
+	else
+	{
+		XGUnit* target = FindClosestTarget(unit);
+		if(target != NULL)
+		{
+			XGAICombatInfo* info = XGAICombatInfo::create();
+			TilePoint pos = FindClosestPointWithTarget(unit, target);
+			info->SetAICombatInfo(EAction_Approach, pos, NULL);
+			unit->SetAICombatInfo(info);
+		}
+	}
+}
+
+void XGAIPlayer::AIExecuteMove(XGUnit* unit)
+{
+	XGAICombatInfo* info = unit->GetAICombatInfo();
+
+	CCLOG("[Game] AIExecuteMove %p %d-%d",unit,info->Position.x, info->Position.y);
+
+	if(info != NULL)
+	{
+		unit->ActionMove(info->Position);
+	}
+	else
+	{
+		CCLOG("[Warn] info == null");
+		unit->ActionForceEndTurn();
+		OnUnitTurnEnd(unit);
+	}
+}
+
+void XGAIPlayer::AIEXecuteAttack(XGUnit* unit)
+{
+	XGAICombatInfo* info = unit->GetAICombatInfo();
+
+	CCLOG("[Game] AIEXecuteAttack %p %p",unit,info);
+
+	if(info != NULL)
+	{
+		unit->ActionAttack(info->Target);
+	}
+	else
+	{
+		CCLOG("[Warn] info == null");
+		unit->ActionForceEndTurn();
+		OnUnitTurnEnd(unit);
+	}
+}
+
 void XGAIPlayer::OnUnitMoveEnd(XGUnit* unit)
 {
-
+	XGAICombatInfo* info = unit->GetAICombatInfo();
+	if(info->AIAction == EAction_MoveAttack)
+	{
+		AIEXecuteAttack(unit);
+	}
+	else if(info->AIAction == EAction_Approach)
+	{
+		unit->ActionForceEndTurn();
+		OnUnitTurnEnd(unit);
+	}
+	else
+	{
+		CCLOG("[Warn] AIAction == null");
+		unit->ActionForceEndTurn();
+		OnUnitTurnEnd(unit);
+	}
 }
+
 
 void XGAIPlayer::OnUnitTurnEnd(XGUnit* unit)
 {
-
+	CCLOG("[AI] OnUnitTurnEnd %p",unit);
+	XGUnit* NextActionUnit = GetNextAvailableUnit();
+	if(NextActionUnit != NULL)
+	{
+		AIThinking(NextActionUnit);
+		AIExecuteMove(NextActionUnit);
+	}
+	else
+	{
+		EndTurn();
+	}
 }
 
 XGUnit* XGAIPlayer::GetNextAvailableUnit()
 {
+	CCLOG("[Game] GetNextAvailableUnit");
+
 	for(unsigned int i = 0; i < Units->count(); i++)
 	{
 		XGUnit* kUnit = dynamic_cast<XGUnit*>(Units->objectAtIndex(i));
-		
+		if(kUnit->IsAvailable())
+		{
+			return kUnit;
+		}
 	}
+
+
+
+	return NULL;
 }
 
 
@@ -88,61 +188,42 @@ void XGAIPlayer::EndTurn()
 }
 
 
-void XGAIPlayer::AITacticsSimple(XGUnit* Unit)
-{
-	CCLOG("[AI] AITacticsSimple %p", Unit);
 
-	CCArray* PotentialPos = GetAttackPos(Unit);
-	if(PotentialPos->count() != 0)
-	{
-		AttackPos* best = GetBestAttackPos(Unit, PotentialPos);
-		Unit->ActionMove(best->Position);
-		Unit->ActionAttack(best->Target);
-	}
-	else
-	{
-		XGUnit* target = FindClosestTarget(Unit);
-		if(target != NULL)
-		{
-			TilePoint pos = FindClosestPointWithTarget(Unit, target);
-			Unit->ActionMove(pos);
-			Unit->ActionForceEndTurn();
-		}
-	}
-}
 
-AttackPos* XGAIPlayer::GetBestAttackPos(XGUnit* Unit, cocos2d::CCArray* PotentialPos)
+
+
+XGAICombatInfo* XGAIPlayer::GetBestCombatInfo(XGUnit* Unit, cocos2d::CCArray* PotentialPos)
 {
 	if(PotentialPos == NULL)
 		return NULL;
 
 	int MaxScore = 0;
-	AttackPos* BestAP = NULL;
+	XGAICombatInfo* BestInfo = NULL;
 	for(unsigned int i = 0; i < PotentialPos->count(); i++)
 	{
-		AttackPos* ap = dynamic_cast<AttackPos*>(PotentialPos->objectAtIndex(i));
-		int score = CalAttackPos(Unit, ap);
+		XGAICombatInfo* info = dynamic_cast<XGAICombatInfo*>(PotentialPos->objectAtIndex(i));
+		int score = EvaluteCombatInfo(Unit, info);
 		if(score > MaxScore)
 		{
 			MaxScore = score;
-			BestAP = ap;
+			BestInfo = info;
 		}
 
 	}
 
-	return BestAP;
+	return BestInfo;
 }
 
 
-float XGAIPlayer::CalAttackPos(XGUnit* Unit, AttackPos* ap)
+float XGAIPlayer::EvaluteCombatInfo(XGUnit* Unit, XGAICombatInfo* info)
 {
 	int score = 2.718;
 
-	if(Unit->Power >= ap->Target->Health)
+	if(Unit->Power >= info->Target->Health)
 	{
 		score *= 1.5;
 	}
-	else if (ap->Target->GetHealthRatio() < 0.3f)
+	else if (info->Target->GetHealthRatio() < 0.3f)
 	{
 		score *= 1.2;
 	}
@@ -150,7 +231,7 @@ float XGAIPlayer::CalAttackPos(XGUnit* Unit, AttackPos* ap)
 	return score;
 }
 
-CCArray* XGAIPlayer::GetAttackPos(XGUnit* Unit)
+CCArray* XGAIPlayer::GetCombatInfo(XGUnit* Unit)
 {
 	CCArray* PotentialPos = CCArray::create();
 	CCArray* MoveableTiles = Unit->GetMoveableTiles();
@@ -167,7 +248,9 @@ CCArray* XGAIPlayer::GetAttackPos(XGUnit* Unit)
 				XGUnit* tUnit = dynamic_cast<XGUnit*>(AllTargets->objectAtIndex(k));
 				if(tUnit->Position.equals(aTile->Position))
 				{
-					PotentialPos->addObject(AttackPos::create(mTile->Position, tUnit));
+					XGAICombatInfo* info = XGAICombatInfo::create();
+					info->SetAICombatInfo(EAction_None, mTile->Position, tUnit);
+					PotentialPos->addObject(info);
 				}
 			}
 		}

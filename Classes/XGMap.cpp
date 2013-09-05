@@ -1,4 +1,5 @@
 #include "XGMap.h"
+#include "NavigationHandle.h"
 
 USING_NS_CC;
 
@@ -124,4 +125,23 @@ void XGMap::ClearOccupied(TilePoint Pos)
 {
 	XGTile* tile = getTileAt(Pos.x, Pos.y);
 	tile->bBlock = false;
+}
+
+
+
+//debug
+bool XGMap::CheckPath(cocos2d::CCArray* path)
+{
+	for(int i = 0; i < path->count(); i++)
+	{
+		TilePoint* pos = dynamic_cast<TilePoint*>(path->objectAtIndex(i));
+		XGTile* tile = getTileAt(pos->x, pos->y);
+		if(tile->bBlock)
+		{
+			CCLog("[WARN] path with block!!!!!!!");
+			return false;
+		}
+	}
+
+	return true;
 }

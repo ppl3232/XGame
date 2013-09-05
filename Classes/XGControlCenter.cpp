@@ -51,20 +51,24 @@ void XGControlCenter::spawnUnit(XGUnit* pUnit, TilePoint desPos)
 	GameInfo->getDisplay()->addTileObject(desPos, pUnit->Texture);
 }
 
-void XGControlCenter::moveUnit(XGUnit* pUnit, TilePoint desPos)
-{
-	GameInfo->getDisplay()->moveTileObject(pUnit->GetPosition(), desPos);
-}
+//void XGControlCenter::moveUnit(XGUnit* pUnit, TilePoint desPos)
+//{
+//	GameInfo->getDisplay()->moveTileObject(pUnit->GetPosition(), desPos);
+//}
 
 
 void XGControlCenter::moveUnit(XGUnit* pUnit, CCArray* Path)
 {
-	GameInfo->getDisplay()->moveTileObject(pUnit->GetPosition(), Path);
+	GameInfo->getDisplay()->moveTileObject(pUnit, Path);
 }
 
 void XGControlCenter::dieUnit(XGUnit* pUnit)
 {
-	GameInfo->getDisplay()->removeTileObject(pUnit->GetPosition());
+	if(!GameInfo->getDisplay()->removeTileObject(pUnit->GetPosition()))
+	{
+		CCLog("[warn] remove unit failed %d %d",pUnit->GetPosition().x, pUnit->GetPosition().y);
+
+	}
 }
 
 void XGControlCenter::potentiallyMoveUnit(XGUnit* pUnit, CCArray* desPos)

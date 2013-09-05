@@ -98,10 +98,16 @@ bool XGGameInfo::InitBattle()
 		CC_BREAK_IF(!Battle);
 		Battle->retain();
 
-		XGPlayer* player = XGPlayer::create(ControlCenter,Battle);
-		CC_BREAK_IF(!player);
-		player->SpawnTeam(this, getHumanTeam(2));
-		Battle->AddPlayer(player);
+		XGAIPlayer* player1 = XGAIPlayer::create(ControlCenter,Battle);
+		CC_BREAK_IF(!player1);
+		player1->SpawnTeam(this, getHumanTeam(4));
+		Battle->AddPlayer(player1);
+
+
+		XGAIPlayer* player2 = XGAIPlayer::create(ControlCenter,Battle);
+		CC_BREAK_IF(!player2);
+		player2->SpawnTeam(this, getOrcTeam(3));
+		Battle->AddPlayer(player2);
 
 		this->scheduleOnce(schedule_selector(XGGameInfo::BattleStart), 2); // to-do delay battle start time
 

@@ -13,7 +13,10 @@
 class XGPlayer;
 class XGControlCenter;
 
-class XGUnit: public cocos2d::CCNode
+
+
+
+class XGUnit: public cocos2d::CCObject
 {
 // constructor/destructor
 public:
@@ -46,6 +49,7 @@ public:
 	virtual void ActionSkill(XGUnit* target);
 	virtual void ActionForceEndTurn();
 
+	virtual bool IsAvailable();
 
 	virtual void OnActionMoveFinished();
 
@@ -63,7 +67,12 @@ public:
 	virtual bool PathFindingMove(TilePoint dest);
 
 	// getter & setter
-	int getActionPoint() {return CurActionPoint;}
+	int getActionPoint() { return CurActionPoint; }
+
+
+	XGAICombatInfo* GetAICombatInfo() { return AICombatInfo; }
+	void SetAICombatInfo(XGAICombatInfo* kAICombatInfo);
+
 
 	// property
 	float GetHealthRatio();
@@ -94,6 +103,8 @@ public:
 	bool							bDead;
 
 	NavigationHandle*				Navigation;
+
+	XGAICombatInfo*					AICombatInfo;
 
 
 };

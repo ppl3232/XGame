@@ -34,6 +34,10 @@ public:
 	virtual bool SpawnTeam(XGGameInfo* info, cocos2d::CCArray* TeamInfo);
 	virtual XGUnit* SpawnUnit(XGGameInfo* info, EUnitType type, TilePoint Pos);
 
+	virtual void OnUnitMoveEnd(XGUnit* unit);
+	virtual void OnUnitTurnEnd(XGUnit* unit);
+
+
 	// member
 public:
 	XGControlCenter*	ControlCenter;

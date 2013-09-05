@@ -19,18 +19,24 @@ public:
 	virtual void BeginTurn();
 	virtual void EndTurn();
 
-	virtual void AITacticsSimple(XGUnit* Unit);
+	//virtual void AITacticsSimple(XGUnit* Unit);
 
 	virtual XGUnit* FindClosestTarget(XGUnit* Unit);
 	virtual TilePoint FindClosestPointWithTarget(XGUnit* Unit, XGUnit* Target);
-	virtual cocos2d::CCArray* GetAttackPos(XGUnit* Unit);
+	virtual cocos2d::CCArray* GetCombatInfo(XGUnit* Unit);
 	virtual cocos2d::CCArray* GetAllTargets();
-	virtual AttackPos* GetBestAttackPos(XGUnit* Unit, cocos2d::CCArray* PotentialPos);
+	virtual XGAICombatInfo* GetBestCombatInfo(XGUnit* Unit, cocos2d::CCArray* PotentialPos);
 	virtual XGPlayer* GetEnemyPlayer();
-	virtual float CalAttackPos(XGUnit* Unit, AttackPos* ap);
+	virtual float EvaluteCombatInfo(XGUnit* Unit, XGAICombatInfo* info);
 
 	virtual void OnUnitMoveEnd(XGUnit* unit);
 	virtual void OnUnitTurnEnd(XGUnit* unit);
+
+	virtual void AIThinking(XGUnit* unit);
+	virtual void AIExecuteMove(XGUnit* unit);
+	virtual void AIEXecuteAttack(XGUnit* unit);
+
+
 
 	virtual XGUnit* GetNextAvailableUnit();
 

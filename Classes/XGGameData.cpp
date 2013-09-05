@@ -1,6 +1,8 @@
 #include "XGGameData.h"
 
 
+
+
 bool XGUnitInfo::init(EUnitType type, TilePoint pos)
 {
 	UnitType		= type;
@@ -24,27 +26,23 @@ XGUnitInfo* XGUnitInfo::create(EUnitType type, TilePoint pos)
 	}
 }
 
-
-bool AttackPos::init(TilePoint Pos, XGUnit* target)
+bool XGAICombatInfo::init()
 {
-	Position		= Pos;
-	Target			= target;
+	return true;
+}
+
+bool XGAICombatInfo::SetAICombatInfo(EAIAction action, TilePoint pos, XGUnit* unit)
+{
+	AIAction	= action;
+	Position	= pos;
+	Target		= unit;
 
 	return true;
 }
 
-AttackPos* AttackPos::create(TilePoint Pos, XGUnit* target)
-{
-	AttackPos* ap = new AttackPos();
-	if(ap && ap->init(Pos, target))
-	{
-		ap->autorelease();
-		return ap;
-	}
-	else
-	{
-		CC_SAFE_DELETE(ap);
-		return NULL;
-	}
-}
 
+
+void XGAICombatInfo::SetAIAction(EAIAction action)
+{
+	AIAction	= action;
+}

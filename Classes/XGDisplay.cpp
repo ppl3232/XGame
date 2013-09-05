@@ -208,9 +208,13 @@ bool XGDisplay::removeTileObject(TilePoint pos)
 		if (pSprite)
 		{
 			// find target obj
+			CCLog("[Debug] pSprite pos %d %d", GetTileCoordForPosition(pSprite->getPosition()).x,
+				GetTileCoordForPosition(pSprite->getPosition()).y);
 			if (GetTileCoordForPosition(pSprite->getPosition()).equals(pos))
 			{
-				TileObjSprites->removeObject(pObj);
+				this->removeChild(pSprite);
+				TileObjSprites->removeObject(pSprite);
+
 				return true;
 			}
 		}
@@ -349,26 +353,26 @@ void XGDisplay::debugDrawPath(cocos2d::CCArray* Path)
 	}
 }
 
-bool XGDisplay::moveTileObject(TilePoint fromPos, TilePoint toPos)
-{
-	CCObject* pObj = NULL;
-	CCARRAY_FOREACH(TileObjSprites, pObj)
-	{
-		CCSprite* pSprite = dynamic_cast<CCSprite*>(pObj);
-		if (pSprite)
-		{
-			// find target obj
-			CCLOG("[Game] moveTileObject");
-			if (GetTileCoordForPosition(pSprite->getPosition()).equals(fromPos))
-			{
-				pSprite->setPosition(GetPositionForTileCoord(toPos));
-				return true;
-			}
-		}
-	}
-
-	return false;
-}
+//bool XGDisplay::moveTileObject(TilePoint fromPos, TilePoint toPos)
+//{
+//	CCObject* pObj = NULL;
+//	CCARRAY_FOREACH(TileObjSprites, pObj)
+//	{
+//		CCSprite* pSprite = dynamic_cast<CCSprite*>(pObj);
+//		if (pSprite)
+//		{
+//			// find target obj
+//			CCLOG("[Game] moveTileObject");
+//			if (GetTileCoordForPosition(pSprite->getPosition()).equals(fromPos))
+//			{
+//				pSprite->setPosition(GetPositionForTileCoord(toPos));
+//				return true;
+//			}
+//		}
+//	}
+//
+//	return false;
+//}
 
 
 bool XGDisplay::moveTileObject(XGUnit* unit, cocos2d::CCArray* Path)
@@ -376,6 +380,9 @@ bool XGDisplay::moveTileObject(XGUnit* unit, cocos2d::CCArray* Path)
 	CurrentMoveUnit = unit;
 	CCObject* pObj = NULL;
 	CCArray* actions = CCArray::create();
+
+	CCLOG("[XGDisplay] moveTileObject ");
+
 	CCARRAY_FOREACH(TileObjSprites, pObj)
 	{
 		CCSprite* pSprite = dynamic_cast<CCSprite*>(pObj);
@@ -391,6 +398,8 @@ bool XGDisplay::moveTileObject(XGUnit* unit, cocos2d::CCArray* Path)
 			actions->addObject(actionMoveDone);
 			CCSequence* seq = CCSequence::create(actions);
 			pSprite->runAction(seq);
+			CCLOG("[Game] runAction %p",CurrentMoveUnit);
+
 			return true;
 		}
 	}
@@ -400,10 +409,11 @@ bool XGDisplay::moveTileObject(XGUnit* unit, cocos2d::CCArray* Path)
 
 void XGDisplay::MoveTileObjectFinished(cocos2d::CCNode* sender)
 {
+
+	CCLOG("[Game] MoveTileObjectFinished %p",CurrentMoveUnit);
 	if(CurrentMoveUnit != NULL)
 	{
 		CurrentMoveUnit->OnActionMoveFinished();
-		CurrentMoveUnit = NULL;
 	}
 }
 

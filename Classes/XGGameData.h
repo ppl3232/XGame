@@ -9,6 +9,14 @@ class XGUnit;
 
 const int MAX_ACTION_POINT = 2;
 
+enum EAIAction
+{
+	EAction_Approach,
+	EAction_MoveAttack,
+	EAction_None,
+};
+
+
 enum ETeamType
 {
 	ETeam_Human,
@@ -25,16 +33,21 @@ enum EUnitType
 
 
 
-class AttackPos : public cocos2d::CCObject
+class XGAICombatInfo : public cocos2d::CCObject
 {
 public:
-	static AttackPos* create(TilePoint Pos, XGUnit* target);
-	virtual bool init(TilePoint Pos, XGUnit* target);
-
+	CREATE_FUNC(XGAICombatInfo);
+	virtual bool init();
+	virtual bool SetAICombatInfo(EAIAction action, TilePoint pos, XGUnit* unit);
+	virtual void SetAIAction(EAIAction action);
 public:
 	TilePoint			Position;
 	XGUnit*				Target;
+	EAIAction			AIAction;
 };
+
+
+
 
 class XGUnitInfo : public cocos2d::CCObject
 {

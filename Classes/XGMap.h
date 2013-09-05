@@ -39,6 +39,11 @@ public:
 	void SetOccupied(TilePoint Pos);
 	void ClearOccupied(TilePoint Pos);
 
+
+
+	//debug 
+	bool CheckPath(cocos2d::CCArray* path);
+
 	// member
 public:
 

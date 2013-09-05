@@ -13,6 +13,7 @@ XGUnit::XGUnit()
 	, Type(EUT_Unknow)
 	, Player(NULL)
 	, Texture(NULL)
+	, AICombatInfo(NULL)
 	, Health(10)
 	, HealthMax(10)
 	, MovePoint(2)
@@ -27,6 +28,7 @@ XGUnit::~XGUnit()
 {
 	//GameInfo->removeChild(this);
 	Navigation->release();
+	AICombatInfo->release();
 }
 
 
@@ -109,6 +111,11 @@ void XGUnit::ResetActionPoint()
 	CurActionPoint = MAX_ACTION_POINT;
 }
 
+bool XGUnit::IsAvailable()
+{
+	return CurActionPoint > 0;
+}
+
 bool XGUnit::CheckForEndTurn()
 {
 	return CurActionPoint <= 0;
@@ -116,11 +123,12 @@ bool XGUnit::CheckForEndTurn()
 
 void XGUnit::OnNormalActionDone(int ap)
 {
+
 	CurActionPoint -= ap;
-	if(CheckForEndTurn())
-	{
-		Player->CheckForEndTurn();
-	}
+	//if(CheckForEndTurn())
+	//{
+	//	Player->CheckForEndTurn();
+	//}
 }
 
 void XGUnit::OnEndTurnActionDone()
@@ -130,11 +138,6 @@ void XGUnit::OnEndTurnActionDone()
 }
 
 
-void XGUnit::ActionAttack(XGUnit* target)
-{
-	target->TakeDamage(Power, this);
-	OnEndTurnActionDone();
-};
 
 
 void XGUnit::ActionSkill(XGUnit* target)
@@ -146,14 +149,7 @@ void XGUnit::ActionSkill(XGUnit* target)
 void XGUnit::ActionForceEndTurn()
 {
 	CurActionPoint = 0;
-	OnEndTurnActionDone();
 };
-
-
-
-
-
-
 
 
 
@@ -174,6 +170,8 @@ bool XGUnit::Died(XGUnit* Killer)
 	{
 		return false;
 	}
+
+	CCLog("[Unit] died!!");
 
 	bDead = true;
 	ControlCenter->dieUnit(this);
@@ -196,7 +194,7 @@ CCArray* XGUnit::GetMoveableTiles()
 	for(unsigned int i = 0; i < MoveableTiles->count(); i++)
 	{
 		XGTile* it = dynamic_cast<XGTile*>(MoveableTiles->objectAtIndex(i));
-		if(it->bBlock)
+		if(it->bBlock || !Navigation->FindPathWithMove(Position, it->Position, MovePoint))
 		{
 			TilesNeedRemove->addObject(it);
 		}
@@ -251,16 +249,51 @@ bool XGUnit::PathFindingMove(TilePoint dest)
 
 void XGUnit::ActionMove(TilePoint Destination)
 {
+	if(Position.equals(Destination))
+	{
+		OnActionMoveFinished();
+		return;
+	}
+
 	if(Navigation->FindPathWithMove(Position, Destination, MovePoint))
 	{
+		CCLOG("[Game] Path find from %d-%d to %d-%d",Position.x, Position.y, Destination.x,
+			Destination.y);
+		GameInfo->getMap()->CheckPath(Navigation->GetPath());
 		ControlCenter->moveUnit(this, Navigation->GetPath());
+		GameInfo->getMap()->ClearOccupied(Position);
 		SetPosition(Destination);
+		GameInfo->getMap()->SetOccupied(Position);
 	}
 };
+
+void XGUnit::SetAICombatInfo(XGAICombatInfo* kAICombatInfo)
+{
+	if(AICombatInfo == NULL)
+	{
+		AICombatInfo = XGAICombatInfo::create();
+		AICombatInfo->retain();
+		AICombatInfo->SetAICombatInfo(kAICombatInfo->AIAction, kAICombatInfo->Position, kAICombatInfo->Target);
+	}
+	else
+	{
+		AICombatInfo->SetAICombatInfo(kAICombatInfo->AIAction, kAICombatInfo->Position, kAICombatInfo->Target);
+	}
+}
 
 
 void XGUnit::OnActionMoveFinished()
 {
+	CCLOG("[Game] OnActionMoveFinished %p",this);
 	OnNormalActionDone(1);
+	Player->OnUnitMoveEnd(this);
 }
+
+void XGUnit::ActionAttack(XGUnit* target)
+{
+	target->TakeDamage(Power, this);
+	Player->OnUnitTurnEnd(this);
+};
+
+
 

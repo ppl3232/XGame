@@ -99,6 +99,7 @@ bool XGPlayer::SpawnTeam(XGGameInfo* info, CCArray* TeamInfo)
 		XGUnit* Unit = SpawnUnit(info, UnitInfo->UnitType, UnitInfo->SpawnLocation);
 		if(Unit != NULL)
 		{
+			info->getMap()->SetOccupied(Unit->Position);
 			Units->addObject(Unit);
 		}
 	}
@@ -132,4 +133,14 @@ XGUnit* XGPlayer::SpawnUnit(XGGameInfo* info, EUnitType type,TilePoint Pos)
 	}
 
 	return Unit;
+}
+
+
+void XGPlayer::OnUnitMoveEnd(XGUnit* unit)
+{
+
+}
+void XGPlayer::OnUnitTurnEnd(XGUnit* unit)
+{
+
 }

@@ -8,7 +8,7 @@ XGFootman::XGFootman()
 	Health = 10;
 	HealthMax = 10;
 	Power = 2;
-	MovePoint  = 20; //for test;
+	MovePoint  = 3; //for test;
 	Range = 1;
 }
 
